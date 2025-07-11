@@ -1,0 +1,6 @@
+---
+title: "Lecture notes"
+---
+
+Here you will find links to individual lecture notes. My goal is to get them written in `Quarto`, which should allow you to explore the notes in detail by yourself when looking at the source code (and re-run any relevant code examples).
+

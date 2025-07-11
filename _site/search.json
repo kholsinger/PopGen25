@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Population Genetics 2025",
+    "section": "",
+    "text": "Welome to PopGen!\nThis is the website for Population Genetics (EEB 5348) at UConn. Here you will find notes on each of the lectures, directions for assignments as well as a list of readings.\n\n\nAbout the course\nThe focus of this course is to introduce graduate students to population genetic thinking. I firmly believe the greatest benefit of population genetics is not knowledge of any particular approach or methodology (there are too many for any course to cover adequately), but a firm grasp of how population genetics can be used to 1) test and hone your intuition of evolutionary processes, 2) understand how (and why) different population genetics approaches work and 3) develop heuristics to examine any system of interest. Throughout the course we will examine classic population genetics results, read recent literature that either uses those results or throws them completely into question and work on developing a set of scripts and skills in a language of your choice (although I will recommend either Julia or R) to investigate the population genetics of different data-sets.\n\n\nSchedule/General Logistics\nEach week, we will start with a lecture on Tuesday, followed by a paper discussion and lab on Thursday. The goal of this class structure is to be able to introduce general concepts/remind you of things you should remember from your Genetics/Evolution courses, introduce classic PopGen results, followed by a more in-depth dive in the state of the art uses of those results and some practical advice of coding how they work. Here’s a general week-by-week overlay of the topics. Lecture notes will be added as links as we go along\n\n\n\nWeek\nTopic(s)\nReading\nLecture Notes\n\n\n\n\nAug 26-28\nGenetic Diversity\n\n\n\n\nSep 2-4\nNeutral processes and mutation\n\n\n\n\nSep 9-11\nDemographic inference\n\n\n\n\nSep 16-18\nSelection at a single locus\n\n\n\n\nSep 23-25\nRecombination\n\n\n\n\nSep 30-Oct 2\nInference of selection\n\n\n\n\nOct 7-9\nProject Meetings, no regular class\nNA\n\n\n\nOct 14-16\n\n\n\n\n\nOct 21-23\n\n\n\n\n\nOct 28-30\n\n\n\n\n\nNov 4-6\n\n\n\n\n\nNov 11-13\n\n\n\n\n\nNov 18-20\nQuantitative traits\n\n\n\n\nNov 25-27\nTHANKSGIVING BREAK\n\n\n\n\nDec 2-4\nProject meetings, final projects due Dec 4\nNA"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  },
+  {
+    "objectID": "notes.html",
+    "href": "notes.html",
+    "title": "Lecture notes",
+    "section": "",
+    "text": "Here you will find links to individual lecture notes. My goal is to get them written in Quarto, which should allow you to explore the notes in detail by yourself when looking at the source code (and re-run any relevant code examples)."
+  }
+]

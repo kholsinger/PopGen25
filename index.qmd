@@ -1,0 +1,34 @@
+---
+title: "Population Genetics 2025"
+author: "Andrius J. Dagilis"
+---
+
+# Welome to PopGen!
+
+This is the website for Population Genetics (EEB 5348) at UConn. Here you will find notes on each of the lectures, directions for [assignments](%22assignments.qmd%22) as well as a list of [readings](%22readings.qmd%22).
+
+# About the course
+
+The focus of this course is to introduce graduate students to population genetic thinking. I firmly believe the greatest benefit of population genetics is not knowledge of any particular approach or methodology (there are too many for any course to cover adequately), but a firm grasp of how population genetics can be used to 1) test and hone your intuition of evolutionary processes, 2) understand how (and why) different population genetics approaches work and 3) develop heuristics to examine any system of interest. Throughout the course we will examine classic population genetics results, read recent literature that either uses those results or throws them completely into question and work on developing a set of scripts and skills in a language of your choice (although I will recommend either `Julia` or `R`) to investigate the population genetics of different data-sets.
+
+# Schedule/General Logistics
+
+Each week, we will start with a lecture on Tuesday, followed by a paper discussion and lab on Thursday. The goal of this class structure is to be able to introduce general concepts/remind you of things you should remember from your Genetics/Evolution courses, introduce classic PopGen results, followed by a more in-depth dive in the state of the art uses of those results and some practical advice of coding how they work. Here's a general week-by-week overlay of the topics. Lecture notes will be added as links as we go along
+
+| Week | Topic(s) | Reading | Lecture Notes |
+|----|----|----|----|
+| Aug 26-28 | Genetic Diversity |  |  |
+| Sep 2-4 | Neutral processes and mutation |  |  |
+| Sep 9-11 | Demographic inference |  |  |
+| Sep 16-18 | Selection at a single locus |  |  |
+| Sep 23-25 | Recombination |  |  |
+| Sep 30-Oct 2 | Inference of selection |  |  |
+| Oct 7-9 | Project Meetings, no regular class | NA |  |
+| Oct 14-16 |  |  |  |
+| Oct 21-23 |  |  |  |
+| Oct 28-30 |  |  |  |
+| Nov 4-6 |  |  |  |
+| Nov 11-13 |  |  |  |
+| Nov 18-20 | Quantitative traits |  |  |
+| Nov 25-27 | THANKSGIVING BREAK |  |  |
+| Dec 2-4 | Project meetings, final projects due Dec 4 | NA |  |

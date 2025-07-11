@@ -1,0 +1,22 @@
+project:
+  type: website
+
+website:
+  title: "EEB5348-Fall25"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - assignments.qmd
+      - readings.qmd
+
+format:
+  html:
+    theme:
+      - lux
+      - brand
+    css: styles.css
+    toc: true
+
+
+
