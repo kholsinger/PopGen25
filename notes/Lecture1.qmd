@@ -1,5 +1,102 @@
 ---
 title: "Lecture 1"
-format: revealjs
+format: 
+    revealjs:
+        theme: night
+        incremental: true
+        preview-links: auto
 ---
 
+# Pre-amble
+
+## Welcome to the class
+
+- Welcome to Population Genetics, EEB5348!
+
+- Before we begin, some general logistics of the course.
+
+- The course will consist of a weekly lectures, paper/methods discussions and a lab.
+
+## Grading
+
+- Grades will consist of 
+    1. Participation in discussions. (24%)
+    2. Weekly lab assignments/quizzes. (24%)
+    3. Two minor homework assignments. (25%)
+    4. One final project. (25%)
+- And two free points!
+- Fully half the grade will depend on a project, so what is the project?
+
+## Assignments/Project
+The goal is to create a small set of scripts that you have for many basic population genetics tasks.
+
+. . .
+
+We will assume you have called variants _somehow_. We sadly don't have time to teach you how to call variants on the many approaches one could.
+
+. . . 
+
+You will develop scripts to calculate basic population genetic statistics, plot them, and perform statistical comparisons when possible in each weekly lab.
+
+. . .
+
+Two incremental code base submissions in which I'll test your code on different data than used in class.
+
+## Project cntd.
+
+Your term project will be to fully analyze the genetics of a population of your choice.
+    - Examine genetic diversity and its distribution
+    - Run basic demographic analysis
+    - Selection scans
+    - etc.
+. . .
+
+You will meet with me half-way through the semester to decide on a tractable data-set, or I will provide you one
+
+## What language should I code in?
+
+The nature of this course is to help you develop tools useful for _you_, and so no single language is being prescribed.
+
+. . . 
+
+I will personally write code in both `Julia` and `R`, but pretty much anything here should be achievable easily in `python`, and with a bit more elbow grease in any language you desire (but I really can't help you if you decide to go for `Haskell` or something).
+
+. . . 
+
+Beyond that you will need at least a passing familiarity with `bash`, as some of the tools we'll run are only really acessable via CLI, and if these terms are sounding scary - we'll have a bootcamp this Friday.
+
+
+## Schedule
+
+- 12 regular weeks, 2 project focused
+
+- You can find the schedule on the [course website]("link")
+
+## Questions?
+
+# Population Genetics   
+
+## What is population genetics?
+:::: {.columns}
+::: {.column width="40%"}
+<img class="r-stretch" src="/images/Haldane.jpg" />
+::: 
+
+::: {.column width="60%"}
+Population genetics is the anvil on which evolutionary intuition is developed.
+
+Many verbal models that sound reasonable don't work once formally considered.
+
+Pop-gen models specifically consider how evolution actually proceeds and affects genetic variation.
+
+:::
+::::
+
+## What are models?
+
+A model is a simplified version of reality.
+
+In pop gen, we generally deal with three types of models:
+    1. Explanatory
+    2. Predictive
+    3. Statistical
