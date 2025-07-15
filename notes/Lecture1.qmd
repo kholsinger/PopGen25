@@ -5,36 +5,41 @@ format:
         theme: night
         incremental: true
         preview-links: auto
+        chalkboard: true
+engine: julia
+julia:
+  exeflags: ["--project=../PopGen25"]
 ---
 
 # Pre-amble
 
 ## Welcome to the class
 
-- Welcome to Population Genetics, EEB5348!
+-   Welcome to Population Genetics, EEB5348!
 
-- Before we begin, some general logistics of the course.
+-   Before we begin, some general logistics of the course.
 
-- The course will consist of a weekly lectures, paper/methods discussions and a lab.
+-   The course will consist of a weekly lectures, paper/methods discussions and a lab.
 
 ## Grading
 
-- Grades will consist of 
-    1. Participation in discussions. (24%)
-    2. Weekly lab assignments/quizzes. (24%)
-    3. Two minor homework assignments. (25%)
-    4. One final project. (25%)
-- And two free points!
-- Fully half the grade will depend on a project, so what is the project?
+-   Grades will consist of
+    1.  Participation in discussions. (24%)
+    2.  Weekly lab assignments/quizzes. (24%)
+    3.  Two minor homework assignments. (25%)
+    4.  One final project. (25%)
+-   And two free points!
+-   Fully half the grade will depend on a project, so what is the project?
 
 ## Assignments/Project
+
 The goal is to create a small set of scripts that you have for many basic population genetics tasks.
 
 . . .
 
-We will assume you have called variants _somehow_. We sadly don't have time to teach you how to call variants on the many approaches one could.
+We will assume you have called variants *somehow*. We sadly don't have time to teach you how to call variants on the many approaches one could.
 
-. . . 
+. . .
 
 You will develop scripts to calculate basic population genetic statistics, plot them, and perform statistical comparisons when possible in each weekly lab.
 
@@ -45,58 +50,460 @@ Two incremental code base submissions in which I'll test your code on different 
 ## Project cntd.
 
 Your term project will be to fully analyze the genetics of a population of your choice.
-    - Examine genetic diversity and its distribution
-    - Run basic demographic analysis
-    - Selection scans
-    - etc.
-. . .
+
+\- Examine genetic diversity and its distribution
+
+\- Run basic demographic analysis
+
+\- Selection scans
+
+\- etc. . . .
 
 You will meet with me half-way through the semester to decide on a tractable data-set, or I will provide you one
 
+## I'm suddenly worried I don't have the background for this class
+
+Don't panic!
+
+Part of the goal of this class is to get you to start thinking computationally about evolution. That will require some math and programming, but I am designing these slides with plenty of time for asides and explanations in mind.
+
+. . .
+
+Be comfortable asking questions!
+
+. . .
+
+Mini boot-camp on programming this week, math we'll try to introduce as we go.
+
 ## What language should I code in?
 
-The nature of this course is to help you develop tools useful for _you_, and so no single language is being prescribed.
+The nature of this course is to help you develop tools useful for *you*, and so no single language is being prescribed.
 
-. . . 
+. . .
 
-I will personally write code in both `Julia` and `R`, but pretty much anything here should be achievable easily in `python`, and with a bit more elbow grease in any language you desire (but I really can't help you if you decide to go for `Haskell` or something).
+I will write code primarily in `julia`, but pretty much anything here should be achievable easily in`R` or `python`, and with a bit more elbow grease in any language you desire.
 
-. . . 
+. . .
 
-Beyond that you will need at least a passing familiarity with `bash`, as some of the tools we'll run are only really acessable via CLI, and if these terms are sounding scary - we'll have a bootcamp this Friday.
-
+Beyond that you will need at least a passing familiarity with `bash`, as some of the tools we'll run are only really acessable via CLI.
 
 ## Schedule
 
-- 12 regular weeks, 2 project focused
+-   12 regular weeks, 2 project focused
 
-- You can find the schedule on the [course website]("link")
+-   You can find the schedule on the [course website](%22link%22)
 
 ## Questions?
 
-# Population Genetics   
+# Population Genetics
 
 ## What is population genetics?
-:::: {.columns}
-::: {.column width="40%"}
-<img class="r-stretch" src="/images/Haldane.jpg" />
-::: 
 
-::: {.column width="60%"}
 Population genetics is the anvil on which evolutionary intuition is developed.
 
-Many verbal models that sound reasonable don't work once formally considered.
+. . .
+
+Many verbal models that sound reasonable work contrary to your ideas once spelled out.
+
+. . .
 
 Pop-gen models specifically consider how evolution actually proceeds and affects genetic variation.
-
-:::
-::::
 
 ## What are models?
 
 A model is a simplified version of reality.
 
-In pop gen, we generally deal with three types of models:
-    1. Explanatory
-    2. Predictive
-    3. Statistical
+. . .
+
+In pop gen, we generally deal with three "types" of models:
+
+1.  Explanatory - how does this system work?
+
+2.  Predictive - what will happen in the future?
+
+3.  Statistical - how well is the data represented by a model?
+
+. . .
+
+The same model can really have both explanatory and predictive power (and be used as the backbone for a statistical model).
+
+## Why do we model: a historical example
+
+Imagine a population with two types of butterflies: red and white.
+
+. . .
+
+You, as a geneticist, work out the underlying control. You find the trait is controlled by a single gene, and is biallelic.
+
+. . .
+
+You work out that `AA` and `Aa` butterflies are red, `aa` are white.
+
+. . .
+
+What will happen to the color in the long run?
+
+## Testing your intuition
+
+Recall: `Aa` and `AA` are red, `aa` are white.
+
+1.  Over time, all butterflies become white.
+
+2.  Over time, butterflies are more likely to be white.
+
+3.  No change.
+
+4.  Over time, butterflies are more likely to be red.
+
+5.  Over time, all butterflies become red.
+
+## How do you compare to early 20th century geneticists?
+
+It was broadly believed that dominant alleles should become more common.
+
+The dominance itself was held as a selective advantage (the trait is "stronger").
+
+It took a mathematician [^1] to point out that there's absolutely no reason dominance should have an advantage in inheritance of the *allele*.
+
+[^1]: According to the historic record - disgusted with how primitive math in biology was
+
+## Testing the intuition with a model {.smaller}
+
+Models begin by simplifying the world as much as possible.
+
+Given what we know about the system:
+
+-   Single locus
+
+-   Diploid
+
+-   Sexually reproducing
+
+. . .
+
+Let's get rid of other potential factors
+
+-   Only dominance, no other fitness differences
+
+-   No mutation
+
+-   No migration/multiple populations
+
+-   Population large enough we don't need to worry about drift
+
+-   Completely random mating
+
+## Now let's define what we are interested in
+
+We want to know how the frequency of white butterflies $P_{white}$ will change.
+
+Let $p$ be the frequency of the `A` allele. Then $q=1-p$ is the frequency of `a`.
+
+We also know that $P_{white} = P_{AA}+P_{Aa}$
+
+What will $P_{white}'$ (we often denote the next step/generation with a tick $'$) be?
+
+Time for chalkboard!
+
+## What we should have derived
+
+$P_{white}' = p*p+p*(1-p)*(1-p)*p= p^2+2pq$
+
+And additionally:
+
+$p' = p$
+
+So after one generation, you'll always have $P_{white}=p^2+2pq$
+
+## You probably recognize this: Hardy-Weinberg
+
+. . .
+
+Originally, HW was derived to show that dominance does not lead to a bias in transmission, even if the trait is expressed over the alternate in heterozygotes.
+
+. . .
+
+::: callout-tip
+## Takeaways
+
+Models have unexpected insights/uses. Hardy never imagined his short letter to Nature would become taught across schools in the world as a "null model" in evolution.
+:::
+
+## Null Models in Evolution
+
+Throughout this semester, we'll return to a few basic "null" models that will serve as useful measuring sticks.
+
+. . .
+
+One that we'll come back to time and again because of its simplicity is Wright-Fisher
+
+## Wright-Fisher
+
+Population of constant size *N*.
+
+Diploid.
+
+Hermaphroditic.
+
+Life cycle: gametes fuse to form adults, adults form gametes and die.
+
+Offspring are generated from a random sampling of alleles from parents (infinite gametes produced, random mating).
+
+## Wright-Fisher *In silico* {.smaller}
+
+Rather than start with math, let's start with a simple simulation of the model:
+
+```{julia}
+#| label: wright-fisher-code
+
+function WrightFisher(N,p,t)
+    g=1
+    freqs=Float64[]
+    append!(freqs,p)
+    while g<t
+        next = only(rand(Binomial(N,freqs[g]),1)/N)
+        append!(freqs,next)
+        g += 1
+    end
+    return(freqs)
+end
+```
+
+![](images/WF_example.gif){fig-align="center" width="225"}
+
+## What does it look like across many trials?
+
+```{julia}
+#| label: wright-fisher-full
+#| fig-height: 2
+using Distributions
+using Plots
+using Measures
+theme(:rose_pine)
+
+N= 1000
+gen=100
+samples = [WrightFisher(N,0.5,gen) for _ in 1:1000]
+p = plot(samples,
+    legend=false,
+    linecolor=:white,
+    ylim=(0,1), 
+    linealpha=0.25,
+    xlabel="Generation",
+    ylabel="Allele Frequency",
+    margins=5mm,
+    size=(1200,500))
+
+```
+
+## Wright-Fisher *analytically* {.smaller}
+
+Let's re-examine the model purely from a mathematical approach. We might want to know what the expected allele frequency in the next generation is. The expected value of a random outcome is the sum of all possible outcomes weighted by their probabilities.
+
+. . .
+
+$$
+E[p_{t+1}] = \sum_{i=1}^N\left( \frac{i}{N} P(i,N|p_{t}) \right) = \frac{1}{N} E[Binom(N,p{t})]
+$$
+
+. . .
+
+Where $Binom(N,p)$ is the $Binomial$ distribution, describing the chance of getting some number of successes given $N$ trials with each having a chance of success of $p$. If you know your distributions, you know that $E[Binomial(N,p)] = Np$, so you get:
+
+. . .
+
+$$
+E[p_{t+1}] = \frac{1}{N}Np_{t}=p_{t}
+$$
+
+. . .
+
+So, no change expected!
+
+## Analytical vs Simulation
+
+Let's add the running mean to the plot:
+
+```{julia}
+
+mean_p = mean.(eachcol(samples))
+plot!(p,mean_p,linecolor=:red)
+```
+
+Looks like no real change, just as we expected.
+
+## Variance in Wright-Fisher
+
+The natural follow-up in probability is to describe the variance. In this case, the variance in the change from one generation to the next is
+
+$$
+Var[p_{t+1}] = \frac{p_t(1-p_t)}{2N}
+$$
+
+But we might want to know what the value is after many generations. That is a bit more complex, but for now understand that it is proportional to the above result:
+
+$$
+Var[p_t] \propto \frac{t}{2N}
+$$
+
+## Add to the plot
+
+Again, we can add this to the plot:
+
+```{julia}
+confint= 1.96 .* [sqrt(t/(2*N)) for t in 1:gen]
+plot!(p,mean_p;ribbon=confint)
+```
+
+## What is/are the important factors?
+
+Our simple Wright-Fisher simulations and analytical results depend on two quantities:
+
+1.  The starting allele frequency.
+
+2.  The population size.
+
+. . .
+
+Let's play around with each to develop a sense for what they do.
+
+## Allele frequency
+
+Recall that expected allele frequency at time step *t* is just the initial frequency. But variance has a more complicated relationship:
+
+```{julia}
+using LaTeXStrings
+function var_func(p,N)
+    return(p*(1-p)/(2*N))
+end
+x= 0.0:0.05:1.0
+plot(x,var_func.(x,1000),
+    leg =false,
+    xlab="Allele Frequency",
+    ylab=L"Var[p_{t+1}]",
+    margins=5mm,
+    size=(1000,500))
+```
+
+## Allele frequency in practice {.smaller}
+
+In practice, you find the largest allele frequency swings at intermediate frequencies.
+
+```{julia}
+
+plot(WrightFisher.(1000,x,100),
+    leg=false,
+    xlabel="Generation",
+    ylabel="Allele frequency",
+    margin=5mm,
+    size=(1000,400))
+```
+
+## Effects of population size
+
+Population size *does not* affect the expected allele frequency change.
+
+::: callout-important
+## Takeaway
+
+While we generally say that drift is strongly affected by population size, it plays no role in the *direction* of drift. In the long run, small and large populations show the same trends in terms of drift.
+:::
+
+Population size *does* affect the variance.
+
+## $N$ vs Variance
+
+```{julia}
+s1 = [WrightFisher(100,0.5,gen) for _ in 1:1000]
+p1 = plot(s1,
+    legend=false,
+    linecolor=:white,
+    ylim=(0,1), 
+    linealpha=0.1,
+    xlabel="Generation",
+    ylabel="Allele Frequency",
+    margins=5mm)
+s2 = [WrightFisher(10000,0.5,gen) for _ in 1:1000]
+p2 = plot(s2,
+    legend=false,
+    linecolor=:white,
+    ylim=(0,1), 
+    linealpha=0.1,
+    xlabel="Generation",
+    ylabel="Allele Frequency",
+    margins=5mm)
+
+plot(p1,p2,size=(1000,600);layout=2)
+```
+
+## No change in mean!
+
+```{julia}
+p1_2 = plot!(p1,mean.(eachcol(s1)),linecolor=:red)
+p2_2 = plot!(p2,mean.(eachcol(s2)),linecolor=:red)
+
+plot(p1_2,p2_2,size=(1000,600);layout=2)
+```
+
+## Different question: fate of an allele? {.smaller}
+
+Let's use this framework to now ask a different question: what's the probability an alternate allele is fixed?
+
+Let's think of it formally - what is the probability that the `A` allele is fixed if it starts with frequency $p_t$?
+
+. . .
+
+Here, we can use a favorite trick of population geneticists: we'll work backwards.
+
+. . .
+
+Imagine we started with a population where each of the *N* individuals has a different allele.
+
+. . .
+
+Eventually, once enough time has passed, all of the individuals in the population will have descended from just *one* of these ancestors.[^2]
+
+[^2]: We'll prove this later when we talk about the coalescent, but for now take it as a fact given to you by god.
+
+## Who's the ancestor?
+
+If all of the alleles are neutral *any* of them have an equal probability of being the ancestor.
+
+. . .
+
+Now, what if there were two types of alleles in different proportions?
+
+. . .
+
+Should be fairly intuitive to see that:
+
+$$
+P(fix|p_0) = p_0
+$$
+
+## Verifying with simulations
+
+Here we start with a frequency of 0.1.
+
+```{julia}
+gen=100000
+
+function WrightFisher_long(N,p)
+    freqs=Float64[]
+    append!(freqs,p)
+    while last(freqs)*(1-last(freqs)) > 0
+        next = only(rand(Binomial(N,last(freqs)),1)/N)
+        append!(freqs,next)
+    end
+    return(freqs)
+end
+
+sims = [WrightFisher_long(1000,0.1) for _ in 1:1000]
+p1 = plot(sims,xlabel="Generations",ylabel="Allele Frequency",leg=false,margin=5mm,linecolor=:white,linealpha=0.1)
+
+fixed_freqs = [last(sims[x]) for x in 1:1000]
+ff= sum(fixed_freqs)/1000
+p2 = plot(["lost","fixed"],[1-ff,ff],leg=false,xlabel="Final Frequency",ylabel="Count",normalize=true)
+
+plot(p1,p2,size=(1000,500);layout=2)
+```

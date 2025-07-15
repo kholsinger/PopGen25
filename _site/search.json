@@ -19,5 +19,285 @@
     "title": "Lecture notes",
     "section": "",
     "text": "Here you will find links to individual lecture notes. My goal is to get them written in Quarto, which should allow you to explore the notes in detail by yourself when looking at the source code (and re-run any relevant code examples)."
+  },
+  {
+    "objectID": "notes/Lecture1.html#welcome-to-the-class",
+    "href": "notes/Lecture1.html#welcome-to-the-class",
+    "title": "Lecture 1",
+    "section": "Welcome to the class",
+    "text": "Welcome to the class\n\nWelcome to Population Genetics, EEB5348!\nBefore we begin, some general logistics of the course.\nThe course will consist of a weekly lectures, paper/methods discussions and a lab."
+  },
+  {
+    "objectID": "notes/Lecture1.html#grading",
+    "href": "notes/Lecture1.html#grading",
+    "title": "Lecture 1",
+    "section": "Grading",
+    "text": "Grading\n\nGrades will consist of\n\nParticipation in discussions. (24%)\nWeekly lab assignments/quizzes. (24%)\nTwo minor homework assignments. (25%)\nOne final project. (25%)\n\nAnd two free points!\nFully half the grade will depend on a project, so what is the project?"
+  },
+  {
+    "objectID": "notes/Lecture1.html#assignments",
+    "href": "notes/Lecture1.html#assignments",
+    "title": "Lecture 1",
+    "section": "Assignments",
+    "text": "Assignments"
+  },
+  {
+    "objectID": "notes/Lecture1.html#project",
+    "href": "notes/Lecture1.html#project",
+    "title": "Lecture 1",
+    "section": "Project",
+    "text": "Project"
+  },
+  {
+    "objectID": "notes/Lecture1.html#shedule",
+    "href": "notes/Lecture1.html#shedule",
+    "title": "Lecture 1",
+    "section": "Shedule",
+    "text": "Shedule\n\n12 regular weeks, 2 project focused\nYou can find the schedule on the course website"
+  },
+  {
+    "objectID": "notes/Lecture1.html#assignmentsproject",
+    "href": "notes/Lecture1.html#assignmentsproject",
+    "title": "Lecture 1",
+    "section": "Assignments/Project",
+    "text": "Assignments/Project\nThe goal is to create a small set of scripts that you have for many basic population genetics tasks.\n\nWe will assume you have called variants somehow. We sadly don’t have time to teach you how to call variants on the many approaches one could.\n\n\nYou will develop scripts to calculate basic population genetic statistics, plot them, and perform statistical comparisons when possible in each weekly lab.\n\n\nTwo incremental code base submissions in which I’ll test your code on different data than used in class."
+  },
+  {
+    "objectID": "notes/Lecture1.html#project-cntd.",
+    "href": "notes/Lecture1.html#project-cntd.",
+    "title": "Lecture 1",
+    "section": "Project cntd.",
+    "text": "Project cntd.\nYour term project will be to fully analyze the genetics of a population of your choice.\n- Examine genetic diversity and its distribution\n- Run basic demographic analysis\n- Selection scans\n- etc. . . .\nYou will meet with me half-way through the semester to decide on a tractable data-set, or I will provide you one"
+  },
+  {
+    "objectID": "notes/Lecture1.html#what-language-should-i-code-in",
+    "href": "notes/Lecture1.html#what-language-should-i-code-in",
+    "title": "Lecture 1",
+    "section": "What language should I code in?",
+    "text": "What language should I code in?\nThe nature of this course is to help you develop tools useful for you, and so no single language is being prescribed.\n\nI will write code primarily in julia, but pretty much anything here should be achievable easily inR or python, and with a bit more elbow grease in any language you desire.\n\n\nBeyond that you will need at least a passing familiarity with bash, as some of the tools we’ll run are only really acessable via CLI."
+  },
+  {
+    "objectID": "notes/Lecture1.html#questions",
+    "href": "notes/Lecture1.html#questions",
+    "title": "Lecture 1",
+    "section": "Questions?",
+    "text": "Questions?"
+  },
+  {
+    "objectID": "notes/Lecture1.html#schedule",
+    "href": "notes/Lecture1.html#schedule",
+    "title": "Lecture 1",
+    "section": "Schedule",
+    "text": "Schedule\n\n12 regular weeks, 2 project focused\nYou can find the schedule on the course website"
+  },
+  {
+    "objectID": "notes/Lecture1.html#what-is-population-genetics",
+    "href": "notes/Lecture1.html#what-is-population-genetics",
+    "title": "Lecture 1",
+    "section": "What is population genetics?",
+    "text": "What is population genetics?\nPopulation genetics is the anvil on which evolutionary intuition is developed.\n\nMany verbal models that sound reasonable work contrary to your ideas once spelled out.\n\n\nPop-gen models specifically consider how evolution actually proceeds and affects genetic variation."
+  },
+  {
+    "objectID": "notes/Lecture1.html#what-are-models",
+    "href": "notes/Lecture1.html#what-are-models",
+    "title": "Lecture 1",
+    "section": "What are models?",
+    "text": "What are models?\nA model is a simplified version of reality.\n\nIn pop gen, we generally deal with three “types” of models:\n\nExplanatory - how does this system work?\nPredictive - what will happen in the future?\nStatistical - how well is the data represented by a model?\n\n\n\nThe same model can really have both explanatory and predictive power (and be used as the backbone for a statistical model)."
+  },
+  {
+    "objectID": "notes/Lecture1.html#why-do-we-model-hardy-weinberg",
+    "href": "notes/Lecture1.html#why-do-we-model-hardy-weinberg",
+    "title": "Lecture 1",
+    "section": "Why do we model? Hardy-Weinberg",
+    "text": "Why do we model? Hardy-Weinberg\nImagine a population with two types of butterflies: red and white.\n\nYou, as a geneticist, work out the underlying control. You find the trait is controlled by a single gene, and is biallelic.\n\n\nYou work out that AA and Aa butterflies are red, aa are white.\n\n\nWhat will happen to the color in the long run?"
+  },
+  {
+    "objectID": "notes/Lecture1.html#testing-your-intuition",
+    "href": "notes/Lecture1.html#testing-your-intuition",
+    "title": "Lecture 1",
+    "section": "Testing your intuition",
+    "text": "Testing your intuition\nRecall: Aa and AA are red, aa are white.\n\nOver time, all butterflies become white.\nOver time, butterflies are more likely to be white.\nNo change.\nOver time, butterflies are more likely to be red.\nOver time, all butterflies become red."
+  },
+  {
+    "objectID": "notes/Lecture1.html#how-do-you-compare-to-early-20th-century-geneticists",
+    "href": "notes/Lecture1.html#how-do-you-compare-to-early-20th-century-geneticists",
+    "title": "Lecture 1",
+    "section": "How do you compare to early 20th century geneticists?",
+    "text": "How do you compare to early 20th century geneticists?\nIt was broadly believed that dominant alleles should become more common.\nThe dominance itself was held as a selective advantage (the trait is “stronger”).\nIt took a mathematician 1 to point out that there’s absolutely no reason dominance should have an advantage in inheritance of the allele.\nAccording to the historic record - disgusted with how primitive math in biology was"
+  },
+  {
+    "objectID": "notes/Lecture1.html#testing-the-intuition-with-a-model",
+    "href": "notes/Lecture1.html#testing-the-intuition-with-a-model",
+    "title": "Lecture 1",
+    "section": "Testing the intuition with a model",
+    "text": "Testing the intuition with a model\nModels begin by simplifying the world as much as possible.\nGiven what we know about the system:\n\nSingle locus\nDiploid\nSexually reproducing\n\n\nLet’s get rid of other potential factors\n\nOnly dominance, no other fitness differences\nNo mutation\nNo migration/multiple populations\nPopulation large enough we don’t need to worry about drift\nCompletely random mating"
+  },
+  {
+    "objectID": "notes/Lecture1.html#why-do-we-model-a-historical-example",
+    "href": "notes/Lecture1.html#why-do-we-model-a-historical-example",
+    "title": "Lecture 1",
+    "section": "Why do we model: a historical example",
+    "text": "Why do we model: a historical example\nImagine a population with two types of butterflies: red and white.\n\nYou, as a geneticist, work out the underlying control. You find the trait is controlled by a single gene, and is biallelic.\n\n\nYou work out that AA and Aa butterflies are red, aa are white.\n\n\nWhat will happen to the color in the long run?"
+  },
+  {
+    "objectID": "notes/Lecture1.html#now-lets-define-what-we-are-interested-in",
+    "href": "notes/Lecture1.html#now-lets-define-what-we-are-interested-in",
+    "title": "Lecture 1",
+    "section": "Now let’s define what we are interested in",
+    "text": "Now let’s define what we are interested in\nWe want to know how the frequency of white butterflies \\(P_{white}\\) will change.\nLet \\(p\\) be the frequency of the A allele. Then \\(q=1-p\\) is the frequency of a.\nWe also know that \\(P_{white} = P_{AA}+P_{Aa}\\)\nWhat will \\(P_{white}'\\) (we often denote the next step/generation with a tick \\('\\)) be?\nTime for chalkboard!"
+  },
+  {
+    "objectID": "notes/Lecture1.html#what-we-should-have-derived",
+    "href": "notes/Lecture1.html#what-we-should-have-derived",
+    "title": "Lecture 1",
+    "section": "What we should have derived",
+    "text": "What we should have derived\n\\(P_{white}' = p*p+p*(1-p)*(1-p)*p= p^2+2pq\\)\nAnd additionally:\n\\(p' = p\\)\nSo after one generation, you’ll always have \\(P_{white}=p^2+2pq\\)"
+  },
+  {
+    "objectID": "notes/Lecture1.html#you-probably-recognize-this-hardy-weinberg",
+    "href": "notes/Lecture1.html#you-probably-recognize-this-hardy-weinberg",
+    "title": "Lecture 1",
+    "section": "You probably recognize this: Hardy-Weinberg",
+    "text": "You probably recognize this: Hardy-Weinberg\n\nOriginally, HW was derived to show that dominance does not lead to a bias in transmission, even if the trait is expressed over the alternate in heterozygotes.\n\n\n\n\n\n\n\n\nTakeaways\n\n\nModels have unexpected insights/uses. Hardy never imagined his short letter to Nature would become taught across schools in the world as a “null model” in evolution."
+  },
+  {
+    "objectID": "notes/Lecture1.html#null-models-in-evolution",
+    "href": "notes/Lecture1.html#null-models-in-evolution",
+    "title": "Lecture 1",
+    "section": "Null Models in Evolution",
+    "text": "Null Models in Evolution\nThroughout this semester, we’ll return to a few basic “null” models that will serve as useful measuring sticks.\n\nOne that we’ll come back to time and again because of its simplicity is Wright-Fisher"
+  },
+  {
+    "objectID": "notes/Lecture1.html#wright-fisher",
+    "href": "notes/Lecture1.html#wright-fisher",
+    "title": "Lecture 1",
+    "section": "Wright-Fisher",
+    "text": "Wright-Fisher\nPopulation of constant size N.\nDiploid.\nHermaphroditic.\nLife cycle: gametes fuse to form adults, adults form gametes and die.\nOffspring are generated from a random sampling of alleles from parents (infinite gametes produced, random mating)."
+  },
+  {
+    "objectID": "notes/Lecture1.html#wright-fisher-in-silico",
+    "href": "notes/Lecture1.html#wright-fisher-in-silico",
+    "title": "Lecture 1",
+    "section": "Wright-Fisher In silico",
+    "text": "Wright-Fisher In silico\nRather than start with math, let’s start with a simple simulation of the model:\n\n\nWrightFisher (generic function with 1 method)"
+  },
+  {
+    "objectID": "notes/Lecture1.html#what-does-it-look-like",
+    "href": "notes/Lecture1.html#what-does-it-look-like",
+    "title": "Lecture 1",
+    "section": "What does it look like?",
+    "text": "What does it look like?"
+  },
+  {
+    "objectID": "notes/Lecture1.html#what-does-it-look-like-across-many-trials",
+    "href": "notes/Lecture1.html#what-does-it-look-like-across-many-trials",
+    "title": "Lecture 1",
+    "section": "What does it look like across many trials?",
+    "text": "What does it look like across many trials?"
+  },
+  {
+    "objectID": "notes/Lecture1.html#wright-fisher-analytically",
+    "href": "notes/Lecture1.html#wright-fisher-analytically",
+    "title": "Lecture 1",
+    "section": "Wright-Fisher analytically",
+    "text": "Wright-Fisher analytically\nLet’s re-examine the model purely from a mathematical approach. We might want to know what the expected allele frequency in the next generation is. The expected value of a random outcome is the sum of all possible outcomes weighted by their probabilities.\n\n\\[\nE[p_{t+1}] = \\sum_{i=1}^N\\left( \\frac{i}{N} P(i,N|p_{t}) \\right) = \\frac{1}{N} E[Binom(N,p{t})]\n\\]\n\n\nWhere \\(Binom(N,p)\\) is the \\(Binomial\\) distribution, describing the chance of getting some number of successes given \\(N\\) trials with each having a chance of success of \\(p\\). If you know your distributions, you know that \\(E[Binomial(N,p)] = Np\\), so you get:\n\n\n\\[\nE[p_{t+1}] = \\frac{1}{N}Np_{t}=p_{t}\n\\]\n\n\nSo, no change expected!"
+  },
+  {
+    "objectID": "notes/Lecture1.html#variance-in-wright-fisher",
+    "href": "notes/Lecture1.html#variance-in-wright-fisher",
+    "title": "Lecture 1",
+    "section": "Variance in Wright-Fisher",
+    "text": "Variance in Wright-Fisher\nThe natural follow-up in probability is to describe the variance. In this case, the variance in the change from one generation to the next is\n\\[\nVar[p_{t+1}] = \\frac{p_t(1-p_t)}{2N}\n\\]\nBut we might want to know what the value is after many generations. That is a bit more complex, but for now understand that it is proportional to the above result:\n\\[\nVar[p_t] \\propto \\frac{t}{2N}\n\\]"
+  },
+  {
+    "objectID": "notes/Lecture1.html#analytical-vs-simulation",
+    "href": "notes/Lecture1.html#analytical-vs-simulation",
+    "title": "Lecture 1",
+    "section": "Analytical vs Simulation",
+    "text": "Analytical vs Simulation\nLet’s add the running mean to the plot:\n\n\n\n\n\n  \n    \n  \n\n\n\n  \n    \n  \n\n\n\n  \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLooks like no real change, just as we expected."
+  },
+  {
+    "objectID": "notes/Lecture1.html#add-to-the-plot",
+    "href": "notes/Lecture1.html#add-to-the-plot",
+    "title": "Lecture 1",
+    "section": "Add to the plot",
+    "text": "Add to the plot\nAgain, we can add this to the plot:"
+  },
+  {
+    "objectID": "notes/Lecture1.html#what-isare-the-important-factors",
+    "href": "notes/Lecture1.html#what-isare-the-important-factors",
+    "title": "Lecture 1",
+    "section": "What is/are the important factors?",
+    "text": "What is/are the important factors?\nOur simple Wright-Fisher simulations and analytical results depend on two quantities:\n\nThe starting allele frequency.\nThe population size.\n\n\nLet’s play around with each to develop a sense for what they do."
+  },
+  {
+    "objectID": "notes/Lecture1.html#allele-frequency",
+    "href": "notes/Lecture1.html#allele-frequency",
+    "title": "Lecture 1",
+    "section": "Allele frequency",
+    "text": "Allele frequency\nRecall that expected allele frequency at time step t is just the initial frequency. But variance has a more complicated relationship:"
+  },
+  {
+    "objectID": "notes/Lecture1.html#allele-frequency-in-practice",
+    "href": "notes/Lecture1.html#allele-frequency-in-practice",
+    "title": "Lecture 1",
+    "section": "Allele frequency in practice",
+    "text": "Allele frequency in practice\nIn practice, you find the largest allele frequency swings at intermediate frequencies."
+  },
+  {
+    "objectID": "notes/Lecture1.html#effects-of-population-size",
+    "href": "notes/Lecture1.html#effects-of-population-size",
+    "title": "Lecture 1",
+    "section": "Effects of population size",
+    "text": "Effects of population size\nPopulation size does not affect the expected allele frequency change.\n\n\n\n\n\n\nTakeaway\n\n\nWhile we generally say that drift is strongly affected by population size, it plays no role in the direction of drift. In the long run, small and large populations show the same trends in terms of drift.\n\n\n\nPopulation size does affect the variance."
+  },
+  {
+    "objectID": "notes/Lecture1.html#effects-of-variance",
+    "href": "notes/Lecture1.html#effects-of-variance",
+    "title": "Lecture 1",
+    "section": "Effects of variance",
+    "text": "Effects of variance"
+  },
+  {
+    "objectID": "notes/Lecture1.html#n-vs-variance",
+    "href": "notes/Lecture1.html#n-vs-variance",
+    "title": "Lecture 1",
+    "section": "\\(N\\) vs Variance",
+    "text": "\\(N\\) vs Variance"
+  },
+  {
+    "objectID": "notes/Lecture1.html#no-change-in-mean",
+    "href": "notes/Lecture1.html#no-change-in-mean",
+    "title": "Lecture 1",
+    "section": "No change in mean!",
+    "text": "No change in mean!"
+  },
+  {
+    "objectID": "notes/Lecture1.html#different-question-fate-of-an-allele",
+    "href": "notes/Lecture1.html#different-question-fate-of-an-allele",
+    "title": "Lecture 1",
+    "section": "Different question: fate of an allele?",
+    "text": "Different question: fate of an allele?\nLet’s use this framework to now ask a different question: what’s the probability an alternate allele is fixed?\nLet’s think of it formally - what is the probability that the A allele is fixed if it starts with frequency \\(p_t\\)?\n\nHere, we can use a favorite trick of population geneticists: we’ll work backwards.\n\n\nImagine we started with a population where each of the N individuals has a different allele.\n\n\nEventually, once enough time has passed, all of the individuals in the population will have descended from just one of these ancestors.1\n\nWe’ll prove this later when we talk about the coalescent, but for now take it as a fact given to you by god."
+  },
+  {
+    "objectID": "notes/Lecture1.html#whos-the-ancestor",
+    "href": "notes/Lecture1.html#whos-the-ancestor",
+    "title": "Lecture 1",
+    "section": "Who’s the ancestor?",
+    "text": "Who’s the ancestor?\nIf all of the alleles are neutral any of them have an equal probability of being the ancestor.\n\nNow, what if there were two types of alleles in different proportions?\n\n\nShould be fairly intuitive to see that:\n\\[\nP(fix|p_0) = p_0\n\\]"
+  },
+  {
+    "objectID": "notes/Lecture1.html#verifying-with-simulations",
+    "href": "notes/Lecture1.html#verifying-with-simulations",
+    "title": "Lecture 1",
+    "section": "Verifying with simulations",
+    "text": "Verifying with simulations\nHere we start with a frequency of 0.1."
+  },
+  {
+    "objectID": "notes/Lecture1.html#im-suddenly-worried-i-dont-have-the-background-for-this-class",
+    "href": "notes/Lecture1.html#im-suddenly-worried-i-dont-have-the-background-for-this-class",
+    "title": "Lecture 1",
+    "section": "I’m suddenly worried I don’t have the background for this class",
+    "text": "I’m suddenly worried I don’t have the background for this class\nDon’t panic!\nPart of the goal of this class is to get you to start thinking computationally about evolution. That will require some math and programming, but I am designing these slides with plenty of time for asides and explanations in mind.\n\nBe comfortable asking questions!\n\n\nMini boot-camp on programming this week, math we’ll try to introduce as we go."
   }
 ]
