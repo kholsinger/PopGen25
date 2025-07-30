@@ -200,7 +200,7 @@
     "href": "notes/Lecture1.html#wright-fisher-analytically",
     "title": "Lecture 1",
     "section": "Wright-Fisher analytically",
-    "text": "Wright-Fisher analytically\nLet’s re-examine the model purely from a mathematical approach. We might want to know what the expected allele frequency in the next generation is. The expected value of a random outcome is the sum of all possible outcomes weighted by their probabilities.\n\n\\[\nE[p_{t+1}] = \\sum_{i=1}^N\\left( \\frac{i}{N} P(i,N|p_{t}) \\right) = \\frac{1}{N} E[Binom(N,p{t})]\n\\]\n\n\nWhere \\(Binom(N,p)\\) is the \\(Binomial\\) distribution, describing the chance of getting some number of successes given \\(N\\) trials with each having a chance of success of \\(p\\). If you know your distributions, you know that \\(E[Binomial(N,p)] = Np\\), so you get:\n\n\n\\[\nE[p_{t+1}] = \\frac{1}{N}Np_{t}=p_{t}\n\\]\n\n\nSo, no change expected!"
+    "text": "Wright-Fisher analytically\nLet’s re-examine the model purely from a mathematical approach. We might want to know what the expected allele frequency in the next generation is. The expected value of a random outcome is the sum of all possible outcomes weighted by their probabilities.\n\n\\[\nE[p_{t+1}] = \\sum_{i=1}^N\\left( \\frac{i}{N} P(i,N|p_{t}) \\right) = \\frac{1}{N} E[Binom(N,p{t})]\n\\]\n\n\nWhere \\(Binom(N,p)\\) is the \\(Binomial\\) distribution, describing the chance of getting some number of successes given \\(N\\) trials with each having a chance of success of \\(p\\). If you know your distributions, you know that \\(E[Binomial(N,p)] = Np\\), so you get:\n\n\n\\[\nE[p_{t+1}] = \\frac{1}{N}Np_{t}=p_{t}\n\\]\n\n\nAnd, further, \\(E[p_t] = p_{t-1} = ... = p_0\\), meaning no change is expected."
   },
   {
     "objectID": "notes/Lecture1.html#variance-in-wright-fisher",
@@ -214,7 +214,7 @@
     "href": "notes/Lecture1.html#analytical-vs-simulation",
     "title": "Lecture 1",
     "section": "Analytical vs Simulation",
-    "text": "Analytical vs Simulation\nLet’s add the running mean to the plot:\n\n\n\n\n\n  \n    \n  \n\n\n\n  \n    \n  \n\n\n\n  \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLooks like no real change, just as we expected."
+    "text": "Analytical vs Simulation\nLet’s add the running mean to the plot to see how it behaves:\n\n\n\n\n\n  \n    \n  \n\n\n\n  \n    \n  \n\n\n\n  \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLooks like no real change, just as we expected."
   },
   {
     "objectID": "notes/Lecture1.html#add-to-the-plot",
@@ -291,7 +291,7 @@
     "href": "notes/Lecture1.html#verifying-with-simulations",
     "title": "Lecture 1",
     "section": "Verifying with simulations",
-    "text": "Verifying with simulations\nHere we start with a frequency of 0.1."
+    "text": "Verifying with simulations\nHere we start with a frequency of 0.2."
   },
   {
     "objectID": "notes/Lecture1.html#im-suddenly-worried-i-dont-have-the-background-for-this-class",
@@ -299,5 +299,54 @@
     "title": "Lecture 1",
     "section": "I’m suddenly worried I don’t have the background for this class",
     "text": "I’m suddenly worried I don’t have the background for this class\nDon’t panic!\nPart of the goal of this class is to get you to start thinking computationally about evolution. That will require some math and programming, but I am designing these slides with plenty of time for asides and explanations in mind.\n\nBe comfortable asking questions!\n\n\nMini boot-camp on programming this week, math we’ll try to introduce as we go."
+  },
+  {
+    "objectID": "notes/Lecture1.html#and-if-we-start-with-a-more-common-allele",
+    "href": "notes/Lecture1.html#and-if-we-start-with-a-more-common-allele",
+    "title": "Lecture 1",
+    "section": "And if we start with a more common allele…",
+    "text": "And if we start with a more common allele…"
+  },
+  {
+    "objectID": "notes/Lecture1.html#so-what-happens-to-a-new-allele",
+    "href": "notes/Lecture1.html#so-what-happens-to-a-new-allele",
+    "title": "Lecture 1",
+    "section": "So, what happens to a new allele?",
+    "text": "So, what happens to a new allele?\nQuiz:\nWhat frequency will a mutation be found in when it first occurs?\nWhat is the probability of that mutation becoming fixed?\nGiven only what you have learned here: should smaller populations show slower or faster rates of fixing substitutions?"
+  },
+  {
+    "objectID": "notes/Lecture1.html#sewall-wright-ronald-a.-fisher",
+    "href": "notes/Lecture1.html#sewall-wright-ronald-a.-fisher",
+    "title": "Lecture 1",
+    "section": "Sewall Wright, Ronald A. Fisher",
+    "text": "Sewall Wright, Ronald A. Fisher"
+  },
+  {
+    "objectID": "notes/Lecture1.html#the-model",
+    "href": "notes/Lecture1.html#the-model",
+    "title": "Lecture 1",
+    "section": "The model",
+    "text": "The model\nPopulation of constant size N.\nDiploid.\nHermaphroditic.\nLife cycle: gametes fuse to form adults, adults form gametes and die.\nOffspring are generated from a random sampling of alleles from parents (infinite gametes produced, random mating)."
+  },
+  {
+    "objectID": "notes/Lecture1.html#and-the-same-happens-with-smaller-populations",
+    "href": "notes/Lecture1.html#and-the-same-happens-with-smaller-populations",
+    "title": "Lecture 1",
+    "section": "And the same happens with smaller populations",
+    "text": "And the same happens with smaller populations"
+  },
+  {
+    "objectID": "notes/Lecture1.html#but-what-about-real-data",
+    "href": "notes/Lecture1.html#but-what-about-real-data",
+    "title": "Lecture 1",
+    "section": "But what about real data?",
+    "text": "But what about real data?\nHow general are the dynamics of this model?"
+  },
+  {
+    "objectID": "notes/Lecture2.html#genetic-diversity-writ-large",
+    "href": "notes/Lecture2.html#genetic-diversity-writ-large",
+    "title": "Lecture 2",
+    "section": "Genetic diversity writ large",
+    "text": "Genetic diversity writ large\nLast week you learned how different evolutionary forces affect allele frequencies at a single site.\n\nThis week, we’ll be discussing how we can measure genetic diversity and what those measurements can tell us.\n\n\nWe will look at a few statistics that measure genetic diversity, notably \\(\\pi\\), \\(\\theta_W\\) and \\(H\\)"
   }
 ]

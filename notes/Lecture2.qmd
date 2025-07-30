@@ -1,0 +1,80 @@
+---
+title: "Lecture 2"
+format: 
+    revealjs:
+        theme: night
+        incremental: true
+        preview-links: auto
+        chalkboard: true
+engine: julia
+julia:
+  exeflags: ["--project=../PopGen25"]
+---
+
+# Lecture 2: Describing genetic diversity
+
+## Genetic diversity writ large
+
+Last week you learned how different evolutionary forces affect allele frequencies at a single site.
+
+. . .
+
+This week, we'll be discussing how we can measure genetic diversity and what those measurements can tell us.
+
+. . .
+
+We will look at a few statistics that measure genetic diversity, notably the SFS, $\pi$, $\theta_W$ and $H$
+
+## Measuring diversity at a site
+
+Before we think about what's happening across genomic regions, we can start by asking what is happening at an individual locus.
+
+::: callout-tip
+## Recall
+
+We will refer to the allele frequency of the *alternate* allele at site *i* as $p_i$.
+:::
+
+What are some ways we can ask how diverse a population is at site *i*?
+
+## Heterozygosity (*H*)
+
+One of the simplest metrics is to ask how frequently we see individuals who are heterozygous.
+
+. . .
+
+$$
+H = P_{Aa}
+$$
+
+Where $P_{Aa}$ is the frequency of heterozygotes.
+
+. . .
+
+If we are in HW (or close to), this should just be: $2p_i(1-p_i)$.
+
+. . .
+
+In practice - often not the case.
+
+. . .
+
+Also - does not work in ploidy != 2 (haploids, polyploids).
+
+## Heterozygosity (\$\\pi\$)
+
+Another way to think about genetic diversity is to ask:
+
+What is the probability that if you sample any two alleles in the population, they are different.
+
+. . .
+
+In an infinite population, this is simply:
+
+$$
+\pi = p(1-p)+(1-p)p = 2p(1-p)
+$$
+
+. . .
+
+Equal to heterozygosity in large populations under HW.

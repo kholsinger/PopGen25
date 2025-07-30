@@ -37,7 +37,7 @@ The goal is to create a small set of scripts that you have for many basic popula
 
 . . .
 
-We will assume you have called variants *somehow*. We sadly don't have time to teach you how to call variants on the many approaches one could.
+We will assume you have called variants *somehow*. We sadly don't have time to teach you how to call variants on the many sequencing approaches one could take (see Jill Wegrzin's EEB XXXX for that!).
 
 . . .
 
@@ -237,7 +237,11 @@ Throughout this semester, we'll return to a few basic "null" models that will se
 
 One that we'll come back to time and again because of its simplicity is Wright-Fisher
 
-## Wright-Fisher
+# Wright-Fisher
+
+## Sewall Wright, Ronald A. Fisher
+
+## The model
 
 Population of constant size *N*.
 
@@ -318,11 +322,11 @@ $$
 
 . . .
 
-So, no change expected!
+And, further, $E[p_t] = p_{t-1} = ... = p_0$, meaning no change is expected.
 
 ## Analytical vs Simulation
 
-Let's add the running mean to the plot:
+Let's add the running mean to the plot to see how it behaves:
 
 ```{julia}
 
@@ -373,12 +377,13 @@ Recall that expected allele frequency at time step *t* is just the initial frequ
 
 ```{julia}
 using LaTeXStrings
-function var_func(p,N)
+function var_func(p;N=1)
     return(p*(1-p)/(2*N))
 end
-x= 0.0:0.05:1.0
-plot(x,var_func.(x,1000),
+
+plot(var_func,0,1,
     leg =false,
+    linecolor=:white,
     xlab="Allele Frequency",
     ylab=L"Var[p_{t+1}]",
     margins=5mm,
@@ -390,13 +395,22 @@ plot(x,var_func.(x,1000),
 In practice, you find the largest allele frequency swings at intermediate frequencies.
 
 ```{julia}
-
-plot(WrightFisher.(1000,x,100),
+x= 0.0:0.01:1.0
+sim = WrightFisher.(1000,x,100)
+p1 = plot(sim,
     leg=false,
     xlabel="Generation",
     ylabel="Allele frequency",
-    margin=5mm,
-    size=(1000,400))
+    margin=5mm)
+
+function t_vs_tp1(sim)
+    return([(sim[t-1],abs(sim[t]-sim[t-1])) for t in 2:length(sim)])
+end
+
+test = reduce(vcat,[t_vs_tp1(sim[x]) for x in 1:100])
+p2 = scatter(test,leg=false,xlabel=L"p_t",ylabel=L"|p_{t+1}-p_t|")
+
+plot(p1,p2,size=(1000,500))
 ```
 
 ## Effects of population size
@@ -483,7 +497,7 @@ $$
 
 ## Verifying with simulations
 
-Here we start with a frequency of 0.1.
+Here we start with a frequency of 0.2.
 
 ```{julia}
 gen=100000
@@ -498,12 +512,76 @@ function WrightFisher_long(N,p)
     return(freqs)
 end
 
-sims = [WrightFisher_long(1000,0.1) for _ in 1:1000]
+sims = [WrightFisher_long(1000,0.2) for _ in 1:1000]
 p1 = plot(sims,xlabel="Generations",ylabel="Allele Frequency",leg=false,margin=5mm,linecolor=:white,linealpha=0.1)
 
 fixed_freqs = [last(sims[x]) for x in 1:1000]
 ff= sum(fixed_freqs)/1000
-p2 = plot(["lost","fixed"],[1-ff,ff],leg=false,xlabel="Final Frequency",ylabel="Count",normalize=true)
+p2 = bar(["lost","fixed"],[1-ff,ff],leg=false,xlabel="Final Frequency",ylabel="Proportion fixed",ylim=(0,1),)
 
 plot(p1,p2,size=(1000,500);layout=2)
 ```
+
+## And if we start with a more common allele...
+
+```{julia}
+
+sims = [WrightFisher_long(1000,0.8) for _ in 1:1000]
+p1 = plot(sims,xlabel="Generations",ylabel="Allele Frequency",leg=false,margin=5mm,linecolor=:white,linealpha=0.1)
+
+fixed_freqs = [last(sims[x]) for x in 1:1000]
+ff= sum(fixed_freqs)/1000
+p2 = bar(["lost","fixed"],[1-ff,ff],leg=false,xlabel="Final Frequency",ylabel="Count",ylim=(0,1),)
+
+plot(p1,p2,size=(1000,500);layout=2)
+```
+
+## And the same happens with smaller populations
+
+```{julia}
+sim1 = [WrightFisher_long(10,0.8) for _ in 1:1000]
+sim2 = [WrightFisher_long(10,0.5) for _ in 1:1000]
+sim3 = [WrightFisher_long(10,0.2) for _ in 1:1000]
+
+p1 = plot(vcat(sim1,sim2,sim3),xlabel="Generations",ylabel="Allele Frequency",leg=false,margin=5mm,linecolor=:white,linealpha=0.1,title=L"N=10")
+
+fixed_freqs = [last(sim1[x]) for x in 1:1000]
+ff1= sum(fixed_freqs)/1000
+
+fixed_freqs = [last(sim2[x]) for x in 1:1000]
+ff2= sum(fixed_freqs)/1000
+
+fixed_freqs = [last(sim3[x]) for x in 1:1000]
+ff3= sum(fixed_freqs)/1000
+
+p2 = bar([L"p_0=0.8",L"p_0=0.5",L"p_0=0.2"],[ff1,ff2,ff3],leg=false,xlabel="Initial Frequency",ylabel="Proportion fixed",ylim=(0,1),title=L"N=100")
+
+plot(p1,p2,size=(1000,500))
+```
+
+## But what about *real* data?
+
+How general are the dynamics of this model? Here's evolution in yeast:
+
+```{julia}
+using CSV, DataFrames
+yeast_data = CSV.read("data/yeast_sex_asex.csv",DataFrame)
+
+p1 = plot(transpose(Matrix(yeast_data[:,9:33])),leg=false,xlabel="Generation",ylabel=L"p_t",margin=5mm)
+Δ_ps = reduce(vcat,[t_vs_tp1(yeast_data[x,9:33]) for x in 1:530])
+
+p2 = scatter(Δ_ps,leg=false,xlabel=L"p_t",ylabel=L"|p_{t+1}-p_t|",margin=5mm)
+
+plot(p1,p2,size=(1000,500))
+
+```
+
+## So, what happens to a *new* allele?
+
+Homework Quiz:
+
+What frequency will a mutation be found in when it first occurs?
+
+What is the probability of that mutation becoming fixed?
+
+Given only what you have learned here: should smaller populations show slower or faster rates of fixing substitutions?

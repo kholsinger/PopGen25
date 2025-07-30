@@ -1,0 +1,38 @@
+---
+title: "Discussion 1"
+format: 
+    revealjs:
+        theme: night
+        incremental: true
+        preview-links: auto
+        chalkboard: true
+engine: julia
+julia:
+  exeflags: ["--project=../PopGen25"]
+---
+
+# Paper Discussion 1
+
+Today we will discuss XXX. 
+
+The goal of these discussions is to understand how the pop-gen concepts we learned about last week help us understand evolution w/in populations.
+
+Your quiz asked you if small or large populations should evolve more rapidly, all else being equal.
+
+This paper asks if sexual/asexual populations evolve in the same way, all else being equal.
+
+## The setup
+
+Experimental design
+
+## Why yeast?
+
+Can manipulate sexual/asexual reproduction.
+
+. . .
+
+Can get many generations quickly.
+
+
+
+##
