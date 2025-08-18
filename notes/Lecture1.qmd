@@ -21,15 +21,26 @@ julia:
 
 -   The course will consist of a weekly lectures, paper/methods discussions and a lab.
 
+    -   Trying out a bunch of new approaches - format might change if it feels like things are not working well.
+
+## Introduce yourselves!
+
+-   What's your name?
+
+-   What's your favorite organism?
+
+-   What are you hoping to get out of this class?
+
 ## Grading
 
 -   Grades will consist of
+
     1.  Participation in discussions. (24%)
     2.  Weekly lab assignments/quizzes. (24%)
-    3.  Two minor homework assignments. (25%)
+    3.  Two minor analyses of a dataset. (25%)
     4.  One final project. (25%)
+
 -   And two free points!
--   Fully half the grade will depend on a project, so what is the project?
 
 ## Assignments/Project
 
@@ -45,7 +56,7 @@ You will develop scripts to calculate basic population genetic statistics, plot 
 
 . . .
 
-Two incremental code base submissions in which I'll test your code on different data than used in class.
+Two incremental code based submissions in which I'll test your code on different data than used in class.
 
 ## Project cntd.
 
@@ -65,7 +76,7 @@ You will meet with me half-way through the semester to decide on a tractable dat
 
 Don't panic!
 
-Part of the goal of this class is to get you to start thinking computationally about evolution. That will require some math and programming, but I am designing these slides with plenty of time for asides and explanations in mind.
+The goal of this course is to build your evolutionary intuition as well as knowledge of what different population genetic tools *do*. AI ramble goes here
 
 . . .
 
@@ -81,17 +92,19 @@ The nature of this course is to help you develop tools useful for *you*, and so 
 
 . . .
 
-I will write code primarily in `julia`, but pretty much anything here should be achievable easily in`R` or `python`, and with a bit more elbow grease in any language you desire.
+I will write code primarily in `Julia`, but pretty much anything here should be achievable easily in `R` or `python`, and with a bit more elbow grease in any language you desire.
 
 . . .
 
-Beyond that you will need at least a passing familiarity with `bash`, as some of the tools we'll run are only really acessable via CLI.
+Beyond that you will need at least a passing familiarity with `bash`, as some of the tools we'll run are only really accessible via command-line.
 
 ## Schedule
 
 -   12 regular weeks, 2 project focused
 
--   You can find the schedule on the [course website](%22link%22)
+-   You can find an updated schedule on the [course website](%22link%22)
+
+-   Last two weeks - students' choice!
 
 ## Questions?
 
@@ -127,7 +140,7 @@ In pop gen, we generally deal with three "types" of models:
 
 The same model can really have both explanatory and predictive power (and be used as the backbone for a statistical model).
 
-## Why do we model: a historical example
+## Why we model: a historical example
 
 Imagine a population with two types of butterflies: red and white.
 
@@ -167,11 +180,9 @@ It took a mathematician [^1] to point out that there's absolutely no reason domi
 
 [^1]: According to the historic record - disgusted with how primitive math in biology was
 
-## Testing the intuition with a model {.smaller}
+## Testing intuition with a model {.smaller}
 
-Models begin by simplifying the world as much as possible.
-
-Given what we know about the system:
+Models begin by simplifying the world as much as possible. Given what we know about the system:
 
 -   Single locus
 
@@ -193,6 +204,14 @@ Let's get rid of other potential factors
 
 -   Completely random mating
 
+## Modeling tips and tricks {style="mainfont"}
+
+It's often useful to draw out a diagram of what your system looks like.
+
+. . .
+
+This lets you see what forces are relevant, what you can potentially simplify, etc.
+
 ## Now let's define what we are interested in
 
 We want to know how the frequency of white butterflies $P_{white}$ will change.
@@ -201,17 +220,19 @@ Let $p$ be the frequency of the `A` allele. Then $q=1-p$ is the frequency of `a`
 
 We also know that $P_{white} = P_{AA}+P_{Aa}$
 
-What will $P_{white}'$ (we often denote the next step/generation with a tick $'$) be?
+What will $P_{white}'$ [^2] be?
+
+[^2]: we often denote the next step/generation with a tick
 
 Time for chalkboard!
 
 ## What we should have derived
 
-$P_{white}' = p*p+p*(1-p)*(1-p)*p= p^2+2pq$
+$P_{white}' = p*p+p*(1-p)+(1-p)*p= p^2+2pq$
 
 And additionally:
 
-$p' = p$
+$p' = P_{AA} + 1/2 P_{Aa} = p$
 
 So after one generation, you'll always have $P_{white}=p^2+2pq$
 
@@ -235,11 +256,21 @@ Throughout this semester, we'll return to a few basic "null" models that will se
 
 . . .
 
-One that we'll come back to time and again because of its simplicity is Wright-Fisher
+Null models are often "zero force" models - they ask what happens when the interesting processes are not in play ("An object in motion stays in motion").
+
+. . .
+
+One that we'll come back to time and again because of its simplicity is the Wright-Fisher model.
 
 # Wright-Fisher
 
 ## Sewall Wright, Ronald A. Fisher
+
+Wright and Fisher were two of the fathers of population genetics.
+
+. . .
+
+They
 
 ## The model
 
@@ -259,15 +290,15 @@ Rather than start with math, let's start with a simple simulation of the model:
 
 ```{julia}
 #| label: wright-fisher-code
-
-function WrightFisher(N,p,t)
-    g=1
+#| output: false
+function WrightFisher(N,p,total_generations)
+    current_gen=1
     freqs=Float64[]
     append!(freqs,p)
-    while g<t
-        next = only(rand(Binomial(N,freqs[g]),1)/N)
+    while current_gen<total_generations
+        next = only(rand(Binomial(N,freqs[current_gen]),1)/N)
         append!(freqs,next)
-        g += 1
+        current_gen += 1
     end
     return(freqs)
 end
@@ -282,6 +313,7 @@ end
 #| fig-height: 2
 using Distributions
 using Plots
+plotly()
 using Measures
 theme(:rose_pine)
 
@@ -307,7 +339,7 @@ Let's re-examine the model purely from a mathematical approach. We might want to
 . . .
 
 $$
-E[p_{t+1}] = \sum_{i=1}^N\left( \frac{i}{N} P(i,N|p_{t}) \right) = \frac{1}{N} E[Binom(N,p{t})]
+E[p_{t+1}] = \sum_{i=1}^N\left( \frac{i}{N} P(i,N|p_{t}) \right) = \frac{1}{N} E[Binom(N,p_{t})]
 $$
 
 . . .
@@ -326,15 +358,13 @@ And, further, $E[p_t] = p_{t-1} = ... = p_0$, meaning no change is expected.
 
 ## Analytical vs Simulation
 
-Let's add the running mean to the plot to see how it behaves:
-
 ```{julia}
 
 mean_p = mean.(eachcol(samples))
 plot!(p,mean_p,linecolor=:red)
 ```
 
-Looks like no real change, just as we expected.
+Looks like no real change, just as expected.
 
 ## Variance in Wright-Fisher
 
@@ -401,14 +431,15 @@ p1 = plot(sim,
     leg=false,
     xlabel="Generation",
     ylabel="Allele frequency",
+    c=:white,
     margin=5mm)
 
-function t_vs_tp1(sim)
-    return([(sim[t-1],abs(sim[t]-sim[t-1])) for t in 2:length(sim)])
+function t_vs_tp1(sim;gen=1)
+    return([(sim[t-1],abs(sim[t]-sim[t-1])/gen) for t in 2:length(sim)])
 end
 
 test = reduce(vcat,[t_vs_tp1(sim[x]) for x in 1:100])
-p2 = scatter(test,leg=false,xlabel=L"p_t",ylabel=L"|p_{t+1}-p_t|")
+p2 = histogram2d(test,leg=false,xlabel=L"p_t",ylabel=L"|p_{t+1}-p_t|")
 
 plot(p1,p2,size=(1000,500))
 ```
@@ -475,9 +506,9 @@ Imagine we started with a population where each of the *N* individuals has a dif
 
 . . .
 
-Eventually, once enough time has passed, all of the individuals in the population will have descended from just *one* of these ancestors.[^2]
+Eventually, once enough time has passed, all of the individuals in the population will have descended from just *one* of these ancestors.[^3]
 
-[^2]: We'll prove this later when we talk about the coalescent, but for now take it as a fact given to you by god.
+[^3]: We'll prove this later when we talk about the coalescent, but for now take it as a fact given to you by god.
 
 ## Who's the ancestor?
 
@@ -561,27 +592,85 @@ plot(p1,p2,size=(1000,500))
 
 ## But what about *real* data?
 
+Surprisingly, tracking individual allele frequency changes is not super common.
+
+-   Either hard to get many generations (generation time \~year), or hard to catch *every* generation (multiple per day)
+
+-   Often not the core interest of any study, but can be incedental to other interests.
+
+-   Reading for Thursday - *Leu et al.* 2020 "Sex alters molecular evolution in diploid experimental populations of *S. cerevisiae"*
+
+## Plot of Data from *Leu et al.*
+
 How general are the dynamics of this model? Here's evolution in yeast:
 
 ```{julia}
 using CSV, DataFrames
 yeast_data = CSV.read("data/yeast_sex_asex.csv",DataFrame)
 
-p1 = plot(transpose(Matrix(yeast_data[:,9:33])),leg=false,xlabel="Generation",ylabel=L"p_t",margin=5mm)
-Δ_ps = reduce(vcat,[t_vs_tp1(yeast_data[x,9:33]) for x in 1:530])
+p1 = plot(transpose(Matrix(yeast_data[:,9:33])),leg=false,xlabel="Sampling (~60 generations)",ylabel=L"p_t",margin=5mm)
+Δ_ps = reduce(vcat,[t_vs_tp1(yeast_data[x,9:33];gen=60) for x in 1:530])
 
 p2 = scatter(Δ_ps,leg=false,xlabel=L"p_t",ylabel=L"|p_{t+1}-p_t|",margin=5mm)
 
-plot(p1,p2,size=(1000,500))
+plot(p1,size=(1000,500);layout=@layout[a _])
 
+```
+
+## How can we compare with WF expectations?
+
+Do allele frequency changes seem odd in any way?
+
+```{julia}
+plot(p2,size=(1000,500))
 ```
 
 ## So, what happens to a *new* allele?
 
-Homework Quiz:
+Homework Assignment (submit via HuskyCT):
 
 What frequency will a mutation be found in when it first occurs?
 
 What is the probability of that mutation becoming fixed?
 
 Given only what you have learned here: should smaller populations show slower or faster rates of fixing substitutions?
+
+# Extending WF
+
+## Adding selection
+
+Part of the benefit of a really simple model is that we can make some simple extensions of it.
+
+One very simple extension is to think about what happens to an allele under directional selection.
+
+Haploid stage selection will help keep parameters down.
+
+## Selection
+
+Selection occurs because of differences in *fitness*.
+
+. . .
+
+We can define fitness in various ways depending on the model.
+
+. . .
+
+In WF - simplest to think of *relative* contribution to the infinite gamete pool.
+
+. . .
+
+We'll first set the fitness of the ancestral allele `a` to 1.
+
+. . .
+
+Let fitness of `A` individuals be: $1+s$.
+
+## Change in allele frequency
+
+Next, let's derive the change in allele frequency.
+
+. . .
+
+$$
+p_{t+1} = \frac{p_t W_A}{\bar{W}} = \frac{p_tW_A}{p_tW_A+(1-p_t)1}=\frac{p_t(1+s)}{1+p_ts}
+$$
