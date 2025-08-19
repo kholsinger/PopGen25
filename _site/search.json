@@ -25,14 +25,14 @@
     "href": "notes/Lecture1.html#welcome-to-the-class",
     "title": "Lecture 1",
     "section": "Welcome to the class",
-    "text": "Welcome to the class\n\nWelcome to Population Genetics, EEB5348!\nBefore we begin, some general logistics of the course.\nThe course will consist of a weekly lectures, paper/methods discussions and a lab."
+    "text": "Welcome to the class\n\nWelcome to Population Genetics, EEB5348!\nBefore we begin, some general logistics of the course.\nThe course will consist of a weekly lectures, paper/methods discussions and a lab.\n\nTrying out a bunch of new approaches - format might change if it feels like things are not working well."
   },
   {
     "objectID": "notes/Lecture1.html#grading",
     "href": "notes/Lecture1.html#grading",
     "title": "Lecture 1",
     "section": "Grading",
-    "text": "Grading\n\nGrades will consist of\n\nParticipation in discussions. (24%)\nWeekly lab assignments/quizzes. (24%)\nTwo minor homework assignments. (25%)\nOne final project. (25%)\n\nAnd two free points!\nFully half the grade will depend on a project, so what is the project?"
+    "text": "Grading\n\nGrades will consist of\n\nParticipation in discussions. (24%)\nWeekly lab assignments/quizzes. (24%)\nTwo minor analyses of a dataset. (25%)\nOne final project. (25%)\n\nAnd two free points!"
   },
   {
     "objectID": "notes/Lecture1.html#assignments",
@@ -74,7 +74,7 @@
     "href": "notes/Lecture1.html#what-language-should-i-code-in",
     "title": "Lecture 1",
     "section": "What language should I code in?",
-    "text": "What language should I code in?\nThe nature of this course is to help you develop tools useful for you, and so no single language is being prescribed.\n\nI will write code primarily in julia, but pretty much anything here should be achievable easily inR or python, and with a bit more elbow grease in any language you desire.\n\n\nBeyond that you will need at least a passing familiarity with bash, as some of the tools we’ll run are only really acessable via CLI."
+    "text": "What language should I code in?\nThe nature of this course is to help you develop tools useful for you, and so no single language is being prescribed.\n\nI will write code primarily in Julia, but pretty much anything here should be achievable easily in R or python, and with a bit more elbow grease in any language you desire.\n\n\nBeyond that you will need at least a passing familiarity with bash, as some of the tools we’ll run are only really accessible via command-line."
   },
   {
     "objectID": "notes/Lecture1.html#questions",
@@ -88,7 +88,7 @@
     "href": "notes/Lecture1.html#schedule",
     "title": "Lecture 1",
     "section": "Schedule",
-    "text": "Schedule\n\n12 regular weeks, 2 project focused\nYou can find the schedule on the course website"
+    "text": "Schedule\n\n12 regular weeks, 2 project focused\nYou can find an updated schedule on the course website\nLast two weeks - students’ choice!"
   },
   {
     "objectID": "notes/Lecture1.html#what-is-population-genetics",
@@ -137,21 +137,21 @@
     "href": "notes/Lecture1.html#why-do-we-model-a-historical-example",
     "title": "Lecture 1",
     "section": "Why do we model: a historical example",
-    "text": "Why do we model: a historical example\nImagine a population with two types of butterflies: red and white.\n\nYou, as a geneticist, work out the underlying control. You find the trait is controlled by a single gene, and is biallelic.\n\n\nYou work out that AA and Aa butterflies are red, aa are white.\n\n\nWhat will happen to the color in the long run?"
+    "text": "Why do we model: a historical example\nImagine a population with two types of butterflies: red and white.\n. . .\nYou, as a geneticist, work out the underlying control. You find the trait is controlled by a single gene, and is biallelic.\n. . .\nYou work out that AA and Aa butterflies are red, aa are white.\n. . .\nWhat will happen to the color in the long run?"
   },
   {
     "objectID": "notes/Lecture1.html#now-lets-define-what-we-are-interested-in",
     "href": "notes/Lecture1.html#now-lets-define-what-we-are-interested-in",
     "title": "Lecture 1",
     "section": "Now let’s define what we are interested in",
-    "text": "Now let’s define what we are interested in\nWe want to know how the frequency of white butterflies \\(P_{white}\\) will change.\nLet \\(p\\) be the frequency of the A allele. Then \\(q=1-p\\) is the frequency of a.\nWe also know that \\(P_{white} = P_{AA}+P_{Aa}\\)\nWhat will \\(P_{white}'\\) (we often denote the next step/generation with a tick \\('\\)) be?\nTime for chalkboard!"
+    "text": "Now let’s define what we are interested in\nWe want to know how the frequency of white butterflies \\(P_{white}\\) will change.\nLet \\(p\\) be the frequency of the A allele. Then \\(q=1-p\\) is the frequency of a.\nWe also know that \\(P_{white} = P_{AA}+P_{Aa}\\)\nWhat will \\(P_{white}'\\) 1 be?\nTime for chalkboard!\nwe often denote the next step/generation with a tick"
   },
   {
     "objectID": "notes/Lecture1.html#what-we-should-have-derived",
     "href": "notes/Lecture1.html#what-we-should-have-derived",
     "title": "Lecture 1",
     "section": "What we should have derived",
-    "text": "What we should have derived\n\\(P_{white}' = p*p+p*(1-p)*(1-p)*p= p^2+2pq\\)\nAnd additionally:\n\\(p' = p\\)\nSo after one generation, you’ll always have \\(P_{white}=p^2+2pq\\)"
+    "text": "What we should have derived\n\\(P_{white}' = p*p+p*(1-p)+(1-p)*p= p^2+2pq\\)\nAnd additionally:\n\\(p' = P_{AA} + 1/2 P_{Aa} = p\\)\nSo after one generation, you’ll always have \\(P_{white}=p^2+2pq\\)"
   },
   {
     "objectID": "notes/Lecture1.html#you-probably-recognize-this-hardy-weinberg",
@@ -165,7 +165,7 @@
     "href": "notes/Lecture1.html#null-models-in-evolution",
     "title": "Lecture 1",
     "section": "Null Models in Evolution",
-    "text": "Null Models in Evolution\nThroughout this semester, we’ll return to a few basic “null” models that will serve as useful measuring sticks.\n\nOne that we’ll come back to time and again because of its simplicity is Wright-Fisher"
+    "text": "Null Models in Evolution\nThroughout this semester, we’ll return to a few basic “null” models that will serve as useful measuring sticks.\n\nNull models are often “zero force” models - they ask what happens when the interesting processes are not in play (“An object in motion stays in motion”).\n\n\nOne that we’ll come back to time and again because of its simplicity is the Wright-Fisher model."
   },
   {
     "objectID": "notes/Lecture1.html#wright-fisher",
@@ -179,7 +179,7 @@
     "href": "notes/Lecture1.html#wright-fisher-in-silico",
     "title": "Lecture 1",
     "section": "Wright-Fisher In silico",
-    "text": "Wright-Fisher In silico\nRather than start with math, let’s start with a simple simulation of the model:\n\n\nWrightFisher (generic function with 1 method)"
+    "text": "Wright-Fisher In silico\nRather than start with math, let’s start with a simple simulation of the model:"
   },
   {
     "objectID": "notes/Lecture1.html#what-does-it-look-like",
@@ -193,14 +193,14 @@
     "href": "notes/Lecture1.html#what-does-it-look-like-across-many-trials",
     "title": "Lecture 1",
     "section": "What does it look like across many trials?",
-    "text": "What does it look like across many trials?"
+    "text": "What does it look like across many trials?\n\n\n\n┌ Warning: Failed to load integration with PlotlyBase & PlotlyKaleido.\n│   exception =\n│    ArgumentError: Package PlotlyBase not found in current path.\n│    - Run `import Pkg; Pkg.add(\"PlotlyBase\")` to install the PlotlyBase package.\n│    Stacktrace:\n│      [1] macro expansion\n│        @ ./loading.jl:2296 [inlined]\n│      [2] macro expansion\n│        @ ./lock.jl:273 [inlined]\n│      [3] __require(into::Module, mod::Symbol)\n│        @ Base ./loading.jl:2271\n│      [4] #invoke_in_world#3\n│        @ ./essentials.jl:1089 [inlined]\n│      [5] invoke_in_world\n│        @ ./essentials.jl:1086 [inlined]\n│      [6] require(into::Module, mod::Symbol)\n│        @ Base ./loading.jl:2260\n│      [7] top-level scope\n│        @ ~/.julia/packages/Plots/gYkEG/src/backends.jl:570\n│      [8] eval\n│        @ ./boot.jl:430 [inlined]\n│      [9] _initialize_backend(pkg::Plots.PlotlyBackend)\n│        @ Plots ~/.julia/packages/Plots/gYkEG/src/backends.jl:569\n│     [10] backend(pkg::Plots.PlotlyBackend)\n│        @ Plots ~/.julia/packages/Plots/gYkEG/src/backends.jl:245\n│     [11] plotly()\n│        @ Plots ~/.julia/packages/Plots/gYkEG/src/backends.jl:86\n│     [12] top-level scope\n│        @ ~/PopGen25/notes/Lecture1.qmd:308\n│     [13] eval\n│        @ ./boot.jl:430 [inlined]\n│     [14] (::QuartoNotebookWorker.var\"#15#16\"{Module, Expr})()\n│        @ QuartoNotebookWorker ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:222\n│     [15] (::QuartoNotebookWorker.Packages.IOCapture.var\"#5#9\"{DataType, QuartoNotebookWorker.var\"#15#16\"{Module, Expr}, IOContext{Base.PipeEndpoint}, IOContext{Base.PipeEndpoint}, IOContext{Base.PipeEndpoint}, IOContext{Base.PipeEndpoint}})()\n│        @ QuartoNotebookWorker.Packages.IOCapture ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/vendor/IOCapture/src/IOCapture.jl:170\n│     [16] with_logstate(f::QuartoNotebookWorker.Packages.IOCapture.var\"#5#9\"{DataType, QuartoNotebookWorker.var\"#15#16\"{Module, Expr}, IOContext{Base.PipeEndpoint}, IOContext{Base.PipeEndpoint}, IOContext{Base.PipeEndpoint}, IOContext{Base.PipeEndpoint}}, logstate::Base.CoreLogging.LogState)\n│        @ Base.CoreLogging ./logging/logging.jl:524\n│     [17] with_logger(f::Function, logger::Base.CoreLogging.ConsoleLogger)\n│        @ Base.CoreLogging ./logging/logging.jl:635\n│     [18] capture(f::QuartoNotebookWorker.var\"#15#16\"{Module, Expr}; rethrow::Type, color::Bool, passthrough::Bool, capture_buffer::IOBuffer, io_context::Vector{Pair{Symbol, Any}})\n│        @ QuartoNotebookWorker.Packages.IOCapture ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/vendor/IOCapture/src/IOCapture.jl:167\n│     [19] capture\n│        @ ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:248 [inlined]\n│     [20] io_capture(f::Function; cell_options::Dict{Any, Any}, kws::@Kwargs{rethrow::DataType, color::Bool, io_context::Vector{Pair{Symbol, Any}}})\n│        @ QuartoNotebookWorker ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:250\n│     [21] io_capture\n│        @ ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:246 [inlined]\n│     [22] include_str(mod::Module, code::String; file::String, line::Int64, cell_options::Dict{Any, Any})\n│        @ QuartoNotebookWorker ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:201\n│     [23] #invokelatest#2\n│        @ ./essentials.jl:1057 [inlined]\n│     [24] invokelatest\n│        @ ./essentials.jl:1052 [inlined]\n│     [25] #6\n│        @ ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:18 [inlined]\n│     [26] with_inline_display(f::QuartoNotebookWorker.var\"#6#7\"{String, String, Int64, Dict{Any, Any}}, cell_options::Dict{Any, Any})\n│        @ QuartoNotebookWorker ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/InlineDisplay.jl:31\n│     [27] _render_thunk(thunk::Function, code::String, cell_options::Dict{Any, Any}, is_expansion_ref::Base.RefValue{Bool}; inline::Bool)\n│        @ QuartoNotebookWorker ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:43\n│     [28] _render_thunk\n│        @ ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:35 [inlined]\n│     [29] #render#5\n│        @ ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:15 [inlined]\n│     [30] render(code::String, file::String, line::Int64, cell_options::Dict{Any, Any})\n│        @ QuartoNotebookWorker ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:1\n│     [31] render(::String, ::Vararg{Any}; kwargs::@Kwargs{})\n│        @ Main ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/startup.jl:145\n│     [32] top-level scope\n│        @ none:1\n│     [33] eval\n│        @ ./boot.jl:430 [inlined]\n│     [34] (::Main.var\"#16#17\")(chan::Channel{Any})\n│        @ Main ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/startup.jl:158\n│     [35] (::Base.var\"#741#742\"{Main.var\"#16#17\", Channel{Any}})()\n│        @ Base ./channels.jl:142\n└ @ Plots ~/.julia/packages/Plots/gYkEG/src/backends.jl:579"
   },
   {
     "objectID": "notes/Lecture1.html#wright-fisher-analytically",
     "href": "notes/Lecture1.html#wright-fisher-analytically",
     "title": "Lecture 1",
     "section": "Wright-Fisher analytically",
-    "text": "Wright-Fisher analytically\nLet’s re-examine the model purely from a mathematical approach. We might want to know what the expected allele frequency in the next generation is. The expected value of a random outcome is the sum of all possible outcomes weighted by their probabilities.\n\n\\[\nE[p_{t+1}] = \\sum_{i=1}^N\\left( \\frac{i}{N} P(i,N|p_{t}) \\right) = \\frac{1}{N} E[Binom(N,p{t})]\n\\]\n\n\nWhere \\(Binom(N,p)\\) is the \\(Binomial\\) distribution, describing the chance of getting some number of successes given \\(N\\) trials with each having a chance of success of \\(p\\). If you know your distributions, you know that \\(E[Binomial(N,p)] = Np\\), so you get:\n\n\n\\[\nE[p_{t+1}] = \\frac{1}{N}Np_{t}=p_{t}\n\\]\n\n\nAnd, further, \\(E[p_t] = p_{t-1} = ... = p_0\\), meaning no change is expected."
+    "text": "Wright-Fisher analytically\nLet’s re-examine the model purely from a mathematical approach. We might want to know what the expected allele frequency in the next generation is. The expected value of a random outcome is the sum of all possible outcomes weighted by their probabilities.\n\n\\[\nE[p_{t+1}] = \\sum_{i=1}^N\\left( \\frac{i}{N} P(i,N|p_{t}) \\right) = \\frac{1}{N} E[Binom(N,p_{t})]\n\\]\n\n\nWhere \\(Binom(N,p)\\) is the \\(Binomial\\) distribution, describing the chance of getting some number of successes given \\(N\\) trials with each having a chance of success of \\(p\\). If you know your distributions, you know that \\(E[Binomial(N,p)] = Np\\), so you get:\n\n\n\\[\nE[p_{t+1}] = \\frac{1}{N}Np_{t}=p_{t}\n\\]\n\n\nAnd, further, \\(E[p_t] = p_{t-1} = ... = p_0\\), meaning no change is expected."
   },
   {
     "objectID": "notes/Lecture1.html#variance-in-wright-fisher",
@@ -214,7 +214,7 @@
     "href": "notes/Lecture1.html#analytical-vs-simulation",
     "title": "Lecture 1",
     "section": "Analytical vs Simulation",
-    "text": "Analytical vs Simulation\nLet’s add the running mean to the plot to see how it behaves:\n\n\n\n\n\n  \n    \n  \n\n\n\n  \n    \n  \n\n\n\n  \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLooks like no real change, just as we expected."
+    "text": "Analytical vs Simulation\n\n\n    \n    \n    \n\n\nLooks like no real change, just as expected."
   },
   {
     "objectID": "notes/Lecture1.html#add-to-the-plot",
@@ -298,7 +298,7 @@
     "href": "notes/Lecture1.html#im-suddenly-worried-i-dont-have-the-background-for-this-class",
     "title": "Lecture 1",
     "section": "I’m suddenly worried I don’t have the background for this class",
-    "text": "I’m suddenly worried I don’t have the background for this class\nDon’t panic!\nPart of the goal of this class is to get you to start thinking computationally about evolution. That will require some math and programming, but I am designing these slides with plenty of time for asides and explanations in mind.\n\nBe comfortable asking questions!\n\n\nMini boot-camp on programming this week, math we’ll try to introduce as we go."
+    "text": "I’m suddenly worried I don’t have the background for this class\nDon’t panic!\nThe goal of this course is to build your evolutionary intuition as well as knowledge of what different population genetic tools do. AI ramble goes here\n\nBe comfortable asking questions!\n\n\nMini boot-camp on programming this week, math we’ll try to introduce as we go."
   },
   {
     "objectID": "notes/Lecture1.html#and-if-we-start-with-a-more-common-allele",
@@ -319,7 +319,7 @@
     "href": "notes/Lecture1.html#sewall-wright-ronald-a.-fisher",
     "title": "Lecture 1",
     "section": "Sewall Wright, Ronald A. Fisher",
-    "text": "Sewall Wright, Ronald A. Fisher"
+    "text": "Sewall Wright, Ronald A. Fisher\nWright and Fisher were two of the fathers of population genetics.\n\nThey"
   },
   {
     "objectID": "notes/Lecture1.html#the-model",
