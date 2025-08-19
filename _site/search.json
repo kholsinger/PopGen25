@@ -60,7 +60,7 @@
     "href": "notes/Lecture1.html#assignmentsproject",
     "title": "Lecture 1",
     "section": "Assignments/Project",
-    "text": "Assignments/Project\nThe goal is to create a small set of scripts that you have for many basic population genetics tasks.\n\nWe will assume you have called variants somehow. We sadly don’t have time to teach you how to call variants on the many approaches one could.\n\n\nYou will develop scripts to calculate basic population genetic statistics, plot them, and perform statistical comparisons when possible in each weekly lab.\n\n\nTwo incremental code base submissions in which I’ll test your code on different data than used in class."
+    "text": "Assignments/Project\nThe goal is to create a small set of scripts that you have for many basic population genetics tasks.\n\nWe will assume you have called variants somehow. We sadly don’t have time to teach you how to call variants on the many sequencing approaches one could take (see Jill Wegrzin’s EEB XXXX for that!).\n\n\nYou will develop scripts to calculate basic population genetic statistics, plot them, and perform statistical comparisons when possible in each weekly lab.\n\n\nTwo incremental code base submissions in which I’ll test your code on different data than used in class."
   },
   {
     "objectID": "notes/Lecture1.html#project-cntd.",
@@ -312,7 +312,7 @@
     "href": "notes/Lecture1.html#so-what-happens-to-a-new-allele",
     "title": "Lecture 1",
     "section": "So, what happens to a new allele?",
-    "text": "So, what happens to a new allele?\nQuiz:\nWhat frequency will a mutation be found in when it first occurs?\nWhat is the probability of that mutation becoming fixed?\nGiven only what you have learned here: should smaller populations show slower or faster rates of fixing substitutions?"
+    "text": "So, what happens to a new allele?\nHomework Quiz:\nWhat frequency will a mutation be found in when it first occurs?\nWhat is the probability of that mutation becoming fixed?\nGiven only what you have learned here: should smaller populations show slower or faster rates of fixing substitutions?"
   },
   {
     "objectID": "notes/Lecture1.html#sewall-wright-ronald-a.-fisher",
@@ -340,13 +340,146 @@
     "href": "notes/Lecture1.html#but-what-about-real-data",
     "title": "Lecture 1",
     "section": "But what about real data?",
-    "text": "But what about real data?\nHow general are the dynamics of this model?"
+    "text": "But what about real data?\nHow general are the dynamics of this model? Here’s evolution in yeast:"
   },
   {
     "objectID": "notes/Lecture2.html#genetic-diversity-writ-large",
     "href": "notes/Lecture2.html#genetic-diversity-writ-large",
     "title": "Lecture 2",
     "section": "Genetic diversity writ large",
-    "text": "Genetic diversity writ large\nLast week you learned how different evolutionary forces affect allele frequencies at a single site.\n\nThis week, we’ll be discussing how we can measure genetic diversity and what those measurements can tell us.\n\n\nWe will look at a few statistics that measure genetic diversity, notably \\(\\pi\\), \\(\\theta_W\\) and \\(H\\)"
+    "text": "Genetic diversity writ large\nLast week you learned how different evolutionary forces affect allele frequencies at a single site.\n\nThis week, we’ll be discussing how we can measure genetic diversity and what those measurements can tell us.\n\n\nWe will look at a few statistics that measure genetic diversity, notably the SFS, \\(\\pi\\), \\(\\theta_W\\) and \\(H\\)"
+  },
+  {
+    "objectID": "notes/Lecture2.html#measuring-diversity-at-a-site",
+    "href": "notes/Lecture2.html#measuring-diversity-at-a-site",
+    "title": "Lecture 2",
+    "section": "Measuring diversity at a site",
+    "text": "Measuring diversity at a site\nBefore we think about what’s happening across the genome, we can start by asking what is happening at an individual locus.\n\n\n\n\n\n\nRecall\n\n\nWe will refer to the allele frequency of the alternate allele at site \\(j\\) as \\(p\\).\n\n\n\nWhat are some ways we can ask how diverse a population is at a site?"
+  },
+  {
+    "objectID": "notes/Lecture2.html#heterozygosity-h",
+    "href": "notes/Lecture2.html#heterozygosity-h",
+    "title": "Lecture 2",
+    "section": "Heterozygosity ( H )",
+    "text": "Heterozygosity ( H )\nOne of the simplest metrics is to ask how frequently we see individuals who are heterozygous.\n\nLet’s start by generalizing to any number of alleles.\n\n\n\\[\nH = 1 - \\sum_{i=1}^{k}{p_i^2}\n\\]\nWhere \\(p_i\\) is the frequency of the \\(i^{th}\\) allele and there are a total of \\(k\\) alleles.\n\n\nIf there are only two alleles: \\(1-p_a^2 -p_A^2 = 2p_a(1-p_a)\\)\n\n\nIn practice - often not the case: why?"
+  },
+  {
+    "objectID": "notes/Lecture2.html#heterozygosity-pi",
+    "href": "notes/Lecture2.html#heterozygosity-pi",
+    "title": "Lecture 2",
+    "section": "Heterozygosity ($\\pi$)",
+    "text": "Heterozygosity ($\\pi$)\nAnother way to think about genetic diversity is to ask:\nWhat is the probability that if you sample any two alleles in the population, they are different.\n\nIn an infinite population, this is simply:\n\\[\n\\pi = p(1-p)+(1-p)p = 2p(1-p)\n\\]\n\n\nEqual to heterozygosity in large populations under HW."
+  },
+  {
+    "objectID": "notes/Lecture2.html#sample-heterozygosity-h",
+    "href": "notes/Lecture2.html#sample-heterozygosity-h",
+    "title": "Lecture 2",
+    "section": "Sample heterozygosity (h)",
+    "text": "Sample heterozygosity (h)\nAnother way to think about genetic diversity is to ask:\nWhat is the probability that if you sample any two alleles in the population, they are different.\n\nIn an infinite population with a biallelic site, this is simply \\(2p(2-p)\\)\n\n\nBut populations are not infinite, and we also don’t sample all possible individuals.\n\n\nInstead, we calculate the expected sample heterozygosity, and account for number of alleles sampled (\\(n\\)):\n\\[\nh_j=\\frac{n}{n-1}\\left(1-\\sum_i^k{p_i^2}\\right)\n\\]"
+  },
+  {
+    "objectID": "notes/Lecture2.html#expected-heterozygosity-h",
+    "href": "notes/Lecture2.html#expected-heterozygosity-h",
+    "title": "Lecture 2",
+    "section": "Expected Heterozygosity ( H )",
+    "text": "Expected Heterozygosity ( H )\nOne of the simplest metrics is to ask how frequently we see individuals who are heterozygous.\n\nLet’s start by generalizing to any number of alleles.\n\n\n\\[\nH_j = 1 - \\sum_{i=1}^{k}{p_i^2}\n\\]\nWhere \\(p_i\\) is the frequency of the \\(i^{th}\\) allele and there are a total of \\(k\\) alleles.\n\n\nIf there are only two alleles:\n\\[1-p_a^2 -p_A^2 = 2p_a(1-p_a)\\]\n\n\nIn practice - often not the case: why?"
+  },
+  {
+    "objectID": "notes/Lecture2.html#heterozygosity-across-a-region-π",
+    "href": "notes/Lecture2.html#heterozygosity-across-a-region-π",
+    "title": "Lecture 2",
+    "section": "Heterozygosity across a region (π)",
+    "text": "Heterozygosity across a region (π)\nWe can then zoom out and ask what the diversity is across a whole region. Say there are \\(L\\) sites in your region, then the total polymorphism is given by:\n\\[\n\\pi = \\sum_{j=1}^{L}{h_j}\n\\]\n\nThe more common definition you’ll see is the per site polymorphism/heterozygosity, given as:\n\\[\n\\pi =  \\frac{1}{L}\\sum_{j=1}^{L}{h_j}\n\\]\nNote, often the two will be labeled as \\(\\pi\\), but per-site is more common."
+  },
+  {
+    "objectID": "notes/Lecture2.html#what-does-π-look-like-in-various-cases",
+    "href": "notes/Lecture2.html#what-does-π-look-like-in-various-cases",
+    "title": "Lecture 2",
+    "section": "What does π look like in various cases?",
+    "text": "What does π look like in various cases?\nFirst, some code as to how one would calculate it:\n\nusing StatsBase\n\nfunction sample_h(alleles)\n    obs_alleles=collect(skipmissing(alleles)) #Genotypes might be missing - we skip those.\n    n=length(obs_alleles)\n    freqs = values(countmap(obs_alleles)) ./ n #Get allele frequencies for each allele\n    return( n/(n-1)*(1-sum(freqs .^ 2))) #Return the expected sample h\nend\n\nfunction sample_π(genotype_matrix)\n    return(sum([sample_h(genotype_matrix[:,x]) for x in 1:size(genotype_matrix)[2]])) #Sum of h over all sites\nend\n\nsample_π (generic function with 1 method)"
+  },
+  {
+    "objectID": "notes/Lecture2.html#pi-in-wf-simulations",
+    "href": "notes/Lecture2.html#pi-in-wf-simulations",
+    "title": "Lecture 2",
+    "section": "\\(\\pi\\) in WF simulations",
+    "text": "\\(\\pi\\) in WF simulations"
+  },
+  {
+    "objectID": "notes/Lecture2.html#where-theory-meets-hard-limits-of-data",
+    "href": "notes/Lecture2.html#where-theory-meets-hard-limits-of-data",
+    "title": "Lecture 2",
+    "section": "Where theory meets hard limits of data",
+    "text": "Where theory meets hard limits of data"
+  },
+  {
+    "objectID": "notes/Lecture2.html#pi-in-fake-data",
+    "href": "notes/Lecture2.html#pi-in-fake-data",
+    "title": "Lecture 2",
+    "section": "\\(\\pi\\) in fake data",
+    "text": "\\(\\pi\\) in fake data\nLet’s generate some fake data.\n\n\n5-element Vector{String}:\n \"-CTG-CG-C-ACCCC--CT-CGTGCTCGT-CCCGGTCGGCCTGAGGAGC-\"\n \"AAGCATA-TG-CTC-T-TGAGTT-GCCTATC---AAGTGATAAGTTAAAT\"\n \"GCAAGCTAGACTACTT--CCAC-GACCC-C---A-G-GTGCCTCGA-TTA\"\n \"AAGTTCCGG--ACAAATGATAC-GTCG-G--ACCCTC-G-TG-C-GC-CG\"\n \"TACCCTTTT-GCAAGCG-AATGTTGGTACC-A-CGGGTACGATAGCTCTG\""
+  },
+  {
+    "objectID": "notes/Lecture2.html#where-does-diversity-come-from",
+    "href": "notes/Lecture2.html#where-does-diversity-come-from",
+    "title": "Lecture 2",
+    "section": "Where does diversity come from?",
+    "text": "Where does diversity come from?\nUltimately, all genetic diversity begins with mutation.\nA key quantity in population genetics is \\(\\theta\\) - the neutral genetic diversity.\nUnder Wright-Fisher, \\(\\theta = 4 N_e \\mu\\), where \\(N_e\\) is the effective population size, and \\(\\mu\\) is the neutral mutation rate.\nSo, diversity should depend on both the population size and mutation rates. Does it?"
+  },
+  {
+    "objectID": "notes/Lecture2.html#lets-think-up-some-data",
+    "href": "notes/Lecture2.html#lets-think-up-some-data",
+    "title": "Lecture 2",
+    "section": "Let’s think up some data",
+    "text": "Let’s think up some data\nHere, we’ll use the example data from Hahn’s textbook:\n\n\n4-element Vector{String}:\n \"TTACAATCCGATCGT\"\n \"--ACGATGCGCTCGT\"\n \"TCACAATGCGATGGA\"\n \"TTACGATG--CTCGT\"\n\n\nEach row is an individual, each column is a site. Notice how some sites have missing data “-”.\n\nHow can we account for that in calculating heterozygosity?"
+  },
+  {
+    "objectID": "notes/Lecture2.html#code-examples",
+    "href": "notes/Lecture2.html#code-examples",
+    "title": "Lecture 2",
+    "section": "Code examples",
+    "text": "Code examples\n\nusing StatsBase\n\nfunction sample_h(alleles)\n    obs_alleles=collect(skipmissing(alleles)) #Genotypes might be missing - we skip those.\n    n=length(obs_alleles)\n    freqs = values(countmap(obs_alleles)) ./ n #Get allele frequencies for each allele\n    return( n/(n-1)*(1-sum(freqs .^ 2))) #Return the expected sample h\nend\n\nfunction sample_π(genotype_matrix)\n    return(sum([sample_h(genotype_matrix[:,x]) for x in 1:size(genotype_matrix)[2]])) #Sum of h over all sites\nend\n\nsample_π(replace(fake_data,\"-\"=&gt;missing))\n\n3.5"
+  },
+  {
+    "objectID": "notes/Lecture2.html#not-the-only-heterozygosity",
+    "href": "notes/Lecture2.html#not-the-only-heterozygosity",
+    "title": "Lecture 2",
+    "section": "Not the only heterozygosity",
+    "text": "Not the only heterozygosity\n\\(\\pi\\) is a commonly used estimator for genetic diversity, but it has some issues. The biggest is that when true diversity is high, variance in sample diversity is also really high. That is, it’s hard to get an accurate estimate."
+  },
+  {
+    "objectID": "notes/Lecture2.html#alternatives-to-pi",
+    "href": "notes/Lecture2.html#alternatives-to-pi",
+    "title": "Lecture 2",
+    "section": "Alternatives to \\(\\pi\\)",
+    "text": "Alternatives to \\(\\pi\\)\n\n\n5-element Vector{String}:\n \"CATCTTTATTAGGTTCTTTATACGAGCGAATCATTCCAAGTAACCTGATG\"\n \"TATTAACAGTCCTTCTCTGCTAGGAACATGGGCCTTGCGGAGGTCTATTA\"\n \"GCCTCAAAGTGATGTCGTTTGAGAATGATCCACTTGATCAAGTCTAGACG\"\n \"TTTGGGGCCCCCGACCGCGCTGAATCTGAGGCCCTCGCAACATGATTGGC\"\n \"TCCGATCCCCGCTCTGGGAGTTAAATCTCGCTGAGCCAGAAGCGCTGGGA\""
+  },
+  {
+    "objectID": "notes/Lecture2.html#alternatives-to-pi-1-theta_w",
+    "href": "notes/Lecture2.html#alternatives-to-pi-1-theta_w",
+    "title": "Lecture 2",
+    "section": "Alternatives to \\(\\pi\\) 1) \\(\\theta_W\\)",
+    "text": "Alternatives to \\(\\pi\\) 1) \\(\\theta_W\\)\nOne common alternative is to use Watterson’s Theta. The idea is that we can simply look at the number of segregating sites \\(S\\) (sites with at least one variant). Because as we sample more individuals, we are more likely to sample a new allele, there is a correction factor:\n\\[\n\\theta_W = \\frac{S}{\\sum_{i=1}^{n-1}{1/i}}\n\\]\n\nfunction wat_theta(gm)\n    S = sum([is_segregating(gm[:,i]) for i in 1:size(gm)[2]])\n    a = sum([1/i for i in 1:size(gm)[1]])\n    return(S/a)\nend\n\nwat_theta (generic function with 1 method)"
+  },
+  {
+    "objectID": "notes/Lecture2.html#lets-check-some-intuition",
+    "href": "notes/Lecture2.html#lets-check-some-intuition",
+    "title": "Lecture 2",
+    "section": "Let’s check some intuition",
+    "text": "Let’s check some intuition\nHere, we’ll use the example data from Hahn’s textbook:\n\n\n4-element Vector{String}:\n \"TTACAATCCGATCGT\"\n \"--ACGATGCGCTCGT\"\n \"TCACAATGCGATGGA\"\n \"TTACGATG--CTCGT\"\n\n\nEach row is an individual, each column is a site. Notice how some sites have missing data “-”.\n\nWhat is the heterozygosity at the third site?\n\n\nHow can we account for missing data in calculating heterozygosity?"
+  },
+  {
+    "objectID": "notes/Lecture2.html#single-data-point-for-whole-genome",
+    "href": "notes/Lecture2.html#single-data-point-for-whole-genome",
+    "title": "Lecture 2",
+    "section": "Single data point for whole genome?",
+    "text": "Single data point for whole genome?\n\\(\\theta\\), \\(\\pi\\), \\(h\\) and similar are summary statistics - they reduce potentially huge amounts of data into a single number. That can be useful, but sometimes it’s better to look at a denser view of the data. Let’s make a larger/more complicated data-set.\n\n\n30-element Vector{String}:\n \"G-CCCGTTGGAAGTCTGATTGTAGATATGGT\" ⋯ 139 bytes ⋯ \"TGTTAGCTCCTTGTAAGGCAATGAAATGTC\"\n \"GGCGCGTTGGAAAACTGACCGTATAAATGGT\" ⋯ 139 bytes ⋯ \"TGTTAGCTCCTAGAAAGGCACTGATAGGTC\"\n \"GGCCCGTTGGTAATC-GACTGTAGATATG-T\" ⋯ 139 bytes ⋯ \"TGTTAACTCCTTGTCACGCAATGATAGGAC\"\n \"GGCGCGTTGGAAGACTGACCCTCTCTACGGT\" ⋯ 139 bytes ⋯ \"TCATAGCTCCTTGTAACGCAATGATATGAC\"\n \"GGCCCGATGGAAGTCTGACTGTATATATGGT\" ⋯ 139 bytes ⋯ \"TCTTAGCTCCTTGTAACGCAATGATATGAC\"\n \"GGCCCGTTGGAAATCTGACTGTATATACGGA\" ⋯ 139 bytes ⋯ \"TGTTAGCTCCGTGTAACGCAATGATAGGAC\"\n \"GGCCCGTTGGAAATCTGACTGTCTATATGGT\" ⋯ 139 bytes ⋯ \"TGTTAGCTCCTTGTAACGCAATGAACGGAC\"\n \"GGCCCGTTGGAAAACTGATTGTCGAAATGGT\" ⋯ 139 bytes ⋯ \"TCATCGGTCCTAGTA-GGCAAGTAAAGGAA\"\n \"GGC-CGTTGGAAGTCTGATCGTAGATATGGT\" ⋯ 139 bytes ⋯ \"TCTTAACTTCGTGTAACGCAATGATAGGAC\"\n \"CGCCCGATGGAAATCTGACTGTAGATACGGT\" ⋯ 139 bytes ⋯ \"TGTTAGCTCTGT-TAAGGCTATGATATGAC\"\n ⋮\n \"GGCCCGTTGGAAATCTGACTGTCGCTATGGT\" ⋯ 139 bytes ⋯ \"TC-TAGCTTCTTGTAACGCAATGATAGGAC\"\n \"GGCCCGTTGGAAAACTGACTGGAGCTATGGT\" ⋯ 139 bytes ⋯ \"TGATAAGTCCGAGTAACGCAATGATCTGAC\"\n \"GGCCTGTTGGAAAACTGACTGTAGATACTGT\" ⋯ 139 bytes ⋯ \"TCTTAGCTCCTTGTAAGGCAATGATATGTC\"\n \"GGCGCGATTGAAAACTGATTGTCGATATGAT\" ⋯ 139 bytes ⋯ \"TGATAGC-CCTAGTAACGCTAGGATAGGAC\"\n \"GGCCCGATGGAAAACCGACTGTCGATATGG-\" ⋯ 139 bytes ⋯ \"TGTTAACTCCTTGTAACGCTATGATATGAC\"\n \"GGCCCGTTGGAAATCTGACTGTCGAAATTGA\" ⋯ 139 bytes ⋯ \"TCATAGCTCCTAGAAACGCAATGATCGGAC\"\n \"GGCCCGTTGGATGTCTGACTCTATAAACGGT\" ⋯ 139 bytes ⋯ \"TGATAACTCCTAGTAACGCTATGTTAGGAC\"\n \"GGCCCGTTGGAAGTCTGACTGGAGATACGGT\" ⋯ 139 bytes ⋯ \"TGTTAGCTCCTAGTAACGCTATG-TATGAC\"\n \"GGCCCGTTGGAAATCTGACTGTCGATATGGA\" ⋯ 139 bytes ⋯ \"TCTTAGCTCCTAGTAAGCCAATGATAGGTC\""
+  },
+  {
+    "objectID": "notes/Lecture2.html#longer-alignment---more-information",
+    "href": "notes/Lecture2.html#longer-alignment---more-information",
+    "title": "Lecture 2",
+    "section": "Longer alignment - more information",
+    "text": "Longer alignment - more information\nOne good way to represent a whole region is to summarize the allele frequencies at each site. This is called the Site Frequency Spectrum, or (Allele Frequency Spectrum). In our complicated alignment, it helps us see the frequency of different alleles:\n\nfunction SFS(gm) \n    return([minimum(values(countmap(i)))/length(i) for i in eachcol(gm)]); \nend\n\nplot(SFS(only_segregating(geno_matrix)))"
   }
 ]

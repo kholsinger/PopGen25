@@ -25,43 +25,55 @@ This week, we'll be discussing how we can measure genetic diversity and what tho
 
 We will look at a few statistics that measure genetic diversity, notably the SFS, $\pi$, $\theta_W$ and $H$
 
+## Where does diversity come from?
+
+Ultimately, all genetic diversity begins with mutation.
+
+A key quantity in population genetics is $\theta$ - the neutral genetic diversity.
+
+Under Wright-Fisher, $\theta = 4 N_e \mu$, where $N_e$ is the *effective* population size, and $\mu$ is the *neutral* mutation rate.
+
+So, diversity should depend on both the population size and mutation rates. Does it?
+
 ## Measuring diversity at a site
 
-Before we think about what's happening across genomic regions, we can start by asking what is happening at an individual locus.
+Before we think about what's happening across the genome, we can start by asking what is happening at an individual locus.
 
 ::: callout-tip
 ## Recall
 
-We will refer to the allele frequency of the *alternate* allele at site *i* as $p_i$.
+We will refer to the allele frequency of the *alternate* allele at site $j$ as $p$.
 :::
 
-What are some ways we can ask how diverse a population is at site *i*?
+What are some ways we can ask how diverse a population is at a site?
 
-## Heterozygosity (*H*)
+## Expected Heterozygosity ( *H* )
 
 One of the simplest metrics is to ask how frequently we see individuals who are heterozygous.
 
 . . .
 
+Let's start by generalizing to any number of alleles.
+
+. . .
+
 $$
-H = P_{Aa}
+H_j = 1 - \sum_{i=1}^{k}{p_i^2}
 $$
 
-Where $P_{Aa}$ is the frequency of heterozygotes.
+Where $p_i$ is the frequency of the $i^{th}$ allele and there are a total of $k$ alleles.
 
 . . .
 
-If we are in HW (or close to), this should just be: $2p_i(1-p_i)$.
+If there are only two alleles:
+
+$$1-p_a^2 -p_A^2 = 2p_a(1-p_a)$$
 
 . . .
 
-In practice - often not the case.
+In practice - often not the case: why?
 
-. . .
-
-Also - does not work in ploidy != 2 (haploids, polyploids).
-
-## Heterozygosity (\$\\pi\$)
+## Sample heterozygosity (*h*) {.smaller}
 
 Another way to think about genetic diversity is to ask:
 
@@ -69,12 +81,134 @@ What is the probability that if you sample any two alleles in the population, th
 
 . . .
 
-In an infinite population, this is simply:
+In an infinite population with a biallelic site, this is simply $2p(2-p)$
+
+. . .
+
+But populations are not infinite, and we also don't sample all possible individuals.
+
+. . .
+
+Instead, we calculate the expected *sample* heterozygosity, and account for number of alleles sampled ($n$):
 
 $$
-\pi = p(1-p)+(1-p)p = 2p(1-p)
+h_j=\frac{n}{n-1}\left(1-\sum_i^k{p_i^2}\right)
+$$
+
+## Heterozygosity across a region (π)
+
+We can then zoom out and ask what the diversity is across a whole region. Say there are $L$ sites in your region, then the total *polymorphism* is given by:
+
+$$
+\pi = \sum_{j=1}^{L}{h_j}
 $$
 
 . . .
 
-Equal to heterozygosity in large populations under HW.
+The more common definition you'll see is the *per site* *polymorphism/heterozygosity*, given as:
+
+$$
+\pi =  \frac{1}{L}\sum_{j=1}^{L}{h_j}
+$$
+
+Note, often the two will be labeled as $\pi$, but per-site is more common.
+
+## Let's check some intuition
+
+Here, we'll use the example data from Hahn's textbook:
+
+```{julia}
+fake_data = 
+["T" "T" "A" "C" "A" "A" "T" "C" "C" "G" "A" "T" "C" "G" "T";
+ "-" "-" "A" "C" "G" "A" "T" "G" "C" "G" "C" "T" "C" "G" "T";
+ "T" "C" "A" "C" "A" "A" "T" "G" "C" "G" "A" "T" "G" "G" "A";
+ "T" "T" "A" "C" "G" "A" "T" "G" "-" "-" "C" "T" "C" "G" "T"]
+[join(i) for i in eachrow(fake_data)]
+```
+
+Each row is an individual, each column is a site. Notice how some sites have missing data "-".
+
+. . .
+
+What is the heterozygosity at the third site?
+
+. . .
+
+How can we account for missing data in calculating heterozygosity?
+
+## Code examples
+
+```{julia}
+#| echo: true
+using StatsBase
+
+function sample_h(alleles)
+    obs_alleles=collect(skipmissing(alleles)) #Genotypes might be missing - we skip those.
+    n=length(obs_alleles)
+    freqs = values(countmap(obs_alleles)) ./ n #Get allele frequencies for each allele
+    return( n/(n-1)*(1-sum(freqs .^ 2))) #Return the expected sample h
+end
+
+function sample_π(genotype_matrix)
+    return(sum([sample_h(genotype_matrix[:,x]) for x in 1:size(genotype_matrix)[2]])) #Sum of h over all sites
+end
+
+sample_π(replace(fake_data,"-"=>missing))
+```
+
+## Not the only heterozygosity
+
+$\pi$ is a commonly used estimator for genetic diversity, but it has some issues. The biggest is that when true diversity is high, variance in *sample* diversity is also really high. That is, it's hard to get an accurate estimate.
+
+```{julia}
+using Plots, LaTeXStrings, Measures
+function var_pi(θ,n)
+    (n+1)/(3*(n-1))*θ+2(n^2+n+3)/(9*n*(n-1))*θ^2
+end
+ns=range(10,1000,length=50)
+thetas = [var_pi.(theta,ns) for theta in [0.1,1,5,10]]
+plot(ns,thetas,xlabel="n",ylabel=L"Var(\pi)",label=["0.1" "1" "5" "10"],margins=5mm)
+```
+
+## Alternatives to $\pi$ 1) $\theta_W$
+
+One common alternative is to use Watterson's Theta. The idea is that we can simply look at the *number* of segregating sites $S$ (sites with at least one variant). Because as we sample more individuals, we are more likely to sample a new allele, there is a correction factor:
+
+$$
+\theta_W = \frac{S}{\sum_{i=1}^{n-1}{1/i}}
+$$
+
+```{julia}
+#| echo: true
+function wat_theta(gm)
+    S = sum([is_segregating(i) for i in eachcol(gm)])
+    a = sum([1/i for i in 1:size(gm)[1]])
+    return(S/a)
+end
+```
+
+## Single data point for whole genome?
+
+$\theta$, $\pi$, $h$ and similar are *summary statistics* - they reduce potentially huge amounts of data into a single number. That *can* be useful, but sometimes it's better to look at a denser view of the data. Let's make a larger/more complicated data-set.
+
+```{julia}
+include("../src/useful_code.jl")
+ancestral=fake_alignment(1,200)
+geno_matrix = fake_alignment_biallelic(ancestral,30;gaps=0.01)
+[join(replace(i,missing=>"-")) for i in eachrow(geno_matrix)]
+```
+
+## Longer alignment - more information
+
+One good way to represent a whole region is to summarize the allele frequencies at each site. This is called the *Site Frequency Spectrum*, or (*Allele Frequency Spectrum*). In our complicated alignment, it helps us see the frequency of different alleles:
+
+```{julia}
+#| echo: false
+function SFS(gm) 
+    return([minimum(values(countmap(i)))/length(i) for i in eachcol(gm)]); 
+end
+
+plot(SFS(only_segregating(geno_matrix)),legend=false,xlabel="Allele Frequency",ylabel="Count",margins=5mm)
+```
+
+##
