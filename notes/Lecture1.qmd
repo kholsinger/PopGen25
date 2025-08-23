@@ -25,11 +25,9 @@ julia:
 
 ## Introduce yourselves!
 
--   What's your name?
-
--   What's your favorite organism?
-
--   What are you hoping to get out of this class?
+```{=html}
+<iframe src="https://app.sli.do/event/43ZvsAwv5dA3mHYVBGGuGy" height="100%" width="100%" frameBorder="0" style="min-height: 560px;" allow="clipboard-write" title="Slido"></iframe>
+```
 
 ## Grading
 
@@ -140,13 +138,21 @@ In pop gen, we generally deal with three "types" of models:
 
 The same model can really have both explanatory and predictive power (and be used as the backbone for a statistical model).
 
-## Why we model: a historical example
+## Why we model: a historical example  {.smaller}
 
 Imagine a population with two types of butterflies: red and white.
 
 . . .
 
 You, as a geneticist, work out the underlying control. You find the trait is controlled by a single gene, and is biallelic.
+
+. . .
+
+An *allele* is just a variant at some heritable site. It could be a single mutation, or a whole complex of co-inherited variants.
+
+. . .
+
+Biallelic sites are limited to two alleles.
 
 . . .
 
@@ -160,15 +166,9 @@ What will happen to the color in the long run?
 
 Recall: `Aa` and `AA` are red, `aa` are white.
 
-1.  Over time, all butterflies become white.
-
-2.  Over time, butterflies are more likely to be white.
-
-3.  No change.
-
-4.  Over time, butterflies are more likely to be red.
-
-5.  Over time, all butterflies become red.
+```{=html}
+<iframe src="https://app.sli.do/event/43ZvsAwv5dA3mHYVBGGuGy" height="100%" width="100%" frameBorder="0" style="min-height: 560px;" allow="clipboard-write" title="Slido"></iframe>
+```
 
 ## How do you compare to early 20th century geneticists?
 
@@ -176,9 +176,7 @@ It was broadly believed that dominant alleles should become more common.
 
 The dominance itself was held as a selective advantage (the trait is "stronger").
 
-It took a mathematician [^1] to point out that there's absolutely no reason dominance should have an advantage in inheritance of the *allele*.
-
-[^1]: According to the historic record - disgusted with how primitive math in biology was
+It took a mathematician to point out that there's absolutely no reason dominance should have an advantage in inheritance of the *allele*.
 
 ## Testing intuition with a model {.smaller}
 
@@ -216,13 +214,21 @@ This lets you see what forces are relevant, what you can potentially simplify, e
 
 We want to know how the frequency of white butterflies $P_{white}$ will change.
 
+. . .
+
 Let $p$ be the frequency of the `A` allele. Then $q=1-p$ is the frequency of `a`.
+
+. . .
 
 We also know that $P_{white} = P_{AA}+P_{Aa}$
 
-What will $P_{white}'$ [^2] be?
+What will $P_{white}'$ be?
 
-[^2]: we often denote the next step/generation with a tick
+. . .
+
+We often denote the next step/generation with a tick (\`)
+
+. . .
 
 Time for chalkboard!
 
@@ -270,39 +276,56 @@ Wright and Fisher were two of the fathers of population genetics.
 
 . . .
 
-They
+They hated each other, and disagreed in most beliefs of how evolution actually acted.
+
+. . .
+
+They did agree, however, that one could describe what happens to evolution when there are no forces applied to a population.
 
 ## The model
 
-Population of constant size *N*.
+Population of constant size, *N*. *N* is one of two parameters of the model. Good models get a lot done with a few parameters.
 
-Diploid.
+Allele `A` starts at frequency $p_0$. This is the only other parameter.
+
+Diploid adults, haploid gametes.
 
 Hermaphroditic.
 
 Life cycle: gametes fuse to form adults, adults form gametes and die.
 
-Offspring are generated from a random sampling of alleles from parents (infinite gametes produced, random mating).
+## Random sampling - Binomial Distribution
 
-## Wright-Fisher *In silico* {.smaller}
+The probability that $k$ gametes carrying the `A` allele are selected for the next generation can be calculated using `Binomial` probability distribution:
+
+$$
+P(k|N,p) = \binom{N}{k}p^k(1-p)^{N-k}
+$$
+
+Here, $\binom{N}{k}$ counts the ways we could choose $k$ gametes out of the $N$ total.
+
+## Wright-Fisher *In silico*
 
 Rather than start with math, let's start with a simple simulation of the model:
 
 ```{julia}
 #| label: wright-fisher-code
 #| output: false
+#| echo: true
 function WrightFisher(N,p,total_generations)
     current_gen=1
-    freqs=Float64[]
-    append!(freqs,p)
+    freqs=zeros(total_generations) #This is what we'll keep track of
+    freqs[current_gen] = p
     while current_gen<total_generations
-        next = only(rand(Binomial(N,freqs[current_gen]),1)/N)
-        append!(freqs,next)
+        next = only(rand(Binomial(N,freqs[current_gen]),1))/N
+        freqs[current_gen+1] = next
         current_gen += 1
     end
     return(freqs)
 end
 ```
+
+## What does that look like in practice?
 
 ![](images/WF_example.gif){fig-align="center" width="225"}
 
@@ -313,7 +336,6 @@ end
 #| fig-height: 2
 using Distributions
 using Plots
-plotly()
 using Measures
 theme(:rose_pine)
 
@@ -328,7 +350,7 @@ p = plot(samples,
     xlabel="Generation",
     ylabel="Allele Frequency",
     margins=5mm,
-    size=(1200,500))
+    size=(1000,500))
 
 ```
 
@@ -427,19 +449,20 @@ In practice, you find the largest allele frequency swings at intermediate freque
 ```{julia}
 x= 0.0:0.01:1.0
 sim = WrightFisher.(1000,x,100)
-p1 = plot(sim,
-    leg=false,
+cols=get(cgrad(:viridis),0:0.01:1.0)
+p1 = plot(leg=false,
     xlabel="Generation",
-    ylabel="Allele frequency",
-    c=:white,
-    margin=5mm)
+    ylabel="Allele frequency",margin=5mm)
+for i in 1:100
+    plot!(p1,sim[i],linecolor=cols[i])
+end
 
 function t_vs_tp1(sim;gen=1)
     return([(sim[t-1],abs(sim[t]-sim[t-1])/gen) for t in 2:length(sim)])
 end
 
 test = reduce(vcat,[t_vs_tp1(sim[x]) for x in 1:100])
-p2 = histogram2d(test,leg=false,xlabel=L"p_t",ylabel=L"|p_{t+1}-p_t|")
+p2 = scatter(test,leg=false,xlabel=L"p_t",ylabel=L"|p_{t+1}-p_t|",c=cols[50],xlim=(0,1.0);markerstrokewidth=0.1,markersize=2)
 
 plot(p1,p2,size=(1000,500))
 ```
@@ -506,9 +529,9 @@ Imagine we started with a population where each of the *N* individuals has a dif
 
 . . .
 
-Eventually, once enough time has passed, all of the individuals in the population will have descended from just *one* of these ancestors.[^3]
+Eventually, once enough time has passed, all of the individuals in the population will have descended from just *one* of these ancestors.[^1]
 
-[^3]: We'll prove this later when we talk about the coalescent, but for now take it as a fact given to you by god.
+[^1]: We'll prove this later when we talk about the coalescent, but for now take it as a fact given to you by god.
 
 ## Who's the ancestor?
 
@@ -531,8 +554,6 @@ $$
 Here we start with a frequency of 0.2.
 
 ```{julia}
-gen=100000
-
 function WrightFisher_long(N,p)
     freqs=Float64[]
     append!(freqs,p)

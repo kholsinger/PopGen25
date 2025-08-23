@@ -60,7 +60,7 @@
     "href": "notes/Lecture1.html#assignmentsproject",
     "title": "Lecture 1",
     "section": "Assignments/Project",
-    "text": "Assignments/Project\nThe goal is to create a small set of scripts that you have for many basic population genetics tasks.\n\nWe will assume you have called variants somehow. We sadly don’t have time to teach you how to call variants on the many sequencing approaches one could take (see Jill Wegrzin’s EEB XXXX for that!).\n\n\nYou will develop scripts to calculate basic population genetic statistics, plot them, and perform statistical comparisons when possible in each weekly lab.\n\n\nTwo incremental code base submissions in which I’ll test your code on different data than used in class."
+    "text": "Assignments/Project\nThe goal is to create a small set of scripts that you have for many basic population genetics tasks.\n\nWe will assume you have called variants somehow. We sadly don’t have time to teach you how to call variants on the many sequencing approaches one could take (see Jill Wegrzin’s EEB XXXX for that!).\n\n\nYou will develop scripts to calculate basic population genetic statistics, plot them, and perform statistical comparisons when possible in each weekly lab.\n\n\nTwo incremental code based submissions in which I’ll test your code on different data than used in class."
   },
   {
     "objectID": "notes/Lecture1.html#project-cntd.",
@@ -116,14 +116,14 @@
     "href": "notes/Lecture1.html#testing-your-intuition",
     "title": "Lecture 1",
     "section": "Testing your intuition",
-    "text": "Testing your intuition\nRecall: Aa and AA are red, aa are white.\n\nOver time, all butterflies become white.\nOver time, butterflies are more likely to be white.\nNo change.\nOver time, butterflies are more likely to be red.\nOver time, all butterflies become red."
+    "text": "Testing your intuition\nRecall: Aa and AA are red, aa are white."
   },
   {
     "objectID": "notes/Lecture1.html#how-do-you-compare-to-early-20th-century-geneticists",
     "href": "notes/Lecture1.html#how-do-you-compare-to-early-20th-century-geneticists",
     "title": "Lecture 1",
     "section": "How do you compare to early 20th century geneticists?",
-    "text": "How do you compare to early 20th century geneticists?\nIt was broadly believed that dominant alleles should become more common.\nThe dominance itself was held as a selective advantage (the trait is “stronger”).\nIt took a mathematician 1 to point out that there’s absolutely no reason dominance should have an advantage in inheritance of the allele.\nAccording to the historic record - disgusted with how primitive math in biology was"
+    "text": "How do you compare to early 20th century geneticists?\nIt was broadly believed that dominant alleles should become more common.\nThe dominance itself was held as a selective advantage (the trait is “stronger”).\nIt took a mathematician [^1] to point out that there’s absolutely no reason dominance should have an advantage in inheritance of the allele.\n\n[^1]: Reportedly, Hardy was extremely annoyed at how simplistic the mathematical understanding of biologists was."
   },
   {
     "objectID": "notes/Lecture1.html#testing-the-intuition-with-a-model",
@@ -179,7 +179,7 @@
     "href": "notes/Lecture1.html#wright-fisher-in-silico",
     "title": "Lecture 1",
     "section": "Wright-Fisher In silico",
-    "text": "Wright-Fisher In silico\nRather than start with math, let’s start with a simple simulation of the model:"
+    "text": "Wright-Fisher In silico\nRather than start with math, let’s start with a simple simulation of the model:\n\nfunction WrightFisher(N,p,total_generations)\n    current_gen=1\n    freqs=zeros(total_generations) #This is what we'll keep track of\n    freqs[current_gen] = p\n    while current_gen&lt;total_generations\n        next = only(rand(Binomial(N,freqs[current_gen]),1))/N\n        freqs[current_gen+1] = next\n        current_gen += 1\n    end\n    return(freqs)\nend"
   },
   {
     "objectID": "notes/Lecture1.html#what-does-it-look-like",
@@ -193,7 +193,7 @@
     "href": "notes/Lecture1.html#what-does-it-look-like-across-many-trials",
     "title": "Lecture 1",
     "section": "What does it look like across many trials?",
-    "text": "What does it look like across many trials?\n\n\n\n┌ Warning: Failed to load integration with PlotlyBase & PlotlyKaleido.\n│   exception =\n│    ArgumentError: Package PlotlyBase not found in current path.\n│    - Run `import Pkg; Pkg.add(\"PlotlyBase\")` to install the PlotlyBase package.\n│    Stacktrace:\n│      [1] macro expansion\n│        @ ./loading.jl:2296 [inlined]\n│      [2] macro expansion\n│        @ ./lock.jl:273 [inlined]\n│      [3] __require(into::Module, mod::Symbol)\n│        @ Base ./loading.jl:2271\n│      [4] #invoke_in_world#3\n│        @ ./essentials.jl:1089 [inlined]\n│      [5] invoke_in_world\n│        @ ./essentials.jl:1086 [inlined]\n│      [6] require(into::Module, mod::Symbol)\n│        @ Base ./loading.jl:2260\n│      [7] top-level scope\n│        @ ~/.julia/packages/Plots/gYkEG/src/backends.jl:570\n│      [8] eval\n│        @ ./boot.jl:430 [inlined]\n│      [9] _initialize_backend(pkg::Plots.PlotlyBackend)\n│        @ Plots ~/.julia/packages/Plots/gYkEG/src/backends.jl:569\n│     [10] backend(pkg::Plots.PlotlyBackend)\n│        @ Plots ~/.julia/packages/Plots/gYkEG/src/backends.jl:245\n│     [11] plotly()\n│        @ Plots ~/.julia/packages/Plots/gYkEG/src/backends.jl:86\n│     [12] top-level scope\n│        @ ~/PopGen25/notes/Lecture1.qmd:308\n│     [13] eval\n│        @ ./boot.jl:430 [inlined]\n│     [14] (::QuartoNotebookWorker.var\"#15#16\"{Module, Expr})()\n│        @ QuartoNotebookWorker ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:222\n│     [15] (::QuartoNotebookWorker.Packages.IOCapture.var\"#5#9\"{DataType, QuartoNotebookWorker.var\"#15#16\"{Module, Expr}, IOContext{Base.PipeEndpoint}, IOContext{Base.PipeEndpoint}, IOContext{Base.PipeEndpoint}, IOContext{Base.PipeEndpoint}})()\n│        @ QuartoNotebookWorker.Packages.IOCapture ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/vendor/IOCapture/src/IOCapture.jl:170\n│     [16] with_logstate(f::QuartoNotebookWorker.Packages.IOCapture.var\"#5#9\"{DataType, QuartoNotebookWorker.var\"#15#16\"{Module, Expr}, IOContext{Base.PipeEndpoint}, IOContext{Base.PipeEndpoint}, IOContext{Base.PipeEndpoint}, IOContext{Base.PipeEndpoint}}, logstate::Base.CoreLogging.LogState)\n│        @ Base.CoreLogging ./logging/logging.jl:524\n│     [17] with_logger(f::Function, logger::Base.CoreLogging.ConsoleLogger)\n│        @ Base.CoreLogging ./logging/logging.jl:635\n│     [18] capture(f::QuartoNotebookWorker.var\"#15#16\"{Module, Expr}; rethrow::Type, color::Bool, passthrough::Bool, capture_buffer::IOBuffer, io_context::Vector{Pair{Symbol, Any}})\n│        @ QuartoNotebookWorker.Packages.IOCapture ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/vendor/IOCapture/src/IOCapture.jl:167\n│     [19] capture\n│        @ ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:248 [inlined]\n│     [20] io_capture(f::Function; cell_options::Dict{Any, Any}, kws::@Kwargs{rethrow::DataType, color::Bool, io_context::Vector{Pair{Symbol, Any}}})\n│        @ QuartoNotebookWorker ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:250\n│     [21] io_capture\n│        @ ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:246 [inlined]\n│     [22] include_str(mod::Module, code::String; file::String, line::Int64, cell_options::Dict{Any, Any})\n│        @ QuartoNotebookWorker ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:201\n│     [23] #invokelatest#2\n│        @ ./essentials.jl:1057 [inlined]\n│     [24] invokelatest\n│        @ ./essentials.jl:1052 [inlined]\n│     [25] #6\n│        @ ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:18 [inlined]\n│     [26] with_inline_display(f::QuartoNotebookWorker.var\"#6#7\"{String, String, Int64, Dict{Any, Any}}, cell_options::Dict{Any, Any})\n│        @ QuartoNotebookWorker ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/InlineDisplay.jl:31\n│     [27] _render_thunk(thunk::Function, code::String, cell_options::Dict{Any, Any}, is_expansion_ref::Base.RefValue{Bool}; inline::Bool)\n│        @ QuartoNotebookWorker ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:43\n│     [28] _render_thunk\n│        @ ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:35 [inlined]\n│     [29] #render#5\n│        @ ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:15 [inlined]\n│     [30] render(code::String, file::String, line::Int64, cell_options::Dict{Any, Any})\n│        @ QuartoNotebookWorker ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/QuartoNotebookWorker/src/render.jl:1\n│     [31] render(::String, ::Vararg{Any}; kwargs::@Kwargs{})\n│        @ Main ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/startup.jl:145\n│     [32] top-level scope\n│        @ none:1\n│     [33] eval\n│        @ ./boot.jl:430 [inlined]\n│     [34] (::Main.var\"#16#17\")(chan::Channel{Any})\n│        @ Main ~/.julia/packages/QuartoNotebookRunner/fVEXT/src/startup.jl:158\n│     [35] (::Base.var\"#741#742\"{Main.var\"#16#17\", Channel{Any}})()\n│        @ Base ./channels.jl:142\n└ @ Plots ~/.julia/packages/Plots/gYkEG/src/backends.jl:579"
+    "text": "What does it look like across many trials?"
   },
   {
     "objectID": "notes/Lecture1.html#wright-fisher-analytically",
@@ -214,7 +214,7 @@
     "href": "notes/Lecture1.html#analytical-vs-simulation",
     "title": "Lecture 1",
     "section": "Analytical vs Simulation",
-    "text": "Analytical vs Simulation\n\n\n    \n    \n    \n\n\nLooks like no real change, just as expected."
+    "text": "Analytical vs Simulation\n\n\n\n\n\n  \n    \n  \n\n\n\n  \n    \n  \n\n\n\n  \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLooks like no real change, just as expected."
   },
   {
     "objectID": "notes/Lecture1.html#add-to-the-plot",
@@ -312,21 +312,21 @@
     "href": "notes/Lecture1.html#so-what-happens-to-a-new-allele",
     "title": "Lecture 1",
     "section": "So, what happens to a new allele?",
-    "text": "So, what happens to a new allele?\nHomework Quiz:\nWhat frequency will a mutation be found in when it first occurs?\nWhat is the probability of that mutation becoming fixed?\nGiven only what you have learned here: should smaller populations show slower or faster rates of fixing substitutions?"
+    "text": "So, what happens to a new allele?\nHomework Assignment (submit via HuskyCT):\nWhat frequency will a mutation be found in when it first occurs?\nWhat is the probability of that mutation becoming fixed?\nGiven only what you have learned here: should smaller populations show slower or faster rates of fixing substitutions?"
   },
   {
     "objectID": "notes/Lecture1.html#sewall-wright-ronald-a.-fisher",
     "href": "notes/Lecture1.html#sewall-wright-ronald-a.-fisher",
     "title": "Lecture 1",
     "section": "Sewall Wright, Ronald A. Fisher",
-    "text": "Sewall Wright, Ronald A. Fisher\nWright and Fisher were two of the fathers of population genetics.\n\nThey"
+    "text": "Sewall Wright, Ronald A. Fisher\nWright and Fisher were two of the fathers of population genetics.\n\nThey hated each other, and disagreed in most beliefs of how evolution actually acted.\n\n\nThey did agree, however, that one could describe what happens to evolution when there are no forces applied to a population."
   },
   {
     "objectID": "notes/Lecture1.html#the-model",
     "href": "notes/Lecture1.html#the-model",
     "title": "Lecture 1",
     "section": "The model",
-    "text": "The model\nPopulation of constant size N.\nDiploid.\nHermaphroditic.\nLife cycle: gametes fuse to form adults, adults form gametes and die.\nOffspring are generated from a random sampling of alleles from parents (infinite gametes produced, random mating)."
+    "text": "The model\nPopulation of constant size, N. N is one of two parameters of the model. Good models get a lot done with a few parameters.\nAllele A starts at frequency \\(p_0\\). This is the only other parameter.\nDiploid adults, haploid gametes.\nHermaphroditic.\nLife cycle: gametes fuse to form adults, adults form gametes and die."
   },
   {
     "objectID": "notes/Lecture1.html#and-the-same-happens-with-smaller-populations",
@@ -340,7 +340,7 @@
     "href": "notes/Lecture1.html#but-what-about-real-data",
     "title": "Lecture 1",
     "section": "But what about real data?",
-    "text": "But what about real data?\nHow general are the dynamics of this model? Here’s evolution in yeast:"
+    "text": "But what about real data?\nSurprisingly, tracking individual allele frequency changes is not super common.\n\nEither hard to get many generations (generation time ~year), or hard to catch every generation (multiple per day)\nOften not the core interest of any study, but can be incedental to other interests.\nReading for Thursday - Leu et al. 2020 “Sex alters molecular evolution in diploid experimental populations of S. cerevisiae”"
   },
   {
     "objectID": "notes/Lecture2.html#genetic-diversity-writ-large",
@@ -481,5 +481,82 @@
     "title": "Lecture 2",
     "section": "Longer alignment - more information",
     "text": "Longer alignment - more information\nOne good way to represent a whole region is to summarize the allele frequencies at each site. This is called the Site Frequency Spectrum, or (Allele Frequency Spectrum). In our complicated alignment, it helps us see the frequency of different alleles:\n\nfunction SFS(gm) \n    return([minimum(values(countmap(i)))/length(i) for i in eachcol(gm)]); \nend\n\nplot(SFS(only_segregating(geno_matrix)))"
+  },
+  {
+    "objectID": "notes/Lecture1.html#introduce-yourselves",
+    "href": "notes/Lecture1.html#introduce-yourselves",
+    "title": "Lecture 1",
+    "section": "Introduce yourselves!",
+    "text": "Introduce yourselves!"
+  },
+  {
+    "objectID": "notes/Lecture1.html#why-we-model-a-historical-example",
+    "href": "notes/Lecture1.html#why-we-model-a-historical-example",
+    "title": "Lecture 1",
+    "section": "Why we model: a historical example",
+    "text": "Why we model: a historical example\nImagine a population with two types of butterflies: red and white.\n\nYou, as a geneticist, work out the underlying control. You find the trait is controlled by a single gene, and is biallelic. [^1]\n\n\n[^1]: An allele is just a variant at some heritable site. It could be a single mutation, or a whole complex of co-inherited variants.\n\n\nYou work out that AA and Aa butterflies are red, aa are white.\n\n\nWhat will happen to the color in the long run?"
+  },
+  {
+    "objectID": "notes/Lecture1.html#testing-intuition-with-a-model",
+    "href": "notes/Lecture1.html#testing-intuition-with-a-model",
+    "title": "Lecture 1",
+    "section": "Testing intuition with a model",
+    "text": "Testing intuition with a model\nModels begin by simplifying the world as much as possible. Given what we know about the system:\n\nSingle locus\nDiploid\nSexually reproducing\n\n\nLet’s get rid of other potential factors\n\nOnly dominance, no other fitness differences\nNo mutation\nNo migration/multiple populations\nPopulation large enough we don’t need to worry about drift\nCompletely random mating"
+  },
+  {
+    "objectID": "notes/Lecture1.html#modeling-tips-and-tricks",
+    "href": "notes/Lecture1.html#modeling-tips-and-tricks",
+    "title": "Lecture 1",
+    "section": "Modeling tips and tricks",
+    "text": "Modeling tips and tricks\nIt’s often useful to draw out a diagram of what your system looks like.\n\nThis lets you see what forces are relevant, what you can potentially simplify, etc."
+  },
+  {
+    "objectID": "notes/Lecture1.html#plot-of-data-from-leu-et-al.",
+    "href": "notes/Lecture1.html#plot-of-data-from-leu-et-al.",
+    "title": "Lecture 1",
+    "section": "Plot of Data from Leu et al.",
+    "text": "Plot of Data from Leu et al.\nHow general are the dynamics of this model? Here’s evolution in yeast:"
+  },
+  {
+    "objectID": "notes/Lecture1.html#how-can-we-compare-with-wf-expectations",
+    "href": "notes/Lecture1.html#how-can-we-compare-with-wf-expectations",
+    "title": "Lecture 1",
+    "section": "How can we compare with WF expectations?",
+    "text": "How can we compare with WF expectations?\nDo allele frequency changes seem odd in any way?"
+  },
+  {
+    "objectID": "notes/Lecture1.html#adding-selection",
+    "href": "notes/Lecture1.html#adding-selection",
+    "title": "Lecture 1",
+    "section": "Adding selection",
+    "text": "Adding selection\nPart of the benefit of a really simple model is that we can make some simple extensions of it.\nOne very simple extension is to think about what happens to an allele under directional selection.\nHaploid stage selection will help keep parameters down."
+  },
+  {
+    "objectID": "notes/Lecture1.html#selection",
+    "href": "notes/Lecture1.html#selection",
+    "title": "Lecture 1",
+    "section": "Selection",
+    "text": "Selection\nSelection occurs because of differences in fitness.\n\nWe can define fitness in various ways depending on the model.\n\n\nIn WF - simplest to think of relative contribution to the infinite gamete pool.\n\n\nWe’ll first set the fitness of the ancestral allele a to 1.\n\n\nLet fitness of A individuals be: \\(1+s\\)."
+  },
+  {
+    "objectID": "notes/Lecture1.html#change-in-allele-frequency",
+    "href": "notes/Lecture1.html#change-in-allele-frequency",
+    "title": "Lecture 1",
+    "section": "Change in allele frequency",
+    "text": "Change in allele frequency\nNext, let’s derive the change in allele frequency.\n\n\\[\np_{t+1} = \\frac{p_t W_A}{\\bar{W}} = \\frac{p_tW_A}{p_tW_A+(1-p_t)1}=\\frac{p_t(1+s)}{1+p_ts}\n\\]"
+  },
+  {
+    "objectID": "notes/Lecture1.html#what-does-that-look-like-in-practice",
+    "href": "notes/Lecture1.html#what-does-that-look-like-in-practice",
+    "title": "Lecture 1",
+    "section": "What does that look like in practice?",
+    "text": "What does that look like in practice?"
+  },
+  {
+    "objectID": "notes/Lecture1.html#random-sampling---binomial-distribution",
+    "href": "notes/Lecture1.html#random-sampling---binomial-distribution",
+    "title": "Lecture 1",
+    "section": "Random sampling - Binomial Distribution",
+    "text": "Random sampling - Binomial Distribution\nThe probability that \\(k\\) gametes carrying the A allele are selected for the next generation can be calculated using Binomial probability distribution:\n\\[\nP(k|N,p) = \\binom{N}{k}p^k(1-p)^{N-k}\n\\]\nHere, \\(\\binom{N}{k}\\) counts the ways we could choose \\(k\\) gametes out of the \\(N\\) total."
   }
 ]
