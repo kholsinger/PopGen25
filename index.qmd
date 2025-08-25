@@ -16,18 +16,18 @@ The focus of this course is to introduce graduate students to population genetic
 Each week, we will start with a lecture on Tuesday, followed by a paper discussion and lab on Thursday. The goal of this class structure is to be able to introduce general concepts/remind you of things you should remember from your Genetics/Evolution courses, introduce classic PopGen results, followed by a more in-depth dive in the state of the art uses of those results and some practical advice of coding how they work. Here's a general week-by-week overlay of the topics. Lecture notes will be added as links as we go along
 
 | Week | Topic(s) | Reading | Lecture Notes |
-|----|----|----|----|
+|------------------|------------------|------------------|------------------|
 | Aug 26-28 | Intro, Wright-Fisher | [Leu et al](notes/papers/Leu2020.pdf) | [Lecture 1](notes/Lecture1.qmd) |
 | Sep 2-4 | Genetic diversity measurements | [Buffalo](notes/papers/Buffalo.pdf) |  |
 | Sep 9-11 | Divergence at a site, mutation, molecular models of evolution | [Peede et al](notes/papers/Peede.pdf) |  |
-| Sep 16-18 | Sexual reproduction,Recombination, LD  | [Hahn and Mishra](notes/papers/HahnMishra2025.pdf) |  |
+| Sep 16-18 | Sexual reproduction,Recombination, LD | [Hahn and Mishra](notes/papers/HahnMishra2025.pdf) |  |
 | Sep 23-25 | Population structure, migration, differentiation |  |  |
 | Sep 30-Oct 2 | Selection at a single locus, types of selection |  |  |
 | Oct 7-9 | Project Meetings, no regular class | NA |  |
 | Oct 14-16 | The Coalescent |  |  |
 | Oct 21-23 | Confounded selection, demography, mutation |  |  |
 | Oct 28-30 | Co-estimating selection and demography |  |  |
-| Nov 4-6   | Ancestral Recombination Graphs |  |  |
+| Nov 4-6 | Ancestral Recombination Graphs |  |  |
 | Nov 11-13 | Students' choice |  |  |
 | Nov 18-20 | Students' choice |  |  |
 | Nov 25-27 | THANKSGIVING BREAK |  |  |
