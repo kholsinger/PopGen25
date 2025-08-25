@@ -18,16 +18,16 @@ Each week, we will start with a lecture on Tuesday, followed by a paper discussi
 | Week | Topic(s) | Reading | Lecture Notes |
 |----|----|----|----|
 | Aug 26-28 | Intro, Wright-Fisher | [Leu et al](notes/papers/Leu2020.pdf) | [Lecture 1](notes/Lecture1.qmd) |
-| Sep 2-4 | Genetic diversity measurements |  |  |
-| Sep 9-11 | Demography and its inference |  |  |
-| Sep 16-18 | Recombination and mutation |  |  |
-| Sep 23-25 | Population structure, migration |  |  |
-| Sep 30-Oct 2 | Selection at a single locus |  |  |
+| Sep 2-4 | Genetic diversity measurements | [Buffalo](notes/papers/Buffalo.pdf) |  |
+| Sep 9-11 | Divergence at a site, mutation, molecular models of evolution | [Peede et al](notes/papers/Peede.pdf) |  |
+| Sep 16-18 | Sexual reproduction,Recombination, LD  | [Hahn and Mishra](notes/papers/HahnMishra2025.pdf) |  |
+| Sep 23-25 | Population structure, migration, differentiation |  |  |
+| Sep 30-Oct 2 | Selection at a single locus, types of selection |  |  |
 | Oct 7-9 | Project Meetings, no regular class | NA |  |
 | Oct 14-16 | The Coalescent |  |  |
-| Oct 21-23 | Linked selection |  |  |
-| Oct 28-30 | Demographic history of many populations |  |  |
-| Nov 4-6 |  | ARGs |  |
+| Oct 21-23 | Confounded selection, demography, mutation |  |  |
+| Oct 28-30 | Co-estimating selection and demography |  |  |
+| Nov 4-6   | Ancestral Recombination Graphs |  |  |
 | Nov 11-13 | Students' choice |  |  |
 | Nov 18-20 | Students' choice |  |  |
 | Nov 25-27 | THANKSGIVING BREAK |  |  |
