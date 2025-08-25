@@ -5,7 +5,7 @@ author: "Andrius J. Dagilis"
 
 # Welome to PopGen!
 
-This is the website for Population Genetics (EEB 5348) at UConn. Here you will find notes on each of the lectures, directions for [assignments](%22assignments.qmd%22) as well as a list of [readings](%22readings.qmd%22).
+This is the website for Population Genetics (EEB 5348) at UConn. Here you will find notes on each of the lectures, links to papers and other materials as they become needed.
 
 # About the course
 
@@ -17,18 +17,18 @@ Each week, we will start with a lecture on Tuesday, followed by a paper discussi
 
 | Week | Topic(s) | Reading | Lecture Notes |
 |----|----|----|----|
-| Aug 26-28 | Genetic Diversity |  |  |
-| Sep 2-4 | Neutral processes and mutation |  |  |
-| Sep 9-11 | Demographic inference |  |  |
-| Sep 16-18 | Selection at a single locus |  |  |
-| Sep 23-25 | Recombination |  |  |
-| Sep 30-Oct 2 | Inference of selection |  |  |
+| Aug 26-28 | Intro, Wright-Fisher | [Leu et al](notes/papers/Leu2020.pdf) | [Lecture 1](notes/Lecture1.qmd) |
+| Sep 2-4 | Genetic diversity measurements |  |  |
+| Sep 9-11 | Demography and its inference |  |  |
+| Sep 16-18 | Recombination and mutation |  |  |
+| Sep 23-25 | Population structure, migration |  |  |
+| Sep 30-Oct 2 | Selection at a single locus |  |  |
 | Oct 7-9 | Project Meetings, no regular class | NA |  |
-| Oct 14-16 |  |  |  |
-| Oct 21-23 |  |  |  |
-| Oct 28-30 |  |  |  |
-| Nov 4-6 |  |  |  |
-| Nov 11-13 |  |  |  |
-| Nov 18-20 | Quantitative traits |  |  |
+| Oct 14-16 | The Coalescent |  |  |
+| Oct 21-23 | Linked selection |  |  |
+| Oct 28-30 | Demographic history of many populations |  |  |
+| Nov 4-6 |  | ARGs |  |
+| Nov 11-13 | Students' choice |  |  |
+| Nov 18-20 | Students' choice |  |  |
 | Nov 25-27 | THANKSGIVING BREAK |  |  |
 | Dec 2-4 | Project meetings, final projects due Dec 4 | NA |  |

@@ -1,6 +1,5 @@
 ---
-title: "Lecture notes"
+title: "Useful links"
 ---
 
-Here you will find links to individual lecture notes. My goal is to get them written in `Quarto`, which should allow you to explore the notes in detail by yourself when looking at the source code (and re-run any relevant code examples).
-
+This page will slowly be populated by useful pieces of software, guides, tutorials and other little bits that you might find useful for self-study or use in your projects.

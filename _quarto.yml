@@ -7,8 +7,9 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - assignments.qmd
-      - readings.qmd
+      - about.qmd
+      - notes.qmd
+      - labs.qmd
 
 format:
   html:

@@ -1,5 +1,7 @@
 ---
 title: "Lecture 2"
+execute:
+  freeze: auto  # re-render only when source changes
 format: 
     revealjs:
         theme: night
@@ -208,7 +210,41 @@ function SFS(gm)
     return([minimum(values(countmap(i)))/length(i) for i in eachcol(gm)]); 
 end
 
-plot(SFS(only_segregating(geno_matrix)),legend=false,xlabel="Allele Frequency",ylabel="Count",margins=5mm)
+histogram(SFS(only_segregating(geno_matrix)),legend=false,xlabel="Allele Frequency",ylabel="Count",margins=5mm)
 ```
 
-##
+## SFS - Typical distribution
+
+## How is variation distributed among individuals?
+
+We can now say something about how genetic variation is sumarised across a population. *But* this gives us very little information about how the variation is distributed within each individual.
+
+For instance, if overall $\pi$ is high - does that mean that every individual is likely to *be* heterozygous?
+
+## Summarizing complex data quickly: PCA
+
+Principal component analysis (PCA) is an approach to take complex, highly dimensional data (like the genotypes of a bunch of individuals at very many sites), and reduce it to something simpler.
+
+```{julia}
+using MultivariateStats
+x = randn(1000)
+y = x+randn(1000)
+
+pca_test_plot=scatter(x,y,leg=false)
+
+```
+
+## PC1 identifies the axis of highest variability
+
+```{julia}
+pca_m = fit(PCA,transpose(hcat(x,y)))
+plot!(pca_test_plot,i->i*scaled_loadings(pca_m)[1,1],-4,4)
+```
+
+## Works in genetic data as well!
+
+Lots of dimensions, but if correlated, top PCs help reduce data complexity!
+
+```{julia}
+gm_PCA = fit(PCA,transpose(geno_mat_to_Int(geno_matrix)))
+```

@@ -1,5 +1,7 @@
 ---
 title: "Lecture 1"
+execute:
+  freeze: auto  # re-render only when source changes
 format: 
     revealjs:
         theme: night
@@ -334,6 +336,7 @@ end
 ```{julia}
 #| label: wright-fisher-full
 #| fig-height: 2
+#| echo: false
 using Distributions
 using Plots
 using Measures
@@ -381,7 +384,7 @@ And, further, $E[p_t] = p_{t-1} = ... = p_0$, meaning no change is expected.
 ## Analytical vs Simulation
 
 ```{julia}
-
+#| echo: false
 mean_p = mean.(eachcol(samples))
 plot!(p,mean_p,linecolor=:red)
 ```
@@ -407,6 +410,7 @@ $$
 Again, we can add this to the plot:
 
 ```{julia}
+#| echo: false
 confint= 1.96 .* [sqrt(t/(2*N)) for t in 1:gen]
 plot!(p,mean_p;ribbon=confint)
 ```
@@ -428,6 +432,7 @@ Let's play around with each to develop a sense for what they do.
 Recall that expected allele frequency at time step *t* is just the initial frequency. But variance has a more complicated relationship:
 
 ```{julia}
+#| echo: false
 using LaTeXStrings
 function var_func(p;N=1)
     return(p*(1-p)/(2*N))
@@ -482,6 +487,7 @@ Population size *does* affect the variance.
 ## $N$ vs Variance
 
 ```{julia}
+#| echo: false
 s1 = [WrightFisher(100,0.5,gen) for _ in 1:1000]
 p1 = plot(s1,
     legend=false,
@@ -507,6 +513,7 @@ plot(p1,p2,size=(1000,600);layout=2)
 ## No change in mean!
 
 ```{julia}
+#| echo: false
 p1_2 = plot!(p1,mean.(eachcol(s1)),linecolor=:red)
 p2_2 = plot!(p2,mean.(eachcol(s2)),linecolor=:red)
 
@@ -554,6 +561,7 @@ $$
 Here we start with a frequency of 0.2.
 
 ```{julia}
+#| echo: false
 function WrightFisher_long(N,p)
     freqs=Float64[]
     append!(freqs,p)
@@ -577,7 +585,7 @@ plot(p1,p2,size=(1000,500);layout=2)
 ## And if we start with a more common allele...
 
 ```{julia}
-
+#| echo: false
 sims = [WrightFisher_long(1000,0.8) for _ in 1:1000]
 p1 = plot(sims,xlabel="Generations",ylabel="Allele Frequency",leg=false,margin=5mm,linecolor=:white,linealpha=0.1)
 
@@ -591,6 +599,7 @@ plot(p1,p2,size=(1000,500);layout=2)
 ## And the same happens with smaller populations
 
 ```{julia}
+#| echo: false
 sim1 = [WrightFisher_long(10,0.8) for _ in 1:1000]
 sim2 = [WrightFisher_long(10,0.5) for _ in 1:1000]
 sim3 = [WrightFisher_long(10,0.2) for _ in 1:1000]
@@ -626,6 +635,7 @@ Surprisingly, tracking individual allele frequency changes is not super common.
 How general are the dynamics of this model? Here's evolution in yeast:
 
 ```{julia}
+#| echo: false
 using CSV, DataFrames
 yeast_data = CSV.read("data/yeast_sex_asex.csv",DataFrame)
 
@@ -643,6 +653,7 @@ plot(p1,size=(1000,500);layout=@layout[a _])
 Do allele frequency changes seem odd in any way?
 
 ```{julia}
+#| echo: false
 plot(p2,size=(1000,500))
 ```
 

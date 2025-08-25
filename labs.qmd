@@ -1,0 +1,14 @@
+---
+title: "Labs"
+author: ""
+---
+
+Here you'll find links for the labs on Thursdays, although they should all be available if you pull the latest version of the git before class time as well.
+
+## Pluto
+
+Some labs we will run using `Pluto` - an interactive notebook that uses `Julia` as the programming language, and will let us get on the same page faster for certain pieces of code.
+
+To get runnning with Pluto, you'll just want to follow the guide at [Pluto's website](https://plutojl.org/#install).
+
+Once Pluto is running, load in the lab `.jl` file provided for each lab and we'll work from there!

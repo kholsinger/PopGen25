@@ -1,3 +1,7 @@
 ---
 title: "Readings"
 ---
+
+## Week 1
+
+Leu et al, 2020: [URL](https://www.nature.com/articles/s41559-020-1101-1), [PDF](notes/papers/leuetal.pdf)

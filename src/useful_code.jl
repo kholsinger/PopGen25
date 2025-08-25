@@ -62,3 +62,18 @@ function only_segregating(gm)
     idx = findall([is_segregating(i) for i in eachcol(gm)])
     return(gm[:,idx])
 end
+
+function geno_mat_to_Int(gm)
+    geno_mat = zeros(size(gm))
+    for i in 1:size(gm)[2]
+        cases = unique(gm[:,i])
+        rep = Dict(cases[x]=>x for x in 1:length(cases))
+        geno_mat[:,i] = [rep[x] for x in gm[:,i]] 
+    end
+    return(geno_mat)
+end
+
+function scaled_loadings(PCA_model)
+    scaled_loadings = loadings(PCA_model).*principalvars(PCA_model).^0.5
+    return(scaled_loadings)
+end
