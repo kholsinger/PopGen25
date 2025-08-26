@@ -172,7 +172,7 @@ thetas = [var_pi.(theta,ns) for theta in [0.1,1,5,10]]
 plot(ns,thetas,xlabel="n",ylabel=L"Var(\pi)",label=["0.1" "1" "5" "10"],margins=5mm)
 ```
 
-## Alternatives to $\pi$ 1) $\theta_W$
+## Alternatives to $\pi$ : $\theta_W$
 
 One common alternative is to use Watterson's Theta. The idea is that we can simply look at the *number* of segregating sites $S$ (sites with at least one variant). Because as we sample more individuals, we are more likely to sample a new allele, there is a correction factor:
 
@@ -189,6 +189,39 @@ function wat_theta(gm)
 end
 ```
 
+## $\theta_W$ - lower variance with greater sampling
+
+Unlike $\pi$, $\theta_W$ shows a nice decrease in sample variance with more samples.
+
+```{julia}
+function theta_var(n,theta)
+    vars =sum([theta/i for i in 1:(n-1)])+sum([theta^2/(i^2) for i in 1:(n-1)])
+    a = sum([1/i for i in 1:(n-1)])
+    return(vars/(a^2))
+end
+
+thetas_w = [theta_var.(ns,i) for i in [0.1,1,5,10]]
+plot(ns,thetas_w,xlabel="n",ylabel=L"Var(\theta_W)",label=["0.1" "1" "5" "10"],margins=5mm)
+```
+
+## Why is $\theta_W$ not the standard?
+
+Accuracy from sample size is not the only potential issue:
+
+. . .
+
+$\theta_W$ is not robust to other sources of errors:
+
+-   missing data
+
+-   sequencing error
+
+-   uneven sampling
+
+. . .
+
+In practice, it's often good to be able to look at multiple different estimators, and make informed conclusions about the data from them.
+
 ## Single data point for whole genome?
 
 $\theta$, $\pi$, $h$ and similar are *summary statistics* - they reduce potentially huge amounts of data into a single number. That *can* be useful, but sometimes it's better to look at a denser view of the data. Let's make a larger/more complicated data-set.
@@ -202,7 +235,9 @@ geno_matrix = fake_alignment_biallelic(ancestral,30;gaps=0.01)
 
 ## Longer alignment - more information
 
-One good way to represent a whole region is to summarize the allele frequencies at each site. This is called the *Site Frequency Spectrum*, or (*Allele Frequency Spectrum*). In our complicated alignment, it helps us see the frequency of different alleles:
+One good way to represent a whole region is to summarize the allele frequencies at each site. This is called the *Site Frequency Spectrum*, or (*Allele Frequency Spectrum*). In our complicated alignment, it helps us see the frequency of different alleles.
+
+## SFS example:
 
 ```{julia}
 #| echo: false
@@ -210,10 +245,34 @@ function SFS(gm)
     return([minimum(values(countmap(i)))/length(i) for i in eachcol(gm)]); 
 end
 
-histogram(SFS(only_segregating(geno_matrix)),legend=false,xlabel="Allele Frequency",ylabel="Count",margins=5mm)
+histogram(SFS(only_segregating(geno_matrix)),legend=false,xlabel="Minor Allele Frequency",ylabel="Count",margins=5mm,bins=30)
 ```
 
-## SFS - Typical distribution
+## Allele *polarity*: ancestral state
+
+When you don't know what the ancestral allele is, you generally examine the *minor* allele frequency (whichever is rarer.
+
+. . .
+
+This results in a *folded* SFS.
+
+. . .
+
+But, if you have an outgroup/ancestral data, you can instead use the full SFS.
+
+## What do you do with the SFS
+
+One of the uses of the SFS is, ironically, to calculate summary statistics.
+
+. . .
+
+Some, like $\theta_H$ estimate the genetic diversity.
+
+. . .
+
+Others, like Tajima's D (which we'll talk about more later) let you estimate the influence of demography on the population.
+
+## 
 
 ## How is variation distributed among individuals?
 
@@ -221,7 +280,7 @@ We can now say something about how genetic variation is sumarised across a popul
 
 For instance, if overall $\pi$ is high - does that mean that every individual is likely to *be* heterozygous?
 
-## Summarizing complex data quickly: PCA
+## Summarizing complex data: PCA {.smaller}
 
 Principal component analysis (PCA) is an approach to take complex, highly dimensional data (like the genotypes of a bunch of individuals at very many sites), and reduce it to something simpler.
 
@@ -241,10 +300,46 @@ pca_m = fit(PCA,transpose(hcat(x,y)))
 plot!(pca_test_plot,i->i*scaled_loadings(pca_m)[1,1],-4,4)
 ```
 
-## Works in genetic data as well!
+## Each PC explains the next most variation {.smaller}
 
-Lots of dimensions, but if correlated, top PCs help reduce data complexity!
+When data fits PCA assumptions, each subsequent PC explains the next most variance.
+
+. . .
+
+These assumptions are met for most genomic data.
 
 ```{julia}
-gm_PCA = fit(PCA,transpose(geno_mat_to_Int(geno_matrix)))
+plot!(pca_test_plot,i->i*(1/scaled_loadings(pca_m)[1,2]))
+```
+
+## Works in genomic data too!
+
+Here's our toy sequence data along the first two PCs.
+
+```{julia}
+gm_PCA = fit(PCA,geno_mat_to_Int(geno_matrix))
+scatter(gm_PCA.proj[:,1],gm_PCA.proj[:,2])
+```
+
+## Is PCA always worth it?
+
+How do you know how many PCs are "enough" to describe your data?
+
+. . .
+
+PCA significance can be evaluated using the *broken stick model*.
+
+. . .
+
+If you choose *n* random break points of a stick of length 1, then the size of these segments follows a typical distribution:
+
+```{julia}
+bar(reverse([broken_stick_dist(i,10) for i in 1:10]),legend=false,xlabel="PC",ylabel="Variance explained",margins=5mm,size=(800,500))
+```
+
+## How does that compare to our toy sequence data?
+
+```{julia}
+p1 = scree(pca_m)
+p2 = scree(gm_PCA)
 ```
