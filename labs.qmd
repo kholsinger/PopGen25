@@ -5,6 +5,10 @@ author: ""
 
 Here you'll find links for the labs on Thursdays, although they should all be available if you pull the latest version of the git before class time as well.
 
+## Git?
+
+The code for the class is hosted at: https://github.com/adagilis/PopGen25. Lab assignments will be placed in the creatively titled `labs` folder there. To get the latest version of the code, you'll need to download it from git. The easiest way to do this is to clone the whole repository, and pull any changes before class time. If that doesn't make sense to you, we'll cover it in slightly more detail in class, or [do some self study](https://swcarpentry.github.io/git-novice/).
+
 ## Pluto
 
 Some labs we will run using `Pluto` - an interactive notebook that uses `Julia` as the programming language, and will let us get on the same page faster for certain pieces of code.
