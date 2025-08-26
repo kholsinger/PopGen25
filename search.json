@@ -364,6 +364,13 @@
     "text": "Here you’ll find links for the labs on Thursdays, although they should all be available if you pull the latest version of the git before class time as well."
   },
   {
+    "objectID": "labs.html#git",
+    "href": "labs.html#git",
+    "title": "Labs",
+    "section": "Git?",
+    "text": "Git?\nThe code for the class is hosted at: https://github.com/adagilis/PopGen25. Lab assignments will be placed in the creatively titled labs folder there. To get the latest version of the code, you’ll need to download it from git. The easiest way to do this is to clone the whole repository, and pull any changes before class time. If that doesn’t make sense to you, we’ll cover it in slightly more detail in class, or do some self study."
+  },
+  {
     "objectID": "labs.html#pluto",
     "href": "labs.html#pluto",
     "title": "Labs",
