@@ -39,9 +39,9 @@ In Pluto, everything is structured as a bunch of `cells`. Each `cell` can contai
 
 2) On the bottom right, you should see two buttons: "Live docs" and "Status". Click them!
 
-	a) Live docs will bring up Julia's documentation on any function you have your cursor over. This can help you remember syntax when needed.
+- Live docs will bring up Julia's documentation on any function you have your cursor over. This can help you remember syntax when needed.
 
-	b) Status lets you know what Pluto is actually doing at the moment. Useful to see if things are just running, or are stuck evaluating a cell, etc.
+- Status lets you know what Pluto is actually doing at the moment. Useful to see if things are just running, or are stuck evaluating a cell, etc.
 
 3) There should be a closed eye icon to the left of this text block. This just means the code for this block is being hidden. Click it and see what happens (you might need to scroll down a bit, this is a long block of text).
 
@@ -52,7 +52,7 @@ Now that you are hopefully slightly oriented, let's do some coding!
 
 # ╔═╡ 38202ace-9239-434c-b96e-2360dc9dcfc0
 md"""
-# Let's expand our Wright-Fisher simulations
+# Wright-Fisher simulations
 
 Today's goal is to take what we have learned in the lecture and discussion, and create Wright-Fisher simulators that we can use as toy models for the rest of the semester. These will necessarily be over-simplified, but they are here just to give you a chance to test your intuition. 
 
@@ -70,7 +70,7 @@ But, what is the `randomMating()` function? Well, we define it below.
 
 # ╔═╡ 73433c15-1a58-4a71-91bc-9377ad739c0c
 function randomMating(p,N)
-	return(only(rand(Binomial(N,p),1)/N)) #If you need help with a function, click the "Live docs" button on the right.
+	return(rand(Binomial(N,p),1)[1]/N) #If you need help with a function, click the "Live docs" button on the right.
 end
 
 # ╔═╡ 753e4dd1-9b35-480b-8585-b0910e946914
@@ -79,7 +79,16 @@ And here we run the actual random sampling function. Recall from lecture that it
 
 Let's see if this works! One nice thing about interactive notebooks, is as we change initial parameters the code is quickly re-run. In fact, we can also add fun things like sliders for initial frequency:
 
-_p_ = $(@bind p Slider(0:0.01:1;default=0.5))
+_p_ = $(@bind p Slider(0:0.01:1,show_value=true;default=0.5))
+"""
+
+# ╔═╡ 02173b6a-b3d5-4889-a328-89c32a37e5ad
+md"""
+If you are finding things are running slow, you can try messing with these parameters:
+
+_sims_ (the number of independent simulations to run) = $(@bind sims NumberField(1:10:1000;default=200))
+
+_k_ (keep results every $k^{th}$ generation) = $(@bind k NumberField(1:10;default=1))
 """
 
 # ╔═╡ 7296bd84-3500-435e-9664-4a233bdabd82
@@ -90,6 +99,40 @@ _t_ = $(@bind t NumberField(10:10000;default=100))
 
 _N_ = $(@bind N NumberField(10:1000000;default=1000))
 
+"""
+
+# ╔═╡ 2ac176bf-3e69-4dc9-a23e-a7febeae29cc
+md"""
+### Leu et al data.
+
+We can next look at what a WF model looks like when compared to the Leu et al model.
+"""
+
+# ╔═╡ 4164367a-c14f-4abc-a1ae-594942190041
+md"""
+The simplest way to simulate WF in a similar approach is to start allele frequencies at close to 0 (the authors claim all alleles were not present in ancestor), and see how their increase might look like under WF.
+
+We might wonder, for instance, if fluctuating the population size would affect the results. 
+"""
+
+# ╔═╡ e378256a-b241-43b0-88eb-a6d3f7405e49
+md"""
+In the above, _N_ = 10^$(@bind N_leu NumberField(1.0:0.1:6.0;default=3)),
+
+And the initial frequency is $p_0$ = $(@bind p_leu NumberField(0:0.01:0.5;default=0.001))
+"""
+
+# ╔═╡ f61ae75a-f15f-4b13-a20a-0a334d088c8b
+md"""
+Throughout this worksheet, there'll be points to stop and think. Take notes on these answers, and submit them via HuskyCT before next class. Remember - good faith completion is full points.
+
+## Lab Question 1:
+
+a) How does changing the population size affect results? 
+
+b) What is the population size that (visually) is the most consistent with allele frequency changes seen in the experiment?  
+
+c) At what point do you see some of the odd artifacts become replicated?
 """
 
 # ╔═╡ 365ddd14-8bd4-4e44-a2a0-767b6cb24982
@@ -114,27 +157,9 @@ Try to fill out the code below yourself, there should be helpful hints that pop 
 
 # ╔═╡ ad025dd9-41a2-4ae3-8e9d-8f7dd04ca626
 function mutation(p,μ)
-	next = p*(1-μ)+(1-p)*μ #You only need to edit this line
+	next = missing #You only need to edit this line
 	return(next)
 end
-
-# ╔═╡ 25747531-b333-4fd8-9b12-0feb528d877b
-function WrightFisher(N,p,t,μ,s) #Function definitions start by stating this will be a function, then giving its name and in parentheses listing the parameters that will be supplied.
-	generation=1 # A counter for how many generations we are in
-    freqs=zeros(t) # We'll store frequencies into a Vector - we make one filled with zeros to start.
-    freqs[1]=p # The first value in this vector is the starting allele frequency.
-    while generation<t
-		current=freqs[generation] #Retrieve the current frequency from vector
-		next = mutation(current,μ)
-		next = randomMating(next,N) #Modify it by random mating
-		freqs[generation + 1] = next #Add it to the list
-        generation += 1 #Go to next generation
-    end #The above lines keep running over and over until generation = t
-    return(freqs) #When done, return the vector of frequencies. The rest is scrapped.
-end
-
-# ╔═╡ 224670d5-11d7-41b5-ba5b-acd9be785f86
-mutation(0.1,0.1)
 
 # ╔═╡ 09e306fa-c623-49fc-b670-3ce175c481db
 if !@isdefined(mutation)
@@ -166,31 +191,23 @@ _μ_ = $(@bind μ NumberField(0:0.0001:0.5;default=0.01))
 Just so you don't have to scroll back up, here's the plot of the simulations again:
 """
 
-# ╔═╡ faa5e8b2-6dda-4a2c-ae4b-94c87b000da8
-let
-	seed=0
-	result = WrightFisher(100000,0.0,2,0.1,0)[2]
-	if ismissing(result)
-		still_missing()
-	elseif isnothing(result)
-		keep_working(md"It seems that your code is still broken.")
-	elseif result == 0.0
-		tip(md"The above plot probably looks the same. Don't forget that we need to modify the actual WrightFisher simulation code to include mutations. Before the `randomMating()` function gets called, allele frequencies need to be modified by your `mutation()` function.")
-	elseif result != 0.1
-		tip(md"Seems like you've modified the simulations in an unexpected way. Ask for help!")
-	else
-		correct(md"Now changing the mutation rates should change allele frequencies in predictable ways")
-	end
-end
-
-
 # ╔═╡ 4177a8fc-4f0b-4b70-bbe2-048076e75ad8
 md"""
 #### Comparing mutation+WF to real data
 
-Let's take a look at the mutation data versus the time series in the Leu et al paper. Don't worry about editing the code here, just play around with mutation rates. What value of μ do the changes start looking like the data at?
+Let's take a look at the mutation data versus the time series in the Leu et al paper. For simplicity, I use the same population size as in the prior figure, but initial allele frequency is set to 0.
 
-_μ_ = $(@bind μ2 NumberField(0:0.01:1;default=0.1))
+_μ_ = $(@bind μ2 NumberField(0:0.0001:0.1;default=0.001))
+"""
+
+# ╔═╡ 1a0781c1-b384-4430-9458-20a8e6ccd84f
+md"""
+## Lab Question 2:
+
+a) What patterns do high mutation rates help explain?
+
+b) What patterns are missing from mutation alone?
+
 """
 
 # ╔═╡ c1fa92f7-b86b-44bb-a2c5-d318365dd2e8
@@ -220,9 +237,7 @@ Let's make a function that can modify the allele frequencies due to selection. J
 # ╔═╡ 98d5e5a3-f7fc-4d7a-9cea-6dbf9d23d074
 function sel(wAA,wAa,pAA,pAa)
 	next = missing #Edit this line
-	num = pAA*wAA+(1/2)*pAa*wAa
-	den = (1-pAA-pAa)+pAA*(wAA)+pAa*(wAa)
-	return(num/den)
+	return(next)
 end
 
 # ╔═╡ 214f98a9-4d9e-4940-bf95-78e5ae46b22a
@@ -255,23 +270,11 @@ _s_ = $(@bind s NumberField(-0.5:0.01:0.5;default=0.0))
 
 """
 
-# ╔═╡ 0a6aa8d1-8a6f-41c3-a308-d94992029056
-#The code here is just to plot. Don't feel the need to alter it unless you are really getting the hang of things.
-begin
-	sims = [WrightFisher(N,p,t,μ,s) for _ in 1:500]
-	p1 = plot(sims,leg=false, linecolor=:black,linealpha=0.2,ylims=(0,1),
-		xlabel="Generations",ylabel=L"p_t",margins=5mm)
-	plot!(p1,mean.(eachcol(sims)),linecolor=:red,linewidth=2)
-end
-
-# ╔═╡ f2938983-93e3-4b88-a6c9-f95b2b26f212
-p1
-
 # ╔═╡ 23ea68e3-0a30-4ac8-8380-962463ee8036
-	function dirsel(s,p)
-		pAA = p*p #Fill this out based on HW expectation
-		pAa = 2*p*(1-p) #Fill this out based on HW expectation
-		return(sel(2.0*s,s,pAA,pAa)) #
+	function dirsel(p,s)
+		pAA = missing #Fill this out based on HW expectation
+		pAa = missing #Fill this out based on HW expectation
+		return(sel(1+2.0*s,1+s,pAA,pAa)) #
 	end
 
 # ╔═╡ a8d2c1d8-dcc7-48cc-9f06-2165d5a22702
@@ -284,7 +287,7 @@ else
 			still_missing()
 		elseif isnothing(result)
 			keep_working(md"Did you forget to write `return`?")
-		elseif result != 0.013253012048192772
+		elseif isapprox(result,0.013253012048192772)
 			keep_working(md"")
 		else
 			correct()
@@ -292,10 +295,141 @@ else
 	end
 end
 
+# ╔═╡ 9066836c-acd7-4bc9-9858-d357fce3d6da
+md"""
+
+#### Selection +  real data
+
+Now we can ask if simulations with selection show results similar to what we might expect. Play around with the below selection parameter and see if you get any overlap with the odd points in the dataset. To remove effects of mutation, alleles start at same frequency as regular WF mutations. 
+
+_s_ = $(@bind s2 NumberField(0:0.001:1;default=0.005))
+
+"""
+
+# ╔═╡ c974b118-fb72-4f36-8839-0a7973a1661d
+md"""
+## Lab question 3:
+a) Can selection by itself explain changes in allele frequencies when alleles are rare?
+"""
+
+# ╔═╡ 6c458fe4-2e11-46c0-b143-4255609f6108
+md"""
+### Putting it together
+
+Now, it should be clear that none of the processes, by themselves, explain the data well. What we might do is build a complex model that includes a mixture of these forces. Try and get something resembling the data playing with all of the parameters together.
+
+_s_ = $(@bind s3 Slider(0:0.001:0.1,show_value=true;default=0.01))
+
+_μ_ = $(@bind μ3 Slider(0:0.001:0.1,show_value=true;default=0.001))
+
+_N_ = 10^$(@bind N_leu2 Slider(0:0.1:6,show_value=true;default=3))
+
+_p_ = $(@bind p_leu2 Slider(0:0.01:0.1,show_value=true;default=0))
+"""
+
+# ╔═╡ 2f925471-bf98-4a81-9e34-fe9eab320b26
+md"""
+
+## Lab question 3:
+
+a) What do you think happened in the Leu et al experiment? Is selection sufficient to explain the results?
+
+b) If not - what seems more likely given the experimental design: small population sizes, or really high mutation rates?
+
+"""
+
+# ╔═╡ 47372bab-4f3d-4fc4-8d70-df24220249e6
+md"""
+# Appendix
+Because `Pluto` figures out which cells need to be run in which order, the back of the document is a useful place to include a bunch of code that's useful to run (broad function definitions, importing libraries, etc.)
+
+In short - don't worry about this section for now.
+"""
+
+# ╔═╡ ae6ae7a9-47a9-468f-8e95-0cb677ef5a7f
+function t_vs_tp1(sim)
+    return([(sim[t-1],abs(sim[t]-sim[t-1])) for t in 2:length(sim)])
+end
+
+# ╔═╡ 63f18ac9-07ca-4b8a-b1ee-7656d7edf8af
+begin
+	yeast_data = CSV.read("data/yeast_sex_asex.csv",DataFrame)
+	Δ_ps = reduce(vcat,[t_vs_tp1(yeast_data[x,9:33]) for x in 1:530])
+	data_plot = scatter(Δ_ps,xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:black,margin=5mm,label="data")
+end
+
+# ╔═╡ 2034d8dc-3cab-4932-aeaf-917725767863
+function subsample_freqs(freqs;k=1)
+	idx = union(collect(1:k:length(freqs)),length(freqs))
+	return(freqs[idx])
+end
+
+# ╔═╡ 25747531-b333-4fd8-9b12-0feb528d877b
+function WrightFisher(N,p,t,μ,s;k=1) #Function definitions start by stating this will be a function, then giving its name and in parentheses listing the parameters that will be supplied.
+	generation=1 # A counter for how many generations we are in
+    freqs=zeros(t) # We'll store frequencies into a Vector - we make one filled with zeros to start.
+    freqs[1]=p # The first value in this vector is the starting allele frequency.
+    while generation<t
+		current=freqs[generation] #Retrieve the current frequency from vector
+		next = randomMating(current,N) #Modify it by random mating
+		freqs[generation + 1] = next #Add it to the list
+        generation += 1 #Go to next generation
+    end #The above lines keep running over and over until generation = t
+	ret=subsample_freqs(freqs;k=k)#to save on memory, we can subsample only some time points, we do that here
+    return(ret) #When done, return the vector of frequencies. The rest is scrapped.
+end
+
+# ╔═╡ 0a6aa8d1-8a6f-41c3-a308-d94992029056
+#The code here is just to plot. Don't feel the need to alter it unless you are really getting the hang of things.
+begin
+	simulated_freqs = [WrightFisher(N,p,t,μ,s;k=k) for _ in 1:sims]
+	p1 = plot(simulated_freqs,leg=false, linecolor=:black,linealpha=0.2,ylims=(0,1),
+		xlabel="Sampling",ylabel=L"p_t",margins=5mm)
+	plot!(p1,mean.(eachcol(simulated_freqs)),linecolor=:red,linewidth=2)
+end
+
+# ╔═╡ f2938983-93e3-4b88-a6c9-f95b2b26f212
+p1
+
 # ╔═╡ a4dba1da-c1a5-4592-b4bd-daa42bdb16d3
 begin
-	p2 = bar(["aa","Aa","AA"],[1.0,1.0+s,1.0+2s],leg=false,y="Relative Fitness",margins=5mm,ylim=(0.8,1.2))
+	p2 = bar(["aa","Aa","AA"],[1.0,1.0+s,1.0+2s],leg=false,ylabel="Relative Fitness",xlabel="Genotype",margins=5mm,ylim=(0.8,1.2))
 	plot(p2,p1)
+end
+
+# ╔═╡ 286e23c0-42bb-4bdb-9b4d-696e76c64c4b
+begin
+	neut_sims=[WrightFisher(round(10^N_leu),p_leu,1500,0,0;k=60) for _ in 1 :100]
+	neut_res = reduce(vcat,[t_vs_tp1(neut_sims[x]) for x in 1:100])
+	neut_plot = scatter(Δ_ps,xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:black,alpha=0.2,margin=5mm,label="data")
+	scatter!(neut_plot,neut_res,label="WF",xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:coral)
+end
+
+# ╔═╡ faa5e8b2-6dda-4a2c-ae4b-94c87b000da8
+let
+	seed=0
+	result = WrightFisher(100000,0.0,2,0.1,0)[2]
+	if ismissing(result)
+		still_missing()
+	elseif isnothing(result)
+		keep_working(md"It seems that your code is still broken.")
+	elseif result == 0.0
+		tip(md"The above plot probably looks the same. Don't forget that we need to modify the actual WrightFisher simulation code to include mutations. Before the `randomMating()` function gets called, allele frequencies need to be modified by your `mutation()` function.")
+	elseif result != 0.1
+		tip(md"Seems like you've modified the simulations in an unexpected way. Ask for help!")
+	else
+		correct(md"Now changing the mutation rates should change allele frequencies in predictable ways")
+	end
+end
+
+
+# ╔═╡ 0b659637-240a-4230-bd41-f270a8b6a6ad
+begin
+	mu_sims = [WrightFisher(round(10^N_leu),0,1500,μ2,0;k=60) for _ in 1:100]
+	mu_res = reduce(vcat,[t_vs_tp1(mu_sims[x]) for x in 1:100])
+	mu_plot = scatter(Δ_ps,xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:black,alpha=0.2,margin=5mm,label="data")
+	scatter!(mu_plot,neut_res,label="WF",xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:coral,alpha=0.2)
+	scatter!(mu_plot,mu_res,label="WF+μ",xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:red)
 end
 
 # ╔═╡ 07fc0006-5191-47e0-b564-1d5386aef2a6
@@ -316,99 +450,22 @@ let
 end
 
 
-# ╔═╡ 9066836c-acd7-4bc9-9858-d357fce3d6da
-md"""
-
-#### Selection +  real data
-
-Now we can ask if simulations with selection show results similar to what we might expect. Play around with the below selection parameter and see if you get any overlap with the odd points in the dataset.
-
-_s_ = $(@bind s2 NumberField(0:0.01:1;default=0.05))
-
-"""
-
-# ╔═╡ 6c458fe4-2e11-46c0-b143-4255609f6108
-md"""
-### Putting it together
-
-One nice thing about the way that `Julia` evaluates functions is that we can do some nice generalizations over parameter space more broadly. For instance, you might want to know what the _equilibrium_ allele frequency is in the long run. 
-
-There are a few approaches here: you could use some modeling package (`SciML`, for instance) to ask what the long term allele frequency is. Because we are including a _stochastic_ element, in the form of drift, those solutions will be unattainable for a bunch of the parameters. Here we'll plot the average result of  50 simulations in their final generation.
-
-_N_ = $(@bind N2 NumberField(10:1000000;default=1000))
-
-_p_ = $(@bind pt Slider(0:0.01:1;default=0.5) )
-
-_t_ = $(@bind tt Slider(10:1:1000;default =100) )
-"""
+# ╔═╡ f9b27432-f967-4d67-b9ce-040dfa1c262e
+begin
+	s_sims = [WrightFisher(round(10^N_leu),p_leu,1500,0,s2;k=60) for _ in 1:100]
+	s_res = reduce(vcat,[t_vs_tp1(s_sims[x]) for x in 1:100])
+	sel_plot2 = scatter(Δ_ps,xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:black,alpha=0.2,margin=5mm,label="data")
+	scatter!(sel_plot2,neut_res,label="WF",xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:coral,alpha=0.2)
+	scatter!(sel_plot2,mu_res,label="WF+μ",xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:red,alpha=0.2)
+	scatter!(sel_plot2,s_res,label="WF+s",xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:blue)
+end
 
 # ╔═╡ fe18db09-2d67-4aa1-ae3e-5e2aee293978
 begin
-	reps=50
-	s_range = 10 .^ range(-6,-1, length=25)
-	mu_range = 10 .^ range(-6,-1, length=25)
-	function lastWF(μ,s;reps=10)
-		mean([only(last(WrightFisher(N2,pt,tt,μ,s))) for _ in 1:reps])
-	end
-	Z = @. lastWF(mu_range',s_range;reps=50)
-	contour(mu_range,s_range,Z,fill=true,title="Frequency after $tt generations",xlabel=L"\mu",ylabel=L"s",scale=:log10,clims=(0,1))
-end
-
-# ╔═╡ 32889efa-bae6-42ec-bcc4-644c20066f08
-md"""
-## Food for thought
-Play around with these simulations for different parameter values.
-
-When does selection seem to win out in the simulations (allele frequency goes to 1)?
-
-When does mutation (allele frequency goes to ~1/2).
-
-What happens in between?
-"""
-
-# ╔═╡ 47372bab-4f3d-4fc4-8d70-df24220249e6
-md"""
-# Appendix
-Because `Pluto` figures out which cells need to be run in which order, the back of the document is a useful place to include a bunch of code that's useful to run (broad function definitions, importing libraries, etc.)
-
-In short - don't worry about this section for now.
-"""
-
-# ╔═╡ ae6ae7a9-47a9-468f-8e95-0cb677ef5a7f
-
-function t_vs_tp1(sim)
-    return([(sim[t-1],abs(sim[t]-sim[t-1])) for t in 2:length(sim)])
-end
-
-# ╔═╡ b5594010-acbf-419b-8555-3fde051b871f
-begin
-	yeast_data = CSV.read("data/yeast_sex_asex.csv",DataFrame)
-	Δ_ps = reduce(vcat,[t_vs_tp1(yeast_data[x,9:33]) for x in 1:530])
-	neut_sims=[WrightFisher(1000,0.1,1500,0,0) for _ in 1 :100]
-	neut_samples =  [neut_sims[i][1:25 .*60] for i in 1:100]
-	neut_res = reduce(vcat,[t_vs_tp1(neut_samples[x]) for x in 1:100])
-	print("Imported data, simulated similar WF.")
-end
-
-# ╔═╡ 0b659637-240a-4230-bd41-f270a8b6a6ad
-begin
-	mu_sims = [WrightFisher(1000,0.01,1500,μ2,0) for _ in 1:100]
-	mu_samples = [mu_sims[i][1:25 .*60] for i in 1:100]
-	mu_res = reduce(vcat,[t_vs_tp1(mu_samples[x]) for x in 1:100])
-	data_plot = scatter(Δ_ps,xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:black,alpha=0.2,margin=5mm,label="data")
-	scatter!(data_plot,neut_res,label="WF",xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:coral,alpha=0.2)
-	scatter!(data_plot,mu_res,label="WF+μ",xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:red)
-end
-
-# ╔═╡ f9b27432-f967-4d67-b9ce-040dfa1c262e
-begin
-	s_sims = [WrightFisher(1000,0.01,1500,0,s2) for _ in 1:100]
-	s_samples = [s_sims[i][1:25 .*60] for i in 1:100]
-	s_res = reduce(vcat,[t_vs_tp1(s_samples[x]) for x in 1:100])
-	data_plot2 = scatter(Δ_ps,xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:black,alpha=0.2,margin=5mm,label="data")
-	scatter!(data_plot2,neut_res,label="WF",xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:coral,alpha=0.2)
-	scatter!(data_plot2,mu_res,label="WF+μ",xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:red,alpha=0.2)
-	scatter!(data_plot2,s_res,label="WF+s",xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:blue)
+	combo_plot= scatter(Δ_ps,xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:black,alpha=0.2,margin=5mm,label="data")
+	combo_sims=[WrightFisher(round(10^N_leu2),(p_leu2),1500,μ3,s3;k=60) for _ in 1:100]
+	combo_res = reduce(vcat,[t_vs_tp1(combo_sims[x]) for x in 1:100])
+	scatter!(combo_plot,combo_res,label="WF+s+μ",xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:teal,alpha=0.9)
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -1801,17 +1858,23 @@ version = "1.9.2+0"
 # ╠═73433c15-1a58-4a71-91bc-9377ad739c0c
 # ╟─753e4dd1-9b35-480b-8585-b0910e946914
 # ╟─0a6aa8d1-8a6f-41c3-a308-d94992029056
+# ╟─02173b6a-b3d5-4889-a328-89c32a37e5ad
 # ╟─7296bd84-3500-435e-9664-4a233bdabd82
+# ╟─2ac176bf-3e69-4dc9-a23e-a7febeae29cc
+# ╟─63f18ac9-07ca-4b8a-b1ee-7656d7edf8af
+# ╟─4164367a-c14f-4abc-a1ae-594942190041
+# ╟─286e23c0-42bb-4bdb-9b4d-696e76c64c4b
+# ╟─e378256a-b241-43b0-88eb-a6d3f7405e49
+# ╟─f61ae75a-f15f-4b13-a20a-0a334d088c8b
 # ╟─365ddd14-8bd4-4e44-a2a0-767b6cb24982
 # ╠═ad025dd9-41a2-4ae3-8e9d-8f7dd04ca626
-# ╠═224670d5-11d7-41b5-ba5b-acd9be785f86
 # ╟─09e306fa-c623-49fc-b670-3ce175c481db
 # ╟─c9e74853-606c-4331-a768-6cc3ca323b68
 # ╟─f2938983-93e3-4b88-a6c9-f95b2b26f212
 # ╟─faa5e8b2-6dda-4a2c-ae4b-94c87b000da8
 # ╟─4177a8fc-4f0b-4b70-bbe2-048076e75ad8
-# ╟─b5594010-acbf-419b-8555-3fde051b871f
 # ╟─0b659637-240a-4230-bd41-f270a8b6a6ad
+# ╟─1a0781c1-b384-4430-9458-20a8e6ccd84f
 # ╟─c1fa92f7-b86b-44bb-a2c5-d318365dd2e8
 # ╟─5908f3ea-77ad-44f4-a985-22fb752b2b93
 # ╟─aa82cb4b-e23a-4748-9d1f-5153535e0978
@@ -1824,11 +1887,13 @@ version = "1.9.2+0"
 # ╟─07fc0006-5191-47e0-b564-1d5386aef2a6
 # ╟─9066836c-acd7-4bc9-9858-d357fce3d6da
 # ╟─f9b27432-f967-4d67-b9ce-040dfa1c262e
-# ╠═6c458fe4-2e11-46c0-b143-4255609f6108
+# ╟─c974b118-fb72-4f36-8839-0a7973a1661d
+# ╟─6c458fe4-2e11-46c0-b143-4255609f6108
 # ╟─fe18db09-2d67-4aa1-ae3e-5e2aee293978
-# ╟─32889efa-bae6-42ec-bcc4-644c20066f08
+# ╟─2f925471-bf98-4a81-9e34-fe9eab320b26
 # ╟─47372bab-4f3d-4fc4-8d70-df24220249e6
 # ╠═a2e7d3d4-8145-4c5e-8dfe-6c9e272ef66e
 # ╟─ae6ae7a9-47a9-468f-8e95-0cb677ef5a7f
+# ╟─2034d8dc-3cab-4932-aeaf-917725767863
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
