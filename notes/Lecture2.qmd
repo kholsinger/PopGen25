@@ -4,7 +4,7 @@ execute:
   freeze: auto  # re-render only when source changes
 format: 
     revealjs:
-        theme: night
+        theme: solarized
         incremental: true
         preview-links: auto
         chalkboard: true
@@ -186,6 +186,9 @@ Note, often the two will be labeled as $\pi$, but per-site is more common.
 Here, we'll use the example data from Hahn's textbook:
 
 ```{julia}
+using Plots
+theme(:solarized)
+default(legendfontsize=18,guidefontsize=18)
 fake_data = 
 ["T" "T" "A" "C" "A" "A" "T" "C" "C" "G" "A" "T" "C" "G" "T";
  "-" "-" "A" "C" "G" "A" "T" "G" "C" "G" "C" "T" "C" "G" "T";
@@ -218,7 +221,7 @@ function sample_h(alleles)
 end
 
 function sample_π(genotype_matrix)
-    return(sum([sample_h(genotype_matrix[:,x]) for x in 1:size(genotype_matrix)[2]])) #Sum of h over all sites
+    return(sum([sample_h(genotype_matrix[:,x]) for x in 1:size(genotype_matrix)[2]])/size(genotype_matrix)[2]) #Sum of h over all sites/number of sites
 end
 
 sample_π(replace(fake_data,"-"=>missing))
@@ -248,14 +251,14 @@ Heterozygosity is lost because of drift (recall drift eventually causes alleles 
 
 How strong are these forces?
 
-## More formally
+## More formally {.smaller}
 
 Let $H_t$ be the heterozygosity at time $t$.
 
 Then:
 
 $$
-H_{t+1} = \Delta mutation + \Delta drift
+H_{t+1}-H_t = \Delta mutation + \Delta drift
 $$
 
 Any individuals *not* heterozygous can become so via mutation at either of their two copies of the locus.
@@ -271,7 +274,7 @@ $\Delta drift = -\frac{H}{2N}$
 Then, at steady state:
 
 $$
-H_{t+1}=H_t=(1-H_t)2\mu-\frac{H_t}{2N}
+0=(1-H_t)2\mu-\frac{H_t}{2N}
 $$
 
 Chalboard time!
@@ -302,8 +305,8 @@ function var_pi(θ,n)
     (n+1)/(3*(n-1))*θ+2(n^2+n+3)/(9*n*(n-1))*θ^2
 end
 ns=range(10,1000,length=50)
-thetas = [var_pi.(theta,ns) for theta in [0.1,1,5,10]]
-plot(ns,thetas,xlabel="n",ylabel=L"Var(\pi)",label=["0.1" "1" "5" "10"],margins=5mm)
+thetas = [var_pi.(theta,ns) for theta in [0.01,0.1,0.5,1.0]]
+plot(ns,thetas,xlabel="n",ylabel=L"Var(\pi)",label=["0.01" "0.1" "0.5" "1.0"],margins=5mm)
 ```
 
 ## Alternatives to $\pi$ : $\theta_W$
@@ -334,7 +337,7 @@ function theta_var(n,theta)
     return(vars/(a^2))
 end
 
-thetas_w = [theta_var.(ns,i) for i in [0.1,1,5,10]]
+thetas_w = [theta_var.(ns,i) for i in [0.01,0.1,0.5,1.0]]
 plot(ns,thetas_w,xlabel="n",ylabel=L"Var(\theta_W)",label=["0.1" "1" "5" "10"],margins=5mm)
 ```
 
@@ -362,9 +365,62 @@ $\theta$, $\pi$, $h$ and similar are *summary statistics* - they reduce potentia
 
 ```{julia}
 include("../src/useful_code.jl")
-ancestral=fake_alignment(1,200)
+ancestral=fake_alignment(1,10000)
 geno_matrix = fake_alignment_biallelic(ancestral,30;gaps=0.01)
 [join(replace(i,missing=>"-")) for i in eachrow(geno_matrix)]
+```
+
+## Windowed statistics {.smaller}
+
+```{julia}
+#| echo: true
+function window_map(f,data,wnd_size)
+    start = 1
+    stop = start+wnd_size
+    centers = []
+    result = []
+    while(stop < size(data)[2])
+        append!(centers,(start+stop)/2)
+        append!(result,f(data[:,start:stop])/wnd_size)
+        start = stop
+        stop = start + wnd_size
+    end
+    return(centers,result)
+end
+
+plot(window_map(sample_π,geno_matrix,1000),label="Windowed",xlabel="Window Center",ylabel=L"\pi",size=(1000,500))
+```
+
+## But window choice not arbitrary
+
+As we'll discuss in the next lecture: our choice of windows might depend on factors like recombination rate.
+
+. . .
+
+Frequently, studies use a *single* window value. But different parts of the genome have different degrees of LD, mutation, recombination.
+
+. . .
+
+In general - good idea to run a sliding window analysis.
+
+## Sliding windows
+
+```{julia}
+function sliding_window_map(f,data,wnd_size,wnd_step)
+    start = 1
+    stop = start+wnd_size
+    centers = []
+    result = []
+    while(stop < size(data)[2])
+        append!(centers,(start+stop)/2)
+        append!(result,f(data[:,start:stop])/wnd_size)
+        start = start + wnd_step
+        stop = start + wnd_size
+    end
+    return(centers,result)
+end
+
+plot!(sliding_window_map(sample_π,geno_matrix,1000,250),label="Sliding",xlabel="Window Center",ylabel=L"\pi")
 ```
 
 ## Longer alignment - more information
@@ -379,7 +435,7 @@ function SFS(gm)
     return([minimum(values(countmap(i)))/length(i) for i in eachcol(gm)]); 
 end
 
-histogram(SFS(only_segregating(geno_matrix)),legend=false,xlabel="Minor Allele Frequency",ylabel="Count",margins=5mm,bins=30)
+histogram(SFS(only_segregating(geno_matrix)),legend=false,xlabel="Minor Allele Frequency",ylabel="Count",margins=5mm,bins=30,size=(1000,500))
 ```
 
 ## Allele *polarity*: ancestral state
@@ -423,7 +479,7 @@ using MultivariateStats
 x = randn(1000)
 y = x+randn(1000)
 
-pca_test_plot=scatter(x,y,leg=false)
+pca_test_plot=scatter(x,y,leg=false,size=(900,500))
 
 ```
 
@@ -440,22 +496,24 @@ When data fits PCA assumptions, each subsequent PC explains the next most varian
 
 . . .
 
-These assumptions are met for most genomic data.
+Technical details: the first principal component is the eigenvector of the correspondingly largest eigenvalue of a covariance matrix between data points.
 
-```{julia}
-plot!(pca_test_plot,i->i*(1/scaled_loadings(pca_m)[1,2]))
-```
+. . .
+
+i.e.: You correlate all data points, and ask what linear transformations explain the covariation. This in turn explains the most variation in the data.
+
+. . .
 
 ## Works in genomic data too!
 
 Here's our toy sequence data along the first two PCs.
 
 ```{julia}
-gm_PCA = fit(PCA,geno_mat_to_Int(geno_matrix))
-scatter(gm_PCA.proj[:,1],gm_PCA.proj[:,2])
+gm_PCA = fit(PCA,transpose(geno_mat_to_Int(geno_matrix)))
+scatter(gm_PCA.proj[:,1],gm_PCA.proj[:,2],leg=false,size=(1000,500))
 ```
 
-## Is PCA always worth it?
+## Is PCA always worth it? {.smaller}
 
 How do you know how many PCs are "enough" to describe your data?
 
@@ -468,12 +526,13 @@ PCA significance can be evaluated using the *broken stick model*.
 If you choose *n* random break points of a stick of length 1, then the size of these segments follows a typical distribution:
 
 ```{julia}
-bar(reverse([broken_stick_dist(i,10) for i in 1:10]),legend=false,xlabel="PC",ylabel="Variance explained",margins=5mm,size=(800,500))
+scatter(reverse([broken_stick_dist(i,10) for i in 1:10]),legend=false,xlabel="PC",ylabel="Variance explained",margins=5mm,size=(800,400),xticks=(1:10))
 ```
 
 ## How does that compare to our toy sequence data?
 
 ```{julia}
-p1 = scree(pca_m)
-p2 = scree(gm_PCA)
+p1 = scree(pca_m;broken_stick=true)
+p2 = scree(gm_PCA;broken_stick=true)
+plot(p1,p2,size=(1000,600))
 ```
