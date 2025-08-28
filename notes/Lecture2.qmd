@@ -127,6 +127,42 @@ $$
 h_j=\frac{n}{n-1}\left(1-\sum_i^k{p_i^2}\right)
 $$
 
+## Heterozygosity and drift
+
+We saw last week how drift alone leads to evolutionary change by fixation and loss of alleles due to random chance.
+
+. . .
+
+This can lead to a change in heterozygosity that is quite predictable.
+
+. . .
+
+Any generation, the given (true) heterozygosity is $H_t$. What will it be in the next generation?
+
+. . .
+
+The traditional proof for this starts by first defining $\mathscr{H}$ : the Homozygosity of the population.
+
+. . .
+
+Useful to know: $H = 1-\mathscr{H}$.
+
+## How does drift change homozygosity?
+
+If two randomly chosen alleles had the same ancestor last generation: they are homozygous.
+
+Alternatively, if they both come from different alleles, but homozygous ones.
+
+So: $\mathscr{H}_{t+1} = \frac{1}{2N} + (1-\frac{1}{2N})\mathscr{H_t}$
+
+Then:
+
+$$
+H_{t+1} = 1-\mathscr{H}_{t+1}=\frac{1}{2N}+\left(1-\frac{1}{2N}\right)\left(1-H_t\right)=\left(1-\frac{1}{2N}\right)H_t
+$$
+
+In other words - drift causes heterozygosity to predictably decrease every generation (at a rate of $-\frac{H}{2N}$)
+
 ## Heterozygosity across a region (π)
 
 We can then zoom out and ask what the diversity is across a whole region. Say there are $L$ sites in your region, then the total *polymorphism* is given by:
@@ -187,6 +223,74 @@ end
 
 sample_π(replace(fake_data,"-"=>missing))
 ```
+
+## What should $\pi$ look like?
+
+We can use some baseline Wright-Fisher model with mutation assumptions to figure out what $\pi$ will be like in practice.
+
+. . .
+
+Let's say there are $N$ individuals. The mutation rate is $\mu$. What is the expected heterozygosity?
+
+## Finding steady-states
+
+One way to solve modeling problems is to enumerate all of the forces acting on them, and find when the forces cancel each other out.
+
+. . .
+
+Heterozygosity can increase because of mutation.
+
+. . .
+
+Heterozygosity is lost because of drift (recall drift eventually causes alleles to be fixed/lost.
+
+. . .
+
+How strong are these forces?
+
+## More formally
+
+Let $H_t$ be the heterozygosity at time $t$.
+
+Then:
+
+$$
+H_{t+1} = \Delta mutation + \Delta drift
+$$
+
+Any individuals *not* heterozygous can become so via mutation at either of their two copies of the locus.
+
+$$
+\Delta mutation = (1-H)2\mu
+$$
+
+And drift cause the loss of heterozygosity at the rate we derived earlier:
+
+$\Delta drift = -\frac{H}{2N}$
+
+Then, at steady state:
+
+$$
+H_{t+1}=H_t=(1-H_t)2\mu-\frac{H_t}{2N}
+$$
+
+Chalboard time!
+
+## Expected heterozygosity
+
+The neutral expected heterozygosity is $4N\mu$. This is often called $\theta$.
+
+. . .
+
+Of course, the quantity is different for haploids: $\theta = 2N\mu$
+
+. . .
+
+What does this tell us about average allele frequencies in populations?
+
+. . .
+
+Remember: $H = 2p(1-p) = 4N\mu$
 
 ## Not the only heterozygosity
 
