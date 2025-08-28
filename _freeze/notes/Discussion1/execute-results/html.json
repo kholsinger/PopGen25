@@ -1,0 +1,12 @@
+{
+  "hash": "76903fe4510e4b15d6eb703cd90cee48",
+  "result": {
+    "engine": "julia",
+    "markdown": "---\ntitle: \"Discussion 1: LTEEs and Sex\"\nexecute:\n  freeze: auto  # re-render only when source changes\nformat: \n    revealjs:\n        theme: clean\n        incremental: true\n        preview-links: auto\n        chalkboard: true\nengine: julia\njulia:\n  exeflags: [\"--project=../PopGen25\"]\n---\n\n\n\n# Discussion 1\n\n## Long Term Evolutionary Experiments (LTEE)\n\nBroadly popular type of study:\n\n-   Put a population in a new environment and track it\n\n-   Popular with yeast/bacteria, since ancestral populations can easily be preserved\n\n-   Useful to test how adaptation happens in the lab\n\n-   Useful to test how adaptation differs in slightly different circumstances\n\n## Leu et al 2020\n\n![](images/paste-1.png)\n\n## What did they actually do?\n\n![](images/paste-2.png)\n\n## Why did they do this?\n\n. . .\n\nLong-standing hypotheses about why sex even exists.\n\n. . .\n\nOne with a lot of backing - adaptation is faster in sexual organisms (they avoid Clonal Interference)\n\nWe'll talk more about Clonal interference in Week 3.\n\n. . .\n\nLTEE experiments find mixed results - sometimes asexual evolve slower, other times equal.\n\n. . .\n\nState of the art only in haploids!\n\n## Let's discuss\n\nIn small groups (4-5), try to figure out the following:\n\n1\\) What are some expected advantages of sexual reproduction? What are the disadvantages? Which ones are supported in this study?\n\n2\\) Why do the authors believe asexuals adapted as quickly/sexuals more slowly?\n\n3\\) Try to enumerate the actual differences between sexual and asexual treatments.\n\n",
+    "supporting": [
+      "Discussion1_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

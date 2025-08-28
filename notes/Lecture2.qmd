@@ -25,15 +25,45 @@ This week, we'll be discussing how we can measure genetic diversity and what tho
 
 . . .
 
-We will look at a few statistics that measure genetic diversity, notably the SFS, $\pi$, $\theta_W$ and $H$
+We will look at a few statistics that measure genetic diversity, notably the SFS, $\pi$, $\theta_W$ and $H$.
+
+. . .
+
+Before that, we'll talk about why we even care.
+
+## What is diversity good for?
+
+*Evolution is the change in traits of populations over generations*
+
+. . .
+
+Change is impossible if variation does not exist.
+
+. . .
+
+Genetic variation allows for evolvability - without it populations are stuck.
+
+. . .
+
+*Most* variation might in fact be deleterious in any particular environment.
+
+. . .
+
+Conversely, if the environment changes - old variants are unlikely to meet all of its needs.
 
 ## Where does diversity come from?
 
 Ultimately, all genetic diversity begins with mutation.
 
+. . .
+
 A key quantity in population genetics is $\theta$ - the neutral genetic diversity.
 
+. . .
+
 Under Wright-Fisher, $\theta = 4 N_e \mu$, where $N_e$ is the *effective* population size, and $\mu$ is the *neutral* mutation rate.
+
+. . .
 
 So, diversity should depend on both the population size and mutation rates. Does it?
 
