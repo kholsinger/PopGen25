@@ -343,20 +343,6 @@
     "text": "So, what happens to a new allele?\nHomework Assignment (submit via HuskyCT):\nWhat frequency will a mutation be found in when it first occurs?\nWhat is the probability of that mutation becoming fixed?\nGiven only what you have learned here: should smaller populations show slower or faster rates of fixing substitutions?"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Population Genetics 2025",
-    "section": "",
-    "text": "Welome to PopGen!\nThis is the website for Population Genetics (EEB 5348) at UConn. Here you will find notes on each of the lectures, links to papers and other materials as they become needed.\n\n\nAbout the course\nThe focus of this course is to introduce graduate students to population genetic thinking. I firmly believe the greatest benefit of population genetics is not knowledge of any particular approach or methodology (there are too many for any course to cover adequately), but a firm grasp of how population genetics can be used to 1) test and hone your intuition of evolutionary processes, 2) understand how (and why) different population genetics approaches work and 3) develop heuristics to examine any system of interest. Throughout the course we will examine classic population genetics results, read recent literature that either uses those results or throws them completely into question and work on developing a set of scripts and skills in a language of your choice (although I will recommend either Julia or R) to investigate the population genetics of different data-sets.\n\n\nSchedule/General Logistics\nEach week, we will start with a lecture on Tuesday, followed by a paper discussion and lab on Thursday. The goal of this class structure is to be able to introduce general concepts/remind you of things you should remember from your Genetics/Evolution courses, introduce classic PopGen results, followed by a more in-depth dive in the state of the art uses of those results and some practical advice of coding how they work. Here’s a general week-by-week overlay of the topics. Lecture notes will be added as links as we go along\n\n\n\nWeek\nTopic(s)\nReading\nLecture Notes\n\n\n\n\nAug 26-28\nIntro, Wright-Fisher\nLeu et al\nLecture 1\n\n\nSep 2-4\nGenetic diversity measurements\nBuffalo\n\n\n\nSep 9-11\nDivergence at a site, mutation, molecular models of evolution\nPeede et al\n\n\n\nSep 16-18\nSexual reproduction,Recombination, LD\nHahn and Mishra\n\n\n\nSep 23-25\nPopulation structure, migration, differentiation\n\n\n\n\nSep 30-Oct 2\nSelection at a single locus, types of selection\n\n\n\n\nOct 7-9\nProject Meetings, no regular class\nNA\n\n\n\nOct 14-16\nThe Coalescent\n\n\n\n\nOct 21-23\nConfounded selection, demography, mutation\n\n\n\n\nOct 28-30\nCo-estimating selection and demography\n\n\n\n\nNov 4-6\nAncestral Recombination Graphs\n\n\n\n\nNov 11-13\nStudents’ choice\n\n\n\n\nNov 18-20\nStudents’ choice\n\n\n\n\nNov 25-27\nTHANKSGIVING BREAK\n\n\n\n\nDec 2-4\nProject meetings, final projects due Dec 4\nNA"
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "This website is build using Quarto markdown. The benefit for you is that all of the code for lectures/labs is available on its associated github repository."
-  },
-  {
     "objectID": "labs.html",
     "href": "labs.html",
     "title": "Labs",
@@ -378,18 +364,81 @@
     "text": "Pluto\nSome labs we will run using Pluto - an interactive notebook that uses Julia as the programming language, and will let us get on the same page faster for certain pieces of code.\nTo get runnning with Pluto, you’ll just want to follow the guide at Pluto’s website.\nOnce Pluto is running, load in the lab .jl file provided for each lab and we’ll work from there!"
   },
   {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "This website is build using Quarto markdown. The benefit for you is that all of the code for lectures/labs is available on its associated github repository."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Population Genetics 2025",
+    "section": "",
+    "text": "Welome to PopGen!\nThis is the website for Population Genetics (EEB 5348) at UConn. Here you will find notes on each of the lectures, links to papers and other materials as they become needed.\n\n\nAbout the course\nThe focus of this course is to introduce graduate students to population genetic thinking. I firmly believe the greatest benefit of population genetics is not knowledge of any particular approach or methodology (there are too many for any course to cover adequately), but a firm grasp of how population genetics can be used to 1) test and hone your intuition of evolutionary processes, 2) understand how (and why) different population genetics approaches work and 3) develop heuristics to examine any system of interest. Throughout the course we will examine classic population genetics results, read recent literature that either uses those results or throws them completely into question and work on developing a set of scripts and skills in a language of your choice (although I will recommend either Julia or R) to investigate the population genetics of different data-sets.\n\n\nSchedule/General Logistics\nEach week, we will start with a lecture on Tuesday, followed by a paper discussion and lab on Thursday. The goal of this class structure is to be able to introduce general concepts/remind you of things you should remember from your Genetics/Evolution courses, introduce classic PopGen results, followed by a more in-depth dive in the state of the art uses of those results and some practical advice of coding how they work. Here’s a general week-by-week overlay of the topics. Lecture notes will be added as links as we go along\n\n\n\nWeek\nTopic(s)\nReading\nLecture Notes\n\n\n\n\nAug 26-28\nIntro, Wright-Fisher\nLeu et al\nLecture 1\n\n\nSep 2-4\nGenetic diversity measurements\nBuffalo\n\n\n\nSep 9-11\nDivergence at a site, mutation, molecular models of evolution\nPeede et al\n\n\n\nSep 16-18\nSexual reproduction,Recombination, LD\nHahn and Mishra\n\n\n\nSep 23-25\nPopulation structure, migration, differentiation\n\n\n\n\nSep 30-Oct 2\nSelection at a single locus, types of selection\n\n\n\n\nOct 7-9\nProject Meetings, no regular class\nNA\n\n\n\nOct 14-16\nThe Coalescent\n\n\n\n\nOct 21-23\nConfounded selection, demography, mutation\n\n\n\n\nOct 28-30\nCo-estimating selection and demography\n\n\n\n\nNov 4-6\nAncestral Recombination Graphs\n\n\n\n\nNov 11-13\nStudents’ choice\n\n\n\n\nNov 18-20\nStudents’ choice\n\n\n\n\nNov 25-27\nTHANKSGIVING BREAK\n\n\n\n\nDec 2-4\nProject meetings, final projects due Dec 4\nNA"
+  },
+  {
+    "objectID": "notes/Discussion1.html#quizlet-1-answers",
+    "href": "notes/Discussion1.html#quizlet-1-answers",
+    "title": "Discussion 1: LTEEs and Sex",
+    "section": "Quizlet 1 Answers",
+    "text": "Quizlet 1 Answers\n\nAlleles initially appear at a frequency of 1/N in haploid, 1/2N in diploid populations.\nFixation probability is \\(p_0\\), so 1/N (1/2N)\nEvolution seems to happen more rapidly in small populations - mutations are lost or fixed faster. BUT - this is ignoring any other evolutionary forces."
+  },
+  {
+    "objectID": "notes/Discussion1.html#long-term-evolutionary-experiments-ltee",
+    "href": "notes/Discussion1.html#long-term-evolutionary-experiments-ltee",
+    "title": "Discussion 1: LTEEs and Sex",
+    "section": "Long Term Evolutionary Experiments (LTEE)",
+    "text": "Long Term Evolutionary Experiments (LTEE)\nBroadly popular type of study:\n\nPut a population in a new environment and track it\nPopular with yeast/bacteria, since ancestral populations can easily be preserved\nUseful to test how adaptation happens in the lab\nUseful to test how adaptation differs in slightly different circumstances"
+  },
+  {
+    "objectID": "notes/Discussion1.html#leu-et-al-2020",
+    "href": "notes/Discussion1.html#leu-et-al-2020",
+    "title": "Discussion 1: LTEEs and Sex",
+    "section": "Leu et al 2020",
+    "text": "Leu et al 2020"
+  },
+  {
+    "objectID": "notes/Discussion1.html#what-did-they-actually-do",
+    "href": "notes/Discussion1.html#what-did-they-actually-do",
+    "title": "Discussion 1: LTEEs and Sex",
+    "section": "What did they actually do?",
+    "text": "What did they actually do?"
+  },
+  {
+    "objectID": "notes/Discussion1.html#why-did-they-do-this",
+    "href": "notes/Discussion1.html#why-did-they-do-this",
+    "title": "Discussion 1: LTEEs and Sex",
+    "section": "Why did they do this?",
+    "text": "Why did they do this?\n\nLong-standing hypotheses about why sex even exists.\n\n\nOne with a lot of backing - adaptation is faster in sexual organisms (they avoid Clonal Interference)\nWe’ll talk more about Clonal interference in Week 3.\n\n\nLTEE experiments find mixed results - sometimes asexual evolve slower, other times equal.\n\n\nState of the art only in haploids!"
+  },
+  {
+    "objectID": "notes/Discussion1.html#lets-discuss",
+    "href": "notes/Discussion1.html#lets-discuss",
+    "title": "Discussion 1: LTEEs and Sex",
+    "section": "Let’s discuss",
+    "text": "Let’s discuss\nIn small groups (4-5), try to figure out the following:\n1) What are some expected advantages of sexual reproduction? What are the disadvantages? Which ones are supported in this study?\n2) Why do the authors believe asexuals adapted as quickly/sexuals more slowly?\n3) Try to enumerate the actual differences between sexual and asexual treatments."
+  },
+  {
     "objectID": "notes/Lecture2.html#genetic-diversity-writ-large",
     "href": "notes/Lecture2.html#genetic-diversity-writ-large",
     "title": "Lecture 2",
     "section": "Genetic diversity writ large",
-    "text": "Genetic diversity writ large\nLast week you learned how different evolutionary forces affect allele frequencies at a single site.\n\nThis week, we’ll be discussing how we can measure genetic diversity and what those measurements can tell us.\n\n\nWe will look at a few statistics that measure genetic diversity, notably the SFS, \\(\\pi\\), \\(\\theta_W\\) and \\(H\\)"
+    "text": "Genetic diversity writ large\nLast week you learned how different evolutionary forces affect allele frequencies at a single site.\n\nThis week, we’ll be discussing how we can measure genetic diversity and what those measurements can tell us.\n\n\nWe will look at a few statistics that measure genetic diversity, notably the SFS, \\(\\pi\\), \\(\\theta_W\\) and \\(H\\).\n\n\nBefore that, we’ll talk about why we even care."
+  },
+  {
+    "objectID": "notes/Lecture2.html#what-is-diversity-good-for",
+    "href": "notes/Lecture2.html#what-is-diversity-good-for",
+    "title": "Lecture 2",
+    "section": "What is diversity good for?",
+    "text": "What is diversity good for?\nEvolution is the change in traits of populations over generations\n\nChange is impossible if variation does not exist.\n\n\nGenetic variation allows for evolvability - without it populations are stuck.\n\n\nMost variation might in fact be deleterious in any particular environment.\n\n\nConversely, if the environment changes - old variants are unlikely to meet all of its needs."
   },
   {
     "objectID": "notes/Lecture2.html#where-does-diversity-come-from",
     "href": "notes/Lecture2.html#where-does-diversity-come-from",
     "title": "Lecture 2",
     "section": "Where does diversity come from?",
-    "text": "Where does diversity come from?\nUltimately, all genetic diversity begins with mutation.\nA key quantity in population genetics is \\(\\theta\\) - the neutral genetic diversity.\nUnder Wright-Fisher, \\(\\theta = 4 N_e \\mu\\), where \\(N_e\\) is the effective population size, and \\(\\mu\\) is the neutral mutation rate.\nSo, diversity should depend on both the population size and mutation rates. Does it?"
+    "text": "Where does diversity come from?\nUltimately, all genetic diversity begins with mutation.\n\nA key quantity in population genetics is \\(\\theta\\) - the neutral genetic diversity.\n\n\nUnder Wright-Fisher, \\(\\theta = 4 N_e \\mu\\), where \\(N_e\\) is the effective population size, and \\(\\mu\\) is the neutral mutation rate.\n\n\nSo, diversity should depend on both the population size and mutation rates. Does it?"
   },
   {
     "objectID": "notes/Lecture2.html#measuring-diversity-at-a-site",
@@ -413,6 +462,20 @@
     "text": "Sample heterozygosity (h)\nAnother way to think about genetic diversity is to ask:\nWhat is the probability that if you sample any two alleles in the population, they are different.\n\nIn an infinite population with a biallelic site, this is simply \\(2p(2-p)\\)\n\n\nBut populations are not infinite, and we also don’t sample all possible individuals.\n\n\nInstead, we calculate the expected sample heterozygosity, and account for number of alleles sampled (\\(n\\)):\n\\[\nh_j=\\frac{n}{n-1}\\left(1-\\sum_i^k{p_i^2}\\right)\n\\]"
   },
   {
+    "objectID": "notes/Lecture2.html#heterozygosity-and-drift",
+    "href": "notes/Lecture2.html#heterozygosity-and-drift",
+    "title": "Lecture 2",
+    "section": "Heterozygosity and drift",
+    "text": "Heterozygosity and drift\nWe saw last week how drift alone leads to evolutionary change by fixation and loss of alleles due to random chance.\n\nThis can lead to a change in heterozygosity that is quite predictable.\n\n\nAny generation, the given (true) heterozygosity is \\(H_t\\). What will it be in the next generation?\n\n\nThe traditional proof for this starts by first defining \\(\\mathscr{H}\\) : the Homozygosity of the population.\n\n\nUseful to know: \\(H = 1-\\mathscr{H}\\)."
+  },
+  {
+    "objectID": "notes/Lecture2.html#how-does-drift-change-homozygosity",
+    "href": "notes/Lecture2.html#how-does-drift-change-homozygosity",
+    "title": "Lecture 2",
+    "section": "How does drift change homozygosity?",
+    "text": "How does drift change homozygosity?\nIf two randomly chosen alleles had the same ancestor last generation: they are homozygous.\nAlternatively, if they both come from different alleles, but homozygous ones.\nSo: \\(\\mathscr{H}_{t+1} = \\frac{1}{2N} + (1-\\frac{1}{2N})\\mathscr{H_t}\\)\nThen:\n\\[\nH_{t+1} = 1-\\mathscr{H}_{t+1}=\\frac{1}{2N}+\\left(1-\\frac{1}{2N}\\right)\\left(1-H_t\\right)=\\left(1-\\frac{1}{2N}\\right)H_t\n\\]\nIn other words - drift causes heterozygosity to predictably decrease every generation (at a rate of \\(-\\frac{H}{2N}\\))"
+  },
+  {
     "objectID": "notes/Lecture2.html#heterozygosity-across-a-region-π",
     "href": "notes/Lecture2.html#heterozygosity-across-a-region-π",
     "title": "Lecture 2",
@@ -431,7 +494,35 @@
     "href": "notes/Lecture2.html#code-examples",
     "title": "Lecture 2",
     "section": "Code examples",
-    "text": "Code examples\n\nusing StatsBase\n\nfunction sample_h(alleles)\n    obs_alleles=collect(skipmissing(alleles)) #Genotypes might be missing - we skip those.\n    n=length(obs_alleles)\n    freqs = values(countmap(obs_alleles)) ./ n #Get allele frequencies for each allele\n    return( n/(n-1)*(1-sum(freqs .^ 2))) #Return the expected sample h\nend\n\nfunction sample_π(genotype_matrix)\n    return(sum([sample_h(genotype_matrix[:,x]) for x in 1:size(genotype_matrix)[2]])) #Sum of h over all sites\nend\n\nsample_π(replace(fake_data,\"-\"=&gt;missing))\n\n3.5"
+    "text": "Code examples\n\nusing StatsBase\n\nfunction sample_h(alleles)\n    obs_alleles=collect(skipmissing(alleles)) #Genotypes might be missing - we skip those.\n    n=length(obs_alleles)\n    freqs = values(countmap(obs_alleles)) ./ n #Get allele frequencies for each allele\n    return( n/(n-1)*(1-sum(freqs .^ 2))) #Return the expected sample h\nend\n\nfunction sample_π(genotype_matrix)\n    return(sum([sample_h(genotype_matrix[:,x]) for x in 1:size(genotype_matrix)[2]])/size(genotype_matrix)[2]) #Sum of h over all sites/number of sites\nend\n\nsample_π(replace(fake_data,\"-\"=&gt;missing))\n\n0.23333333333333334"
+  },
+  {
+    "objectID": "notes/Lecture2.html#what-should-pi-look-like",
+    "href": "notes/Lecture2.html#what-should-pi-look-like",
+    "title": "Lecture 2",
+    "section": "What should \\(\\pi\\) look like?",
+    "text": "What should \\(\\pi\\) look like?\nWe can use some baseline Wright-Fisher model with mutation assumptions to figure out what \\(\\pi\\) will be like in practice.\n\nLet’s say there are \\(N\\) individuals. The mutation rate is \\(\\mu\\). What is the expected heterozygosity?"
+  },
+  {
+    "objectID": "notes/Lecture2.html#finding-steady-states",
+    "href": "notes/Lecture2.html#finding-steady-states",
+    "title": "Lecture 2",
+    "section": "Finding steady-states",
+    "text": "Finding steady-states\nOne way to solve modeling problems is to enumerate all of the forces acting on them, and find when the forces cancel each other out.\n\nHeterozygosity can increase because of mutation.\n\n\nHeterozygosity is lost because of drift (recall drift eventually causes alleles to be fixed/lost.\n\n\nHow strong are these forces?"
+  },
+  {
+    "objectID": "notes/Lecture2.html#more-formally",
+    "href": "notes/Lecture2.html#more-formally",
+    "title": "Lecture 2",
+    "section": "More formally",
+    "text": "More formally\nLet \\(H_t\\) be the heterozygosity at time \\(t\\).\nThen:\n\\[\nH_{t+1}-H_t = \\Delta mutation + \\Delta drift\n\\]\nAny individuals not heterozygous can become so via mutation at either of their two copies of the locus.\n\\[\n\\Delta mutation = (1-H)2\\mu\n\\]\nAnd drift cause the loss of heterozygosity at the rate we derived earlier:\n\\(\\Delta drift = -\\frac{H}{2N}\\)\nThen, at steady state:\n\\[\n0=(1-H_t)2\\mu-\\frac{H_t}{2N}\n\\]\nChalboard time!"
+  },
+  {
+    "objectID": "notes/Lecture2.html#expected-heterozygosity",
+    "href": "notes/Lecture2.html#expected-heterozygosity",
+    "title": "Lecture 2",
+    "section": "Expected heterozygosity",
+    "text": "Expected heterozygosity\nThe neutral expected heterozygosity is \\(4N\\mu\\). This is often called \\(\\theta\\).\n\nOf course, the quantity is different for haploids: \\(\\theta = 2N\\mu\\)\n\n\nWhat does this tell us about average allele frequencies in populations?\n\n\nRemember: \\(H = 2p(1-p) = 4N\\mu\\)"
   },
   {
     "objectID": "notes/Lecture2.html#not-the-only-heterozygosity",
@@ -466,7 +557,28 @@
     "href": "notes/Lecture2.html#single-data-point-for-whole-genome",
     "title": "Lecture 2",
     "section": "Single data point for whole genome?",
-    "text": "Single data point for whole genome?\n\\(\\theta\\), \\(\\pi\\), \\(h\\) and similar are summary statistics - they reduce potentially huge amounts of data into a single number. That can be useful, but sometimes it’s better to look at a denser view of the data. Let’s make a larger/more complicated data-set.\n\n\n30-element Vector{String}:\n \"AAATTAATGGGGAACGTAAAAGTGAATTCGC\" ⋯ 139 bytes ⋯ \"GTTGACCATCGATG-CGGAAATTTCG-GCC\"\n \"TCATTAATGGGGAACATAAAAGTGAAAGTGA\" ⋯ 139 bytes ⋯ \"ATCGACCATCGGGGTCATACATTTCGTGCT\"\n \"TCATTAATGGGGAACGTGAAA-TGAAATTGC\" ⋯ 139 bytes ⋯ \"ATCGCCCATCGATGTGATACATTTAGTTCT\"\n \"TCATTAATGGCGAAC-TAATAGTGGTATTGA\" ⋯ 139 bytes ⋯ \"ATTGATCAGCGAGGTCATAC-TTTAGTTCC\"\n \"TCATTAATGGGGAACGTAAAAGTGAAATTGA\" ⋯ 139 bytes ⋯ \"ATCGACAATAGAGGTCATACGTTTAGTGCC\"\n \"TCACTAATGGCGAACATAAAAGTCAAATTGA\" ⋯ 139 bytes ⋯ \"GTCGACCATAGAGGTCATACATTTAATGCT\"\n \"TCATTAATTGGGAACGTAATAGTCAATTTGA\" ⋯ 139 bytes ⋯ \"ATCGACCAGCGAGGTCATAAATTTCGTTCT\"\n \"ACATTAATTGGAGACGTAAAAGTCAAATCGA\" ⋯ 139 bytes ⋯ \"ATCGCCCATAGAGTTCATACATTTAATTCC\"\n \"TCACTAATGGGGAACGTAAAAAA-GTATTGC\" ⋯ 139 bytes ⋯ \"GTCAATCAGAGATGTCA-ACGTTTAGTGCC\"\n \"TCATTACTTGGGAACGTAAAAGTCGAATTGA\" ⋯ 139 bytes ⋯ \"ATCGCCCATAGAGGTCATTCGTATCGGTCC\"\n ⋮\n \"ACATTGCTGAGGAACGTAAAAGTGAAATTGC\" ⋯ 139 bytes ⋯ \"ATCGAT-ATCGAGGTCAGACGTTGAGTGCC\"\n \"ACATTAATTGGGAACGTAAAAGTGGA-TTGA\" ⋯ 139 bytes ⋯ \"GTCGCTCATCGAGGTCAGACGTTTAGTTCC\"\n \"TCACTAATG-GGAACGTAAAAGTGGAA-TGA\" ⋯ 139 bytes ⋯ \"ATCGACCAGCGAGGTCAGACATTGCATGCC\"\n \"TCACTGATTGGGAACGTAAAAGTCAAATTGC\" ⋯ 139 bytes ⋯ \"ATCGATCATCGATGTCATACGTTTAGGGCC\"\n \"TCACTACTTGGGAACGTAGAAGTGAATTTGA\" ⋯ 139 bytes ⋯ \"ATCGACCATAGAGGTCAGTCA-TTAGTGCT\"\n \"ACACTAATTGG-AACGTAAAGGTGGAATTGC\" ⋯ 139 bytes ⋯ \"ATCGATCAGAGATGTCATACATTTAGTGCC\"\n \"TCATTAATGGGGAACGTAGTAGTGAAATCGC\" ⋯ 139 bytes ⋯ \"ATTGATCATCGGTGTCAGACATTTCGTGCC\"\n \"TCATTAATTGGGGACGTGAAAGTCGAATTGC\" ⋯ 139 bytes ⋯ \"ATCGACCATAGGTGACATACATATCGTGCC\"\n \"TCACTAATGGGAAACGTAAAAGTGAAATTGC\" ⋯ 139 bytes ⋯ \"ATCACCCATCGAGGTCAGACGTTTAGTGCC\""
+    "text": "Single data point for whole genome?\n\\(\\theta\\), \\(\\pi\\), \\(h\\) and similar are summary statistics - they reduce potentially huge amounts of data into a single number. That can be useful, but sometimes it’s better to look at a denser view of the data. Let’s make a larger/more complicated data-set.\n\n\n30-element Vector{String}:\n \"GTCCGCGCAGAAATCAAACCCCCAAGAGAT\" ⋯ 9940 bytes ⋯ \"CCACGTGGTCGGGAGGACCTCTGCAGCTCT\"\n \"GTCCGCGCAGAAAGCAAACCTCAAAAGGAT\" ⋯ 9940 bytes ⋯ \"CCATGTGG-CTTGAT-ACCTCTACTGCTCC\"\n \"GTCTGCGCACAAAGCAATCCCCCAAAGGAT\" ⋯ 9940 bytes ⋯ \"CCATCTGGTCTTGATG-CCTCTGCTGC-CC\"\n \"GTCTGCGCAGATATCAAACCTCCGAGGGAT\" ⋯ 9940 bytes ⋯ \"ACACCTGGGCTTGAGGACCTG-GCTGCTCC\"\n \"GTCCGCGCAGAAATTAAACCTCCATAAGAT\" ⋯ 9940 bytes ⋯ \"-CATCTGGTCGTGAGGACCGCTGCTGCTCC\"\n \"GTCTGCGCAGAAATCAAACCTCCAAAGGAT\" ⋯ 9940 bytes ⋯ \"CCACGCGGGCTTGATGACCTGTACAGCTCC\"\n \"GTCTGCGCAGAAATCAAACCTCCAAAGGAT\" ⋯ 9940 bytes ⋯ \"CCACGTGGGCGTGAGGACATCTACTACTCC\"\n \"GTTTGCGCAGAAATTAAACCCCCAAAGGAT\" ⋯ 9940 bytes ⋯ \"ACACCCGGTCTGGAGGACCTCTGCTGCACC\"\n \"GTCTGCGCACAAATCAATCCCCCAAGGGAT\" ⋯ 9940 bytes ⋯ \"CCATCTGGTCTTGATAACCTCTAATGCTCC\"\n \"GTCTGCGCAGATATCAAACCTCCGAAGGAT\" ⋯ 9940 bytes ⋯ \"CCATGTGGTCTTGCTGACCTCTACT-CTCT\"\n ⋮\n \"GTCCTCGCAGAAATCAGACCCCCAAAGGAT\" ⋯ 9940 bytes ⋯ \"ACACCTGGTCTTGCTGACCTCTACTGCACT\"\n \"GTCTGCGCAGAAATCAAACCTCCAAAGGAT\" ⋯ 9940 bytes ⋯ \"CCACCTGGTCTTGAG-ACCGGTAATGCTCC\"\n \"GTTCGCGCAGAAATTAAACCCACAAAG-AT\" ⋯ 9940 bytes ⋯ \"ACACCTGGTCTTGATAACCTCTACTGCTCC\"\n \"GTCCGCGCAGAAATCAAACCCCCAAGGGAT\" ⋯ 9940 bytes ⋯ \"ACA-C-GGTATTGATGACATCTGATGCACC\"\n \"GTCCGCGCACAAATCAAACCCCCAAAGGAT\" ⋯ 9940 bytes ⋯ \"CCACGTGGGCTTGAGGACCTGTGCAGCTCC\"\n \"GTCTGCGCAGATATCAAACCTCCAAGGGAT\" ⋯ 9940 bytes ⋯ \"CCATGTGGTCTGGATGACCTGTACTGCTCC\"\n \"GTTTGCGCAGAAATTAAACCCCCAAGGGCT\" ⋯ 9940 bytes ⋯ \"CCATGTGGGCT-GAGGACATCTGCTGCTCC\"\n \"GTCTGCGCAGAACTTAATCCCCCATAGGAT\" ⋯ 9940 bytes ⋯ \"CCATCTGGTCTTGATGACCTCTGATGCTCT\"\n \"GTCCGCGCTCAAATCAAACCCCCAAAGGAT\" ⋯ 9940 bytes ⋯ \"ACACGTGGGCTTGAGGAACTGTACTACACC\""
+  },
+  {
+    "objectID": "notes/Lecture2.html#windowed-statistics",
+    "href": "notes/Lecture2.html#windowed-statistics",
+    "title": "Lecture 2",
+    "section": "Windowed statistics",
+    "text": "Windowed statistics\n\nfunction window_map(f,data,wnd_size)\n    start = 1\n    stop = start+wnd_size\n    centers = []\n    result = []\n    while(stop &lt; size(data)[2])\n        append!(centers,(start+stop)/2)\n        append!(result,f(data[:,start:stop])/wnd_size)\n        start = stop\n        stop = start + wnd_size\n    end\n    return(centers,result)\nend\n\nplot(window_map(sample_π,geno_matrix,1000),label=\"Windowed\",xlabel=\"Window Center\",ylabel=L\"\\pi\",size=(1000,500))"
+  },
+  {
+    "objectID": "notes/Lecture2.html#but-window-choice-not-arbitrary",
+    "href": "notes/Lecture2.html#but-window-choice-not-arbitrary",
+    "title": "Lecture 2",
+    "section": "But window choice not arbitrary",
+    "text": "But window choice not arbitrary\nAs we’ll discuss in the next lecture: our choice of windows might depend on factors like recombination rate.\n\nFrequently, studies use a single window value. But different parts of the genome have different degrees of LD, mutation, recombination.\n\n\nIn general - good idea to run a sliding window analysis."
+  },
+  {
+    "objectID": "notes/Lecture2.html#sliding-windows",
+    "href": "notes/Lecture2.html#sliding-windows",
+    "title": "Lecture 2",
+    "section": "Sliding windows",
+    "text": "Sliding windows"
   },
   {
     "objectID": "notes/Lecture2.html#longer-alignment---more-information",
@@ -522,7 +634,7 @@
     "href": "notes/Lecture2.html#each-pc-explains-the-next-most-variation",
     "title": "Lecture 2",
     "section": "Each PC explains the next most variation",
-    "text": "Each PC explains the next most variation\nWhen data fits PCA assumptions, each subsequent PC explains the next most variance.\n\nThese assumptions are met for most genomic data."
+    "text": "Each PC explains the next most variation\nWhen data fits PCA assumptions, each subsequent PC explains the next most variance.\n\nTechnical details: the first principal component is the eigenvector of the correspondingly largest eigenvalue of a covariance matrix between data points.\n\n\ni.e.: You correlate all data points, and ask what linear transformations explain the covariation. This in turn explains the most variation in the data."
   },
   {
     "objectID": "notes/Lecture2.html#works-in-genomic-data-too",
