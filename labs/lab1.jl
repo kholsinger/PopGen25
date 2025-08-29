@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.20.16
+# v0.20.13
 
 using Markdown
 using InteractiveUtils
@@ -41,7 +41,7 @@ In Pluto, everything is structured as a bunch of `cells`. Each `cell` can contai
 
 - Live docs will bring up Julia's documentation on any function you have your cursor over. This can help you remember syntax when needed.
 
-- Status lets you know what Pluto is actually doing at the moment. Useful to see if things are just running, or are stuck evaluating a cell, etc.
+- Status lets you know what Pluto is actually doing at the moment. Useful to see if things are just running, or are stuck evaluating a cell, etc. Right now, it should be either running packaged management, or evaluating the cells.
 
 3) There should be a closed eye icon to the left of this text block. This just means the code for this block is being hidden. Click it and see what happens (you might need to scroll down a bit, this is a long block of text).
 
@@ -60,6 +60,26 @@ To make this scalable, we'll write two functions. The first is the backbone of t
 
 `Julia` code is mostly readable to human eyes without straining too heavily, but I've added lots of comments (text following a '#' symbol is ignored by `Julia`) to help explain each line
 """
+
+# ╔═╡ bae63673-08d5-4836-8e7b-8418f8397198
+md"""
+You can find out more about any function (like `rand`) by clicking on the Live Docs in the bottom right of this Pluto window, and typing a function name in the top.
+
+![image](https://user-images.githubusercontent.com/6933510/107848812-c934df80-6df6-11eb-8a32-663d802f5d11.png)
+
+
+![image](https://user-images.githubusercontent.com/6933510/107848846-0f8a3e80-6df7-11eb-818a-7271ecb9e127.png)
+
+It can be useful to keep that window open to understand exactly what some functions do. But make note - _custom_ functions (ones I've written, for instance), might lack a help file.
+	
+#### Help, I don't see the Live Docs!
+
+Try the following:
+
+🙋 **Are you viewing a static preview?** The Live Docs only work if you _run_ the notebook. If you are reading this on our course website, then click the button in the top right to run the notebook.
+
+🙋 **Is your screen too small?** Try resizing your window or zooming out.
+""" |> hint
 
 # ╔═╡ 7afaaf98-2de8-4797-8640-ed16b1aaef82
 md"""
@@ -132,7 +152,7 @@ a) How does changing the population size affect results?
 
 b) What is the population size that (visually) is the most consistent with allele frequency changes seen in the experiment?  
 
-c) At what point do you see some of the odd artifacts become replicated?
+c) At what point (if any) do you see some of the odd artifacts become replicated?
 """
 
 # ╔═╡ 365ddd14-8bd4-4e44-a2a0-767b6cb24982
@@ -157,7 +177,7 @@ Try to fill out the code below yourself, there should be helpful hints that pop 
 
 # ╔═╡ ad025dd9-41a2-4ae3-8e9d-8f7dd04ca626
 function mutation(p,μ)
-	next = missing #You only need to edit this line
+	next = p #You only need to edit this line
 	return(next)
 end
 
@@ -338,6 +358,74 @@ b) If not - what seems more likely given the experimental design: small populati
 
 """
 
+# ╔═╡ 54fa2a0c-e362-45aa-a1f7-49048509a291
+md"""
+## I've decided I don't like Julia
+
+That's fine! We will try to build tools that are agnostic to the programming language you are using. Part of the reason I'm using `Julia` is that it is fairly easy to read, and looks pseudo-codey enough that it's not impossible to convert the code to, say, `R`. 
+
+If you want to stick to _your_ favorite programming language, it might be worth it to try and code up a Wright-Fisher simulation in that language. Here's an example of what the function might look like in `R`:
+
+```{R}
+WrightFisher = function(N,p,t) {
+  freqs = rep(0,t)
+  freqs[1] = p
+  current = 1
+  for(i in 2:t){
+    freqs[i] = rbinom(1,N,freqs[i-1])/N
+  }
+  return(freqs)
+}
+```
+
+Try running this function in `R`. I'm doing some not recommended things like using a `for` loop, but I've still mostly optimized the code. To avoid things running _really_ slowly - run this using the `replicate()` function in `R` when you want many simulations at once.
+
+
+## I _am_ liking Julia
+
+If you are enjoying `Julia` so far: consider the function below (make sure to use the Live Docs). The goal of the function is to simulate a WrightFisher allele until it is either lost or fixed. It will return two outputs - the final allele frequency, and the number of generations until it was lost.
+
+"""
+
+# ╔═╡ 3e099118-c0c7-4cf5-9a6f-86ddc971883c
+function WrightFisher_long(N,p0)
+	current_freq = p0
+	g = 1
+	while current_freq*(1-current_freq) != 0#
+		next_freq = rand(Binomial(N,current_freq),1)[1]/N
+		g += 1
+		current_freq = next_freq
+	end
+	return(current_freq, g)
+end
+
+# ╔═╡ 9d89c961-3d09-42eb-bb37-d0d930c88f0c
+md"""
+Below the function will be run over a grid of parameters: `Julia`'s implementation of for loops is especially nice when you want to get a multi-dimensional matrix - here we are looping both over different population sizes AND starting frequencies. 
+The resulting output is going to be a three dimensional matrix, where each entry is a Touple (a set of two values), each representing the 
+"""
+
+# ╔═╡ ac4cd879-5aa2-42b4-bf23-f79187181ab6
+begin
+	Ns = [10,100,1000,10000]
+	p0s = 0.1:0.2:0.9
+	out= [[WrightFisher_long(N,p0) for _ in 1:500] for N in Ns, p0 in p0s]
+end
+
+# ╔═╡ 494361db-e9db-458d-b2e7-d530521c298b
+begin
+	p_time=plot(histogram.([[out[i,j][k][2] for k in 1:500] for i in 1:4, j in 1:5],legend=false,normalize=true,yticks=false)...;layout=(5,4))
+	p_fix=plot(histogram.([[out[i,j][k][1] for k in 1:500] for i in 1:4, j in 1:5],legend=false,normalize=true,yticks=false,xticks=([0.25,1.25],["lost","fixed"]))...;layout=(5,4))
+	plot(p_time,p_fix,size=(1000,1000))
+end
+
+# ╔═╡ b6e1706a-b045-434c-be47-faa915b5af18
+md"""
+What the above function (hopefully) showcases is that you can wrangle the data in some intricate ways, and rather quickly. I'm sure you could figure out how to do the same kind of histogram series in `R`, but I would bet it would take more than a few (albeit messy) lines of code. 
+
+I'll keep posting `Julia` code throughout the semester, but if you really want to take a dive into it, consider the [Think Julia](https://benlauwens.github.io/ThinkJulia.jl/latest/book) book for some light reading.
+"""
+
 # ╔═╡ 47372bab-4f3d-4fc4-8d70-df24220249e6
 md"""
 # Appendix
@@ -353,7 +441,8 @@ end
 
 # ╔═╡ 63f18ac9-07ca-4b8a-b1ee-7656d7edf8af
 begin
-	yeast_data = CSV.read("data/yeast_sex_asex.csv",DataFrame)
+	using Downloads
+	yeast_data = CSV.read(Downloads.download("https://raw.githubusercontent.com/adagilis/PopGen25/refs/heads/main/notes/data/yeast_sex_asex.csv"),DataFrame)
 	Δ_ps = reduce(vcat,[t_vs_tp1(yeast_data[x,9:33]) for x in 1:530])
 	data_plot = scatter(Δ_ps,xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:black,margin=5mm,label="data")
 end
@@ -474,6 +563,7 @@ PLUTO_PROJECT_TOML_CONTENTS = """
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+Downloads = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
 Measures = "442fdcdd-2543-5da2-b0f3-8c86c306513e"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
@@ -499,7 +589,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.11.6"
 manifest_format = "2.0"
-project_hash = "3d3fbee3f50e386bd9b6ca1e25c1db70476871e2"
+project_hash = "c4200dfa190ff9362a244fec15e123d50f83c665"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
@@ -1854,6 +1944,7 @@ version = "1.9.2+0"
 # ╟─8db1d84c-3116-4da5-9cf6-2bd7093c9225
 # ╟─38202ace-9239-434c-b96e-2360dc9dcfc0
 # ╠═25747531-b333-4fd8-9b12-0feb528d877b
+# ╟─bae63673-08d5-4836-8e7b-8418f8397198
 # ╟─7afaaf98-2de8-4797-8640-ed16b1aaef82
 # ╠═73433c15-1a58-4a71-91bc-9377ad739c0c
 # ╟─753e4dd1-9b35-480b-8585-b0910e946914
@@ -1891,6 +1982,12 @@ version = "1.9.2+0"
 # ╟─6c458fe4-2e11-46c0-b143-4255609f6108
 # ╟─fe18db09-2d67-4aa1-ae3e-5e2aee293978
 # ╟─2f925471-bf98-4a81-9e34-fe9eab320b26
+# ╟─54fa2a0c-e362-45aa-a1f7-49048509a291
+# ╠═3e099118-c0c7-4cf5-9a6f-86ddc971883c
+# ╠═9d89c961-3d09-42eb-bb37-d0d930c88f0c
+# ╠═ac4cd879-5aa2-42b4-bf23-f79187181ab6
+# ╠═494361db-e9db-458d-b2e7-d530521c298b
+# ╟─b6e1706a-b045-434c-be47-faa915b5af18
 # ╟─47372bab-4f3d-4fc4-8d70-df24220249e6
 # ╠═a2e7d3d4-8145-4c5e-8dfe-6c9e272ef66e
 # ╟─ae6ae7a9-47a9-468f-8e95-0cb677ef5a7f
