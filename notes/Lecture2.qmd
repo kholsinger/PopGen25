@@ -61,11 +61,11 @@ A key quantity in population genetics is $\theta$ - the neutral genetic diversit
 
 . . .
 
-Under Wright-Fisher, $\theta = 4 N_e \mu$, where $N_e$ is the *effective* population size, and $\mu$ is the *neutral* mutation rate.
+Under Wright-Fisher: no new mutations being introduced. What is the long term expectation?
 
 . . .
 
-So, diversity should depend on both the population size and mutation rates. Does it?
+Let's first think about *how* to measure diversity.
 
 ## Measuring diversity at a site
 
@@ -79,7 +79,7 @@ We will refer to the allele frequency of the *alternate* allele at site $j$ as $
 
 What are some ways we can ask how diverse a population is at a site?
 
-## Expected Heterozygosity ( *H* )
+## Expected Heterozygosity ( *H* ) {.smaller}
 
 One of the simplest metrics is to ask how frequently we see individuals who are heterozygous.
 
@@ -141,7 +141,7 @@ Any generation, the given (true) heterozygosity is $H_t$. What will it be in the
 
 . . .
 
-The traditional proof for this starts by first defining $\mathscr{H}$ : the Homozygosity of the population.
+We can make our lives easier by looking at the inverse $\mathscr{H}$ : the Homozygosity of the population.
 
 . . .
 
@@ -149,21 +149,88 @@ Useful to know: $H = 1-\mathscr{H}$.
 
 ## How does drift change homozygosity?
 
-If two randomly chosen alleles had the same ancestor last generation: they are homozygous.
+Two ways for random pair of alleles to be identical:
 
-Alternatively, if they both come from different alleles, but homozygous ones.
+```{dot}
+digraph G {
+  subgraph cluster_0 {
+    node [style=filled,label=""];
+    a1 [color=lightgray]
+    a2 [color=lightgray]
+    A1 [color=black]
+    A2 [color=black]
+    b1 [color=lightgray]
+    b2 [color=lightgray]
+    a2 -> b1 
+    a2 -> b2
+    label = "Identical by descent";
+  }
+
+  subgraph cluster_1 {
+    node [style=filled,label=""];
+    c1 [color=lightgray]
+    c2 [color=lightgray]
+    C1 [color=black]
+    C2 [color=black]
+    B1 [color=lightgray]
+    B2 [color=lightgray]
+    c1 -> B1 
+    c2 -> B2
+    label = "Identical by state";
+  }
+}
+```
 
 So: $\mathscr{H}_{t+1} = \frac{1}{2N} + (1-\frac{1}{2N})\mathscr{H_t}$
+
+## Putting it together
 
 Then:
 
 $$
-H_{t+1} = 1-\mathscr{H}_{t+1}=\frac{1}{2N}+\left(1-\frac{1}{2N}\right)\left(1-H_t\right)=\left(1-\frac{1}{2N}\right)H_t
+H_{t+1} = 1-\frac{1}{2N}-\left(1-\frac{1}{2N}\right)\left(1-H_t\right)=\left(1-\frac{1}{2N}\right)H_t
 $$
 
 In other words - drift causes heterozygosity to predictably decrease every generation (at a rate of $-\frac{H}{2N}$)
 
-## Heterozygosity across a region (π)
+## Let's check simulations
+
+We can take a look at our simulations:
+
+```{julia}
+using Plots, Measures, LaTeXStrings
+theme(:solarized_light)
+default(legendfontsize=18,guidefontsize=18)
+include("../src/Pop_gen_code.jl")
+sims = [WrightFisher(1000,0.5,1000) for _ in 1:500]
+h = broadcast(x -> 2 .* x .*(1 .- x),sims)
+p1 = plot(h,label="",c=:black,alpha=0.2,
+xlabel="Generations",ylabel=L"H",margins=4mm,size=(800,500))
+m = [mean(col) for col in eachcol(h)]
+plot!(p1,m,c=:red,label="Mean",linewidth=2)
+```
+
+## Versus expectation:
+
+```{julia}
+function exp_h(h,N,t)
+    hs = zeros(t)
+    hs[1] = h
+    for g in 1:(t-1)
+        hs[g+1] = (1-1/N)*hs[g]
+    end
+    return(hs)
+end
+plot!(p1,exp_h(0.5,1000,1000),label="Theory",linewidth=2)
+```
+
+## How quickly does heterozygosity decay?
+
+Will heterozygosity decrease faster in big or small populations? Why?
+
+. . .
+
+## Heterozygosity across a region
 
 We can then zoom out and ask what the diversity is across a whole region. Say there are $L$ sites in your region, then the total *polymorphism* is given by:
 
@@ -179,22 +246,19 @@ $$
 \pi =  \frac{1}{L}\sum_{j=1}^{L}{h_j}
 $$
 
-Note, often the two will be labeled as $\pi$, but per-site is more common.
+Note, often the two will be labeled as $\pi$, but per-site is far more common.
 
 ## Let's check some intuition
 
-Here, we'll use the example data from Hahn's textbook:
+Here, we'll use the example data from Hahn's textbook :
 
 ```{julia}
-using Plots
-theme(:solarized)
-default(legendfontsize=18,guidefontsize=18)
-fake_data = 
+hahn_data = 
 ["T" "T" "A" "C" "A" "A" "T" "C" "C" "G" "A" "T" "C" "G" "T";
  "-" "-" "A" "C" "G" "A" "T" "G" "C" "G" "C" "T" "C" "G" "T";
  "T" "C" "A" "C" "A" "A" "T" "G" "C" "G" "A" "T" "G" "G" "A";
  "T" "T" "A" "C" "G" "A" "T" "G" "-" "-" "C" "T" "C" "G" "T"]
-[join(i) for i in eachrow(fake_data)]
+[join(i) for i in eachrow(hahn_data)]
 ```
 
 Each row is an individual, each column is a site. Notice how some sites have missing data "-".
@@ -224,7 +288,7 @@ function sample_π(genotype_matrix)
     return(sum([sample_h(genotype_matrix[:,x]) for x in 1:size(genotype_matrix)[2]])/size(genotype_matrix)[2]) #Sum of h over all sites/number of sites
 end
 
-sample_π(replace(fake_data,"-"=>missing))
+sample_π(replace(hahn_data,"-"=>missing))
 ```
 
 ## What should $\pi$ look like?
@@ -245,7 +309,7 @@ Heterozygosity can increase because of mutation.
 
 . . .
 
-Heterozygosity is lost because of drift (recall drift eventually causes alleles to be fixed/lost.
+Heterozygosity is lost because of drift (recall drift eventually causes alleles to be fixed/lost).
 
 . . .
 
@@ -253,12 +317,12 @@ How strong are these forces?
 
 ## More formally {.smaller}
 
-Let $H_t$ be the heterozygosity at time $t$.
+Let $\Delta H$ be the change in heterozygosity from one generation to the next.
 
 Then:
 
 $$
-H_{t+1}-H_t = \Delta mutation + \Delta drift
+\Delta H = \Delta mutation + \Delta drift
 $$
 
 Any individuals *not* heterozygous can become so via mutation at either of their two copies of the locus.
@@ -274,10 +338,10 @@ $\Delta drift = -\frac{H}{2N}$
 Then, at steady state:
 
 $$
-0=(1-H_t)2\mu-\frac{H_t}{2N}
+0=(1-H)2\mu-\frac{H}{2N}
 $$
 
-Chalboard time!
+Chalkboard time!
 
 ## Expected heterozygosity
 
@@ -289,11 +353,51 @@ Of course, the quantity is different for haploids: $\theta = 2N\mu$
 
 . . .
 
-What does this tell us about average allele frequencies in populations?
+Deviations from $\theta$ are expected to occur because of non Wright-Fisher dynamics.
 
 . . .
 
-Remember: $H = 2p(1-p) = 4N\mu$
+But do populations actually show this much variation?
+
+## Some examples {.smaller}
+
+| Species | Rough *N* | Rough $\mu$ | Expected $\pi$ | More accurate | Actual $\pi$ |
+|------------|------------|------------|------------|------------|------------|
+| *Homo sapiens* | $8.2 * 10^9$ | $1.4 * 10^{-8}$ | 45.9 | 0.997 | 0.12-0.22 |
+| *Drosophila melanogaster* | $10^{15}$ | $10^{-8}$ | $10^7$ | 0.99999999.. | 0.1-0.4 |
+| *Pelagibacter ubique* | $2.4 * 10^{28}$ | $10^{-6}$ | $10^{22}$ | 1 | 0.4-0.8 |
+
+## *Effective* population size ($N_E$)
+
+We often refer not to the census population size, but the effective population size.
+
+. . .
+
+The idea is simple - not all individuals in a population actually mate and contribute to the next generation.
+
+. . .
+
+These individuals, from the perspective of evolutionary biology, might as well be dead/non-existant.
+
+. . .
+
+The *effective population size* is the size of a hypothetical population that evolves under WF dynamics.
+
+## Implication of $N_E$
+
+$N_E$ implies that many individuals in a population don't actually contribute to the species' evolution.
+
+. . .
+
+Some of this might be due to selection - individuals who simply die/don't mate.
+
+. . .
+
+The quantity $\frac{N_E}{N}$ should tell you what fraction of individuals are surviving/contributing.
+
+. . .
+
+More thoughts about this for Thursday's reading.
 
 ## Not the only heterozygosity
 
@@ -359,21 +463,35 @@ $\theta_W$ is not robust to other sources of errors:
 
 In practice, it's often good to be able to look at multiple different estimators, and make informed conclusions about the data from them.
 
+## Tajima's D
+
+In fact, we'll later cover how expected differences between $\pi$ and $\theta_W$ can be used to examine population demographic history.
+
+. . .
+
+For now - let's keep thinking about how to summarize genetic variation in a population.
+
 ## Single data point for whole genome?
 
 $\theta$, $\pi$, $h$ and similar are *summary statistics* - they reduce potentially huge amounts of data into a single number. That *can* be useful, but sometimes it's better to look at a denser view of the data. Let's make a larger/more complicated data-set.
 
 ```{julia}
-include("../src/useful_code.jl")
-ancestral=fake_alignment(1,10000)
-geno_matrix = fake_alignment_biallelic(ancestral,30;gaps=0.01)
+include("../src/Pop_gen_code.jl")
+include("../src/Stats_utilities.jl")
+ancestral=vec(fake_alignment(1,10000))
+#Just to make the PCA more exciting later - generate two "independent" pops here, one of which willl be more diverged within a middle chunk of the data.
+pop1 = fake_alignment_biallelic(ancestral,50;gaps=0.01,adj=30)
+pop2_1 = fake_alignment_biallelic(ancestral[1:4450],50;gaps=0.01)
+pop2_2 = vcat(fake_alignment(10,500),fake_alignment_biallelic(ancestral[4451:4950],40;gaps=0,adj=50))
+pop2_3 = fake_alignment_biallelic(ancestral[4951:10000],50;gaps=0.01)
+pop2 = hcat(pop2_1,pop2_2,pop2_3)
+geno_matrix = vcat(pop1,pop2)
 [join(replace(i,missing=>"-")) for i in eachrow(geno_matrix)]
 ```
 
 ## Windowed statistics {.smaller}
 
 ```{julia}
-#| echo: true
 function window_map(f,data,wnd_size)
     start = 1
     stop = start+wnd_size
@@ -381,14 +499,20 @@ function window_map(f,data,wnd_size)
     result = []
     while(stop < size(data)[2])
         append!(centers,(start+stop)/2)
-        append!(result,f(data[:,start:stop])/wnd_size)
+        append!(result,f(data[:,start:stop]))
         start = stop
         stop = start + wnd_size
     end
     return(centers,result)
 end
-
-plot(window_map(sample_π,geno_matrix,1000),label="Windowed",xlabel="Window Center",ylabel=L"\pi",size=(1000,500))
+scatter([sample_h(i) for i in eachcol(geno_matrix)],
+label="",
+xlabel="Window Center",
+ylabel=L"\pi",
+size=(1000,500),margins=5mm,legend=:outertopright;
+markersize=1,markerstrokewidth=0)
+plot!(window_map(sample_π,geno_matrix,1000),label="Windowed (1000)",linewidth=1.5,linecolor=:black)
+plot!(window_map(sample_π,geno_matrix,500),label="Windowed (500)",linewidth=1.5,linecolor=:red)
 ```
 
 ## But window choice not arbitrary
@@ -406,21 +530,25 @@ In general - good idea to run a sliding window analysis.
 ## Sliding windows
 
 ```{julia}
-function sliding_window_map(f,data,wnd_size,wnd_step)
+function sliding_window_map(f,data,wnd_size,wnd_step;first_pos=0)
     start = 1
     stop = start+wnd_size
     centers = []
     result = []
     while(stop < size(data)[2])
         append!(centers,(start+stop)/2)
-        append!(result,f(data[:,start:stop])/wnd_size)
+        append!(result,f(data[:,start:stop]))
         start = start + wnd_step
         stop = start + wnd_size
     end
-    return(centers,result)
+    return(centers .+ first_pos,result)
 end
 
-plot!(sliding_window_map(sample_π,geno_matrix,1000,250),label="Sliding",xlabel="Window Center",ylabel=L"\pi")
+xlims!(4000,6000)
+ylims!(0.2,0.4)
+plot!(sliding_window_map(sample_π,geno_matrix[:,3000:7000],1000,50;first_pos=3000),label="Sliding (1000,50)",linewidth=2)
+plot!(sliding_window_map(sample_π,geno_matrix[:,3500:6500],500,25;first_pos=3500),label="Sliding (500,25)",linewidth=2)
+plot!(sliding_window_map(sample_π,geno_matrix[:,3750:6250],250,10;first_pos=3750),label="Sliding (250,10)",linewidth=2)
 ```
 
 ## Longer alignment - more information
@@ -431,11 +559,11 @@ One good way to represent a whole region is to summarize the allele frequencies 
 
 ```{julia}
 #| echo: false
-function SFS(gm) 
+function SFS_folded(gm) 
     return([minimum(values(countmap(i)))/length(i) for i in eachcol(gm)]); 
 end
 
-histogram(SFS(only_segregating(geno_matrix)),legend=false,xlabel="Minor Allele Frequency",ylabel="Count",margins=5mm,bins=30,size=(1000,500))
+histogram(SFS_folded(only_segregating(geno_matrix)),legend=false,xlabel="Minor Allele Frequency",ylabel="Count",margins=5mm,bins=50,size=(1000,500))
 ```
 
 ## Allele *polarity*: ancestral state
@@ -450,6 +578,20 @@ This results in a *folded* SFS.
 
 But, if you have an outgroup/ancestral data, you can instead use the full SFS.
 
+## Unfolded SFS
+
+```{julia}
+function SFS(geno_matrix)
+    #This assumes the ancestral sequence is labeled as "1", diverged as greater ints.
+    return([countmap(i)[1]/length(i) for i in eachcol(geno_matrix)])
+end
+
+#In this case, we'll take a random sample from pop 1 as the "ancestor"
+gm_matrix = geno_mat_to_Int(geno_matrix)
+
+histogram(SFS(only_segregating(gm_matrix)),legend=false,xlabel="Derived Allele Frequency",ylabel="Count",margins=5mm,bins=50,size=(1000,500))
+```
+
 ## What do you do with the SFS
 
 One of the uses of the SFS is, ironically, to calculate summary statistics.
@@ -460,9 +602,11 @@ Some, like $\theta_H$ estimate the genetic diversity.
 
 . . .
 
-Others, like Tajima's D (which we'll talk about more later) let you estimate the influence of demography on the population.
+Others, like Tajima's D let you estimate the influence of demography on the population.
 
-## 
+. . .
+
+Once we talk about demography estimation - SFS contains most data needed.
 
 ## How is variation distributed among individuals?
 
@@ -479,7 +623,7 @@ using MultivariateStats
 x = randn(1000)
 y = x+randn(1000)
 
-pca_test_plot=scatter(x,y,leg=false,size=(900,500))
+pca_test_plot=scatter(x,y,leg=false,size=(900,500),xlabel="X",ylabel="Y",margins=4mm)
 
 ```
 
@@ -509,8 +653,12 @@ i.e.: You correlate all data points, and ask what linear transformations explain
 Here's our toy sequence data along the first two PCs.
 
 ```{julia}
-gm_PCA = fit(PCA,transpose(geno_mat_to_Int(geno_matrix)))
-scatter(gm_PCA.proj[:,1],gm_PCA.proj[:,2],leg=false,size=(1000,500))
+gm_matrix = geno_mat_to_Int(vcat(reshape(ancestral,1,length(ancestral)),geno_matrix))
+gm_PCA = fit(PCA,gm_matrix[2:101,:])
+proc = round.(gm_PCA.prinvars/sum(gm_PCA.prinvars)*100;digits=2)
+lab =  string.(proc)
+scatter(gm_PCA.proj[:,1],gm_PCA.proj[:,2],leg=false,size=(1000,500),
+    xlabel="PC 1 ("*lab[1]*" %)",ylabel="PC 2 ("*lab[2]*" %)",margins=5mm)
 ```
 
 ## Is PCA always worth it? {.smaller}
@@ -532,7 +680,158 @@ scatter(reverse([broken_stick_dist(i,10) for i in 1:10]),legend=false,xlabel="PC
 ## How does that compare to our toy sequence data?
 
 ```{julia}
-p1 = scree(pca_m;broken_stick=true)
 p2 = scree(gm_PCA;broken_stick=true)
-plot(p1,p2,size=(1000,600))
+plot(p2,size=(800,600))
 ```
+
+## PCA can be deceiving!
+
+Unequal sampling can make it seem like one subgroup has all the "important" variation, but they are just sampled better.
+
+. . .
+
+Samples from different time points can create illusion of similarity between populations/individuals.
+
+. . .
+
+Interesting variation is not necessarily along the first PC axis.
+
+. . .
+
+In this case: 500 bp bit of basically random sequence in 10 individuals in pop2.
+
+## Other ways of thinking about genetic variation
+
+We've considered how much variability there is at a locus/across the genome.
+
+. . .
+
+We've considered how that variation might be partitioned among all the samples.
+
+. . .
+
+Let's ask how variation might be partitioned within a population.
+
+## $F$-statistics (inbreeding coefficients)
+
+We've talked a lot about *expected* heterozygosity, but actual observed heterozygosity is also informative.
+
+. . .
+
+Let $F$ be the coefficient of inbreeding (the probability that any two alleles are identical by descent).
+
+. . .
+
+Then:
+
+$$
+\begin{cases}
+p_{AA} = p^2(1-F)+pF \\
+p_{Aa} = 2pq(1-F) \\
+p_{aa} = q^2(1-F)+qF \\
+\end{cases}
+$$
+
+. . .
+
+In other words - the frequency of heterozygotes is decreased, while homozygotes increase.
+
+. . .
+
+What should $F$ be in Wright-Fisher?
+
+## $F_{IS}$ - Inbreeding statistic
+
+Wright realized you could measure how inbred a population is by comparing the Observed Heterozygosity $H_{obs}$ with Expected Heterozygosity $H_{exp}$. For any locus, the inbreeding coefficient can be found as:
+
+. . .
+
+$$
+F = \frac{H_{obs}}{H_{exp}}=\frac{P_{Aa}}{2pq}
+$$
+
+. . .
+
+To actually study inbreeding it's more useful to examine this across the whole genome rather than a single locus.
+
+## Case study
+
+Let's look at a case study of some allele data:
+
+| Locus          | AA   | Aa   | aa  | Total |
+|----------------|------|------|-----|-------|
+| Wing spotting  | 1610 | 302  | 88  | 2000  |
+| Eye distortion | 1215 | 508  | 277 | 2000  |
+| Jawless mouth  | 200  | 1450 | 450 | 2000  |
+
+. . .
+
+Should get: 0.28, 0.34, -0.4
+
+## Are any of these *significant* deviations?
+
+Simple to test if population is statistically deviating from HW ($\chi^2$ tests, for instance).
+
+. . .
+
+Rule of thumb - differences w/in 5% of expectation (e.g. $F_{IS} ~0.05$) happen in neutral simulations all of the time.
+
+. . .
+
+Bigger differences - actually perform testing.
+
+## Inbred population, or inbred individuals?
+
+One way to look for individuals who may be inbred is to look for *Runs of Homozygosity* (ROH)
+
+. . .
+
+We'll talk more when we cover LD and recombination, but not only should inbred individuals have more homozygous alleles than expected, these alleles should also be clustered.
+
+# Rate of evolution
+
+Next week we'll talk a lot more about divergence. But as a prequel, let's test our intuition again.
+
+. . .
+
+If populations are diverging over time, which should diverge faster: small or large populations?
+
+. . .
+
+## Rate of allele fixation
+
+Recall that any new allele that's starting at frequency $\frac{1}{2N_E}$ also has a probability of $\frac{1}{2N_E}$ of becoming fixed.
+
+. . .
+
+Let's say there are lots of these mutations, each with probability of $\frac{1}{2N_E}$ of becoming fixed. How long do we have to wait until an allele is fixed?
+
+. . .
+
+If they evolve independently, this is just the `geometric` probability distribution: takes a rate parameter == chance of success.
+
+. . .
+
+So, on average of $2N_E$ generations for a mutation to fix, and each generation $\frac{1}{2N_E}$ mutations fix.
+
+## But there are not infinite mutations
+
+. . .
+
+How many new alleles come in every generation?
+
+. . .
+
+There are $2N_E$ copies of the allele. Then - there are $2N_E\mu$ new mutations every generation.
+
+## Putting it together - the basics of neutral theory
+
+If we put all of this together, the rate of fixing mutations becomes quite predictable:
+
+Every generation there are $2N_E\mu$ mutations coming in that are fixed at a rate of $\frac{1}{2N_E}$
+
+The neutral evolutionary rate is therefore:
+
+$$
+\frac{2N_E\mu}{2N_E} = \mu
+$$

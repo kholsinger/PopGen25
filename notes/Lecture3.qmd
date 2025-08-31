@@ -1,0 +1,135 @@
+---
+title: "Lecture 3"
+execute:
+  freeze: auto  # re-render only when source changes
+format: 
+    revealjs:
+        theme: solarized
+        incremental: true
+        preview-links: auto
+        chalkboard: true
+engine: julia
+julia:
+  exeflags: ["--project=../PopGen25"]
+---
+
+## Many places we simplified
+
+WF expectation is for a steady state - populations frequently undergo bottlenecks.
+
+. . .
+
+Selection causes signals identical to bottlenecks - could perpetually keep $N_E$ depressed.
+
+. . .
+
+Assumption is that the loci used to calculate $\pi$ are independent - they are not.
+
+. . .
+
+WF expectation from simple model of mutation - mutations are more complex.
+
+## More complex models of mutation
+
+The model of mutation we have used so far is the simplest possible - a single parameter ($\mu$) with equal backwards and forwards mutation rates.
+
+. . .
+
+Works great for the ephemeral "loci" before we knew what genes actually were.
+
+. . .
+
+More realistically: we need to consider a molecular model.
+
+## Jukes-Cantor (JC69)
+
+One step up from our biallelic model is recognizing that there are, actually, four bases possible.
+
+. . .
+
+We can think of these mutation rates along a _state _di
+
+. . .
+
+{dot}
+digraph G {
+  layout=circo
+  A
+  T
+  C
+  G
+  A -> C [label="μ"]
+  A -> T [label="μ"]
+  A -> G [label="μ"]
+  C -> T [label="μ"]
+  C -> G [label="μ"]
+  C -> A [label="μ"]
+  T -> G [label="μ"]
+  T -> A [label="μ"]
+  T -> C [label="μ"]
+  G -> A [label="μ"]
+  G -> C [label="μ"]
+  G -> T [label="μ"]
+}
+
+## A series of increasingly more complicated models
+
+More complex models have more parameters, distinguishing between transitions and transversion (Kimura 1981, K81).
+
+. . .
+
+And allowing for different expected base frequencies (Felsenstein 81).
+
+. . .
+
+And specifying mutation/base frequencies for the type of sequence (HIV, MT models, etc)
+
+. . .
+
+Up to each mutation rate/base rate being specified.
+
+. . .
+
+That's 12 mutation rates and four bases, for 16 parameters!
+
+## Most practical model: GTR
+
+The General Time Reversible model still has 10 parameters, but they are simpler.
+
+{dot}
+digraph G {
+  layout=circo
+  A
+  T
+  C
+  G
+  A -> C [label="μ1"]
+  A -> T [label="μ2"]
+  A -> G [label="μ3"]
+  C -> T [label="μ4"]
+  C -> G [label="μ5"]
+  C -> A [label="μ1"]
+  T -> G [label="μ6"]
+  T -> A [label="μ2"]
+  T -> C [label="μ4"]
+  G -> A [label="μ4"]
+  G -> C [label="μ5"]
+  G -> T [label="μ6"]
+}
+
+. . .
+
+Time reversible because probability forward and back is the same.
+
+## Will we use these more complex models?
+
+When possible, we'll use a single parameter model.
+
+. . .
+
+Most population genomics approaches, however, will try to fit a model to your data.
+
+. . .
+
+iqTree2 for instance, has ModelFinder which will try to detect the type of sequence and most appropriate evolutionary model.
+

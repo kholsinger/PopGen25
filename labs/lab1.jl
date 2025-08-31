@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.20.16
+# v0.20.13
 
 using Markdown
 using InteractiveUtils
@@ -60,6 +60,9 @@ To make this scalable, we'll write two functions. The first is the backbone of t
 
 `Julia` code is mostly readable to human eyes without straining too heavily, but I've added lots of comments (text following a '#' symbol is ignored by `Julia`) to help explain each line
 """
+
+# ╔═╡ eba3caeb-e460-4aac-8a98-365b22d1cd6a
+
 
 # ╔═╡ 7afaaf98-2de8-4797-8640-ed16b1aaef82
 md"""
@@ -157,7 +160,7 @@ Try to fill out the code below yourself, there should be helpful hints that pop 
 
 # ╔═╡ ad025dd9-41a2-4ae3-8e9d-8f7dd04ca626
 function mutation(p,μ)
-	next = missing #You only need to edit this line
+	next = p*(1-μ)+(1-p)*μ #You only need to edit this line
 	return(next)
 end
 
@@ -236,8 +239,9 @@ Let's make a function that can modify the allele frequencies due to selection. J
 
 # ╔═╡ 98d5e5a3-f7fc-4d7a-9cea-6dbf9d23d074
 function sel(wAA,wAa,pAA,pAa)
-	next = missing #Edit this line
-	return(next)
+	numerator = pAA*wAA+1/2*pAa*wAa
+	denom = 1+pAA*(wAA-1)+pAa*(wAa-1)
+	return(numerator/denom)
 end
 
 # ╔═╡ 214f98a9-4d9e-4940-bf95-78e5ae46b22a
@@ -272,8 +276,8 @@ _s_ = $(@bind s NumberField(-0.5:0.01:0.5;default=0.0))
 
 # ╔═╡ 23ea68e3-0a30-4ac8-8380-962463ee8036
 	function dirsel(p,s)
-		pAA = missing #Fill this out based on HW expectation
-		pAa = missing #Fill this out based on HW expectation
+		pAA = 1 #Fill this out based on HW expectation
+		pAa =  0.5 #Fill this out based on HW expectation
 		return(sel(1+2.0*s,1+s,pAA,pAa)) #
 	end
 
@@ -320,7 +324,7 @@ Now, it should be clear that none of the processes, by themselves, explain the d
 
 _s_ = $(@bind s3 Slider(0:0.001:0.1,show_value=true;default=0.01))
 
-_μ_ = $(@bind μ3 Slider(0:0.001:0.1,show_value=true;default=0.001))
+_μ_ = $(@bind μ3 Slider(0:0.00001:0.1,show_value=true;default=0.00001))
 
 _N_ = 10^$(@bind N_leu2 Slider(0:0.1:6,show_value=true;default=3))
 
@@ -353,7 +357,7 @@ end
 
 # ╔═╡ 63f18ac9-07ca-4b8a-b1ee-7656d7edf8af
 begin
-	yeast_data = CSV.read("data/yeast_sex_asex.csv",DataFrame)
+	yeast_data = CSV.read("../notes/data/yeast_sex_asex.csv",DataFrame)
 	Δ_ps = reduce(vcat,[t_vs_tp1(yeast_data[x,9:33]) for x in 1:530])
 	data_plot = scatter(Δ_ps,xlabel=L"p_t",ylabel=L"|p_{t+60}-p_t|",c=:black,margin=5mm,label="data")
 end
@@ -371,7 +375,8 @@ function WrightFisher(N,p,t,μ,s;k=1) #Function definitions start by stating thi
     freqs[1]=p # The first value in this vector is the starting allele frequency.
     while generation<t
 		current=freqs[generation] #Retrieve the current frequency from vector
-		next = randomMating(current,N) #Modify it by random mating
+		post_mutation = mutation(current,μ)
+		next = randomMating(post_mutation,N) #Modify it by random mating
 		freqs[generation + 1] = next #Add it to the list
         generation += 1 #Go to next generation
     end #The above lines keep running over and over until generation = t
@@ -415,7 +420,7 @@ let
 		keep_working(md"It seems that your code is still broken.")
 	elseif result == 0.0
 		tip(md"The above plot probably looks the same. Don't forget that we need to modify the actual WrightFisher simulation code to include mutations. Before the `randomMating()` function gets called, allele frequencies need to be modified by your `mutation()` function.")
-	elseif result != 0.1
+	elseif isapprox(0.1,result)
 		tip(md"Seems like you've modified the simulations in an unexpected way. Ask for help!")
 	else
 		correct(md"Now changing the mutation rates should change allele frequencies in predictable ways")
@@ -1853,6 +1858,7 @@ version = "1.9.2+0"
 # ╟─39298816-f200-4cab-af76-14a1b3e1686c
 # ╟─8db1d84c-3116-4da5-9cf6-2bd7093c9225
 # ╟─38202ace-9239-434c-b96e-2360dc9dcfc0
+# ╟─eba3caeb-e460-4aac-8a98-365b22d1cd6a
 # ╠═25747531-b333-4fd8-9b12-0feb528d877b
 # ╟─7afaaf98-2de8-4797-8640-ed16b1aaef82
 # ╠═73433c15-1a58-4a71-91bc-9377ad739c0c

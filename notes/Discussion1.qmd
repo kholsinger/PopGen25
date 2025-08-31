@@ -17,11 +17,11 @@ julia:
 
 ## Quizlet 1 Answers
 
-1) Alleles initially appear at a frequency of 1/N in haploid, 1/2N in diploid populations.
+1)  Alleles initially appear at a frequency of 1/N in haploid, 1/2N in diploid populations.
 
-2) Fixation probability is $p_0$, so 1/N (1/2N)
+2)  Fixation probability is $p_0$, so 1/N (1/2N)
 
-3) Evolution seems to happen more rapidly in small populations - mutations are lost or fixed faster. BUT - this is ignoring any other evolutionary forces.
+3)  Evolution seems to happen more rapidly in small populations - mutations are lost or fixed faster. BUT - this is ignoring any other evolutionary forces.
 
 ## Long Term Evolutionary Experiments (LTEE)
 
@@ -73,4 +73,32 @@ In small groups (4-5), try to figure out the following:
 
 3\) Try to enumerate the actual differences between sexual and asexual treatments.
 
-##
+## Figure 2
+
+![](images/paste-3.png)
+
+## Figure 3
+
+![](images/paste-4.png)
+
+## Figure 4
+
+![](images/paste-5.png)
+
+## Takeaways
+
+Really cool experiment!
+
+. . .
+
+Unclear why asexual populations showed any fitness increase - not any of the individual mutations they identified.
+
+. . .
+
+## Let's look at the data!
+
+Supplementary Data File 1 (available online, or on the github for this class).
+
+. . .
+
+In lab, we'll see how Wright-Fisher simulations can match up to this data (if they can)

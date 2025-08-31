@@ -1,0 +1,138 @@
+---
+title: Lab 2
+theme: cosmo
+bibliography: references.bib
+---
+
+# Data structures in genomics
+
+Today's goal is two-fold:
+
+1)  Learn to import and manipulate data tables either in `R` or `Julia`.
+
+2)  Understand how genomic data files are structured, and play around with one.
+
+I will supply both `Julia` and `R` code in the blocks below - it's up to you which you use. However, in either case I would recommend using some kind of IDE (integrated development environment). An IDE lets you interact with a programming language by seperating out your code writing from your code execution, and generally supplies lots of convenience functions. If you've already been using `R`, you are likely already using an IDE: `RStudio`. `Pluto` actually functions as a lightweight IDE for `Julia`, but if you would like more bells and whistles, I will recommend some branch of `VSCode`, like [VSCodium](https://vscodium.com/). Setting it up should take you a few moments, but I am happy to help out.
+
+Before we start coding, whichever language/IDE you have chosen, let's think about how you'll organize code. If you have done coding in the past, you are probably used to *everything* you write for a single project living in a single file. You are also therefore probably used to having to scroll gigantic files trying to find where some small piece of code is. More troublingly, if you have to redo something multiple times (say, loop through some function for different subsets of data), you probably have to remember to edit each instance of doing that method when you change it. I'll try to encourage you to write code in a way that is more modular: functions/approaches you reuse can live in a separate file, so that you can quickly find them, and edit them more consistently.
+
+In the case of my own projects, I organize them in a way that lets me reuse code, and edit it more consistently, by taking some pointers from the software development world. A typical project directory for me looks like:
+
+```         
+project
+|    README.md
+|____data/
+|    |_____raw_data.tsv
+|    |_____genomic.vcf
+|____scripts/
+|____results/
+|____src/
+|    |____genomic_functions.jl
+|    |____stats_functions.jl
+|    |____plotting_functions.jl
+|     
+|____plots/
+```
+
+Unprocessed data files can live in the `data/` folder, letting you avoid editing them by accident and overwriting raw data. Scripts/pipelines to process the data go in `scripts/`, processed data that you don't want to regenerate/results tables go in `results/`, and most importantly, any custom code goes into `src/`.
+
+## For this class:
+
+Try working in the directory structure that you've been given with this repository. There is a folder including some `Julia` code I've written in `src/` , and over time it will be populated with more of my own solutions, but you might as well add your own. To avoid `git` issues when you pull code in future weeks (and later help me when I'm grading code submissions), create a file in `src/` called `last_name.R` or `last_name.jl`, depending on whether you are writing in `R` or `Julia`, respectively. Any *functions* you write - try to keep them in that file. Any scripts you work on for labs can live in the `labs` folder, just call them `lab_{number of lab}last_name.R` or `.jl` or `.sh`
+
+## Virtual environments and package management
+
+In different projects, you'll often use different sets of software packages/libraries for your programming language. To make your workflow fully replicable, it's a good idea to keep track of the package environment with some sort of environment management approach. You don't need to do this right now, but feel free to come back to this section after you've run through the lab and figure out if you want to use any of these approaches.
+
+### R: `renv`
+
+`renv` is the best approach to manage your packages in `R`. Getting it set up is relatively easy, and `Rstudio` comes with some utility tools for it. Follow the guide [here](https://rstudio.github.io/renv/).
+
+In my personal experience, `R` ends up with frequent weird issues with packages, where some version of some library requires a new version of `R`, while a different package is not yet updated and therefore incompatible. For that (and other reasons we can talk about), I will recommend that you avoid looking for packages that do some task for you, and write your own code for it when possible, at least for this class.
+
+### Julia: package environments
+
+`Julia` has package environments built into its core, so there's nothing too special you need to do. If you are working using a `Pluto` notebook, for instance, the package environment is handled entirely for you. But as you probably noticed in last weeks lab - the startup time includes a whole lot of precompiling packages in the background. The way to make `Julia` quite a bit faster is to explicitly have a project file in your project directory. You do this as follows:
+
+```{julia}
+#| eval: false
+using Pkg; Pkg.activate("/absolute/path/to/your/project/"); Pkg.instantiate()
+```
+
+What the above line will do is tell `Julia` to create two files in the project directory: `Manifest.toml` and `Project.toml`. These files just keep track of the versions of all of the packages that have been added to the project, so that when you start up the project, it knows there should be stored binaries for all of those packages (compatible with each other). As you add new packages, it'll handle downgrading/upgrading/finding a solution that works for all of the packages you want.
+
+### Python: `conda`
+
+Python has a few solutions, but probably the best is making a `conda` environment. It builds on top of python's own system `pip` and `pyenv`, but has great integration with the huge ecosystem of packages that exist in the `Python` world. See a guide [here](https://carpentries-incubator.github.io/introduction-to-conda-for-data-scientists/01-getting-started-with-conda/index.html).
+
+# Buffalo 2021 data:
+
+The first thing we'll do is learn how to import data/deal with data frames in either `R` or `Julia`.
+
+## Data formats: 90% of the battle
+
+You will find that in practice most bioinformatics is wrangling data formats. Every piece of software/software package has its own preferred format for data. This is part of the reason I stress the importance of understanding (and being able to write your own) code for performing various population genetic approaches. If you know how to calculate $\pi$, you will hopefully just figure out how to do that for the format you have the data in, rather than having to spend hours/days chasing format conversion down. In this and future weeks, I will give you a general run down of what you need to do with the data, and then give you some code/pointers as for how, but I'll leave the actual implementation to you.
+
+## Looking at the data before importing it
+
+It's useful to take a glance at the data before you try to import it. You can try to open the file using your operating system's choice of software, but Unix tools are built well to precisely do a quick glance. In the `labs/data` folder, there is a file called `buffalo.txt`. This is the data from [@Buffalo2021]. Before you import it, it's good to take a look at what the data actually looks like. We can do so in the terminal. Navigate to the right directory (if you are on Windows and using `wsl`, I can help you here). Once there, run the following
+
+``` bash
+head -2 buffalo.txt
+```
+
+You should see something like:
+
+``` bash
+species phylum  habitat mating_system   range_cat       sexual_system   abbrv   neut_model_conf genome_species self_est maplen_data_source      diversity_data_source   site_type       hcn     num_markers     parpath pred_piimpact_of_sel    log10_size      log10_range     num_chr totalMb_covered ave_rec assembly_size   selfing map_length      genome_size     fecundity       propagule       bodymass_g      diversity       size    log10_diversitysocial   species_orig    is_terrestrial  n_occ   range   id      kingdom superphylum     subphylum       class  order    family  genus   clean_name      redlist_cat     log10_body_mass log10_body_mass_pred    log10_popsize  log10_density    log10_density_pred      pred_log10_body_mass    pred_log10_density      pred_log10_N    RS     log10_RS log10_map_length        species_lower
+Abatus agassizi Echinodermata   NA      NA      NA      NA      NA      NA      NA      NA      NA      Romiguier et al.        NA      NA      NA      FALSE   NA      NA      -1.6108339156354674     6.633700542517746      NA       NA      NA      NA      NA      NA      NA      0.299   0.002   9.28    0.00727197      0.0245  -2.1383479214336867     FALSE   Abatus agassizi FALSE   72      4302298.533787006       NA      Animalia        NA     NA       Echinoidea      Spatangoida     Schizasteridae  Abatus  Abatus agassizi NA      -0.6534814211608199    -0.6405066270384477      11.065298198284022      4.431597655766276       4.42625265103009        -0.6547028847549656     4.432901908737623       11.066602451255369      175604021.7872247       8.244534458153213       NA     abatus agassizi
+Acromyrmex echinatior   Arthropoda      NA      NA      NA      male.haploid    NA      NA      NA      NA     Stapley et al.   NA      NA      19      145     FALSE   NA      NA      -2.2596373105057563     5.61732386966055NA      NA      NA      NA      NA      20.338  0.335   NA      NA      NA      NA      0.0055  NA      TRUE   Acromyrmex echinatior    TRUE    105     414308.5250288181       574019  Animalia        Ecdysozoa       HexapodaInsecta Hymenoptera     Formicidae      Acromyrmex      Acromyrmex echinatior   NA      -2.7280036542040085    -2.7364907216649312      11.617818883879833      6.000495014219284       6.009905730795794       -2.7309804876823183     6.003335452336658       11.620659321997207      75328822.73251238       7.8769611801663055      1.3083082429982256      acromyrmex echinatior
+Acropora millepora      Cnidaria        NA      NA      NA      hermaphrodite   NA      NA      NA      NA     Stapley et al.   NA      NA      14      429     FALSE   NA      NA      NA      7.795297039711985       NA     NA       NA      NA      NA      13.91   0.42    NA      NA      NA      NA      NA      NA      FALSE   Acropora millepora      FALSE   1613    62416159.05944288       52901   Animalia        NA      Anthozoa        AnthozoaScleractinia    Acroporidae     Acropora        Acropora millepora      NT      NA      NA      NA      NA     NA       NA      NA      NA      NA      NA      1.1433271299920464      acropora millepora
+Acyrthosiphon pisum     Arthropoda      Terrestrial     Partial selfing Cosmopolitan    parthenogenic   NA     NA       NA      NA      Stapley et al.  Leffler et al.  NA      5       173     FALSE   NA      NA      -2.3979400086720375     7.080809415567688       NA      NA      NA      NA      NA      3.94    0.165   NA      NA     NA       0.0088125       0.004   -2.054900870000545      FALSE   Acyrthosiphon pisum     TRUE    2512    12045072.421827307      200572  Animalia        Ecdysozoa       Hexapoda        Insecta Hemiptera       Aphididae      Acyrthosiphon    Acyrthosiphon pisum     NA      -3.1702208566789927     -3.182279811406018      13.415739698676683      6.334930283108995       6.357104023822486       -3.173571874992307      6.338098183370152       13.41890759893784       3011268105.4568267      9.478749424239727       0.5954962218255742      acyrthosiphon pisum
+Aedes aegypti   Arthropoda      Terrestrial     Obligatory outcrossing  Cosmopolitan    gonochorous     NA     NA       NA      NA      Stapley et al.  Leffler et al.  NA      3       2006    FALSE   NA      NA      -2.579631620142476      7.583115518888759       NA      NA      NA      NA      NA      2.35    0.94214 NA      NA     NA       0.01421 0.0026325       -1.8474059220725303     FALSE   Aedes aegypti   TRUE    30000   38292658.52071776       126240  Animalia        Ecdysozoa       Hexapoda        Insecta Diptera Culicidae       Aedes   Aedes aegypti   NA      -3.7511723290864785     -3.753271310092434      14.35740153216626       6.774286013277501      6.770873848375246        -3.7550149230997683     6.777884108505123       14.360999627393882      14546119096.189085      10.162747139031236      0.37106786227173627     aedes aegypti
+Aedes albopictus        Arthropoda      NA      NA      NA      gonochorous     NA      NA      NA      NA     Stapley et al.   NA      NA      3       172     FALSE   NA      NA      -2.580044251510242      7.445784591347202       NA      NA      NA      NA      NA      2.126   1.09047 NA      NA      NA      NA      0.00263 NA     FALSE    Aedes albopictus        TRUE    30000   27911590.92003886       126244  Animalia        Ecdysozoa      Hexapoda Insecta Diptera Culicidae       Aedes   Aedes albopictus        NA      -3.7524917009535947     -3.753551590575262      14.221068404987681      6.775283813640479       6.779607141395379       -3.756335411361592     6.778882885863879        14.224667477211081      10612772212.942533      10.025828842857445      0.32756326018727794     aedes albopictus
+Agelaius phoeniceus     Chordata        Terrestrial     Obligatory outcrossing  Broad endemic   NA      NA     NA       NA      NA      NA      Leffler et al.  NA      NA      NA      FALSE   NA      NA      -0.6575773191777937     7.119596489010348       NA      NA      NA      NA      NA      NA      NA      NA      NA      NA     0.0059   0.22    -2.2291479883578558     FALSE   Agelaius phoeniceus     TRUE    30000   13170324.908019817     179045   Animalia        NA      Vertebrata      Aves    Passeriformes   Icteridae       Agelaius        Agelaius phoeniceus     LC      2.394517431468307       2.39143600201306        9.246086360300021       2.126489871289673       2.117521308655038       2.3958750510517968      2.125537079006005       9.245133568016353       59865113.218271896      7.7771738081881425      NA      agelaius phoeniceus
+Ailuropoda melanoleuca  Chordata        Terrestrial     Obligatory outcrossing  Narrow endemic  NA      NA     NA       NA      NA      NA      Leffler et al.  NA      NA      NA      FALSE   NA      NA      0.18730634078622424     6.150386149916167       NA      NA      NA      NA      NA      NA      NA      NA      NA      NA     0.00135  1.53924 -2.869666231504994      FALSE   Ailuropoda melanoleuca  TRUE    130     1413794.051074382      621845   Animalia        NA      Vertebrata      Mammalia        Carnivora       Ursidae Ailuropoda      Ailuropoda melanoleuca  VU      5.095998266476374       5.1000064327850865      6.2338291555483885      0.08344300563222148     0.08933867763248815     5.099641760862692       0.08048976492485682     6.2308759148410235      918501.3715043671       5.963079809129942       NA      ailuropoda melanoleuca
+Allolobophora chlorotica        Annelida        NA      NA      NA      NA      NA      NA      NA      NA     NA       Romiguier et al.        NA      NA      NA      FALSE   NA      NA      -1.2596373105057561     6.580581413049396       NA      NA      NA      NA      NA      NA      NA      0.74    2.38e-4 0.3     0.0449719      0.055    -1.3470587637088103     FALSE   Allolobophora chlorotica        TRUE    3070    3806987.16874359       974862   Animalia        Lophozoa        NA      Clitellata      Opisthopora     Lumbricidae     Allolobophora  Allolobophora chlorotica NA      0.46945531325089346     0.4661403969117158      10.162936554916952      3.582355141867555       3.582435448831861       0.4691840295555272      3.5828278594116822      10.163409272461077     69217948.52261072        7.840218723555152       NA      allolobophora chlorotica
+adagilis@4ZMQ374:/mnt/c/Projects/PopGen25/labs/data$ head -2 buffalo_2021.txt 
+species phylum  habitat mating_system   range_cat       sexual_system   abbrv   neut_model_conf genome_species self_est maplen_data_source      diversity_data_source   site_type       hcn     num_markers     parpath pred_piimpact_of_sel    log10_size      log10_range     num_chr totalMb_covered ave_rec assembly_size   selfing map_length      genome_size     fecundity       propagule       bodymass_g      diversity       size    log10_diversitysocial   species_orig    is_terrestrial  n_occ   range   id      kingdom superphylum     subphylum       class  order    family  genus   clean_name      redlist_cat     log10_body_mass log10_body_mass_pred    log10_popsize  log10_density    log10_density_pred      pred_log10_body_mass    pred_log10_density      pred_log10_N    RS     log10_RS log10_map_length        species_lower
+Abatus agassizi Echinodermata   NA      NA      NA      NA      NA      NA      NA      NA      NA      Romiguier et al.        NA      NA      NA      FALSE   NA      NA      -1.6108339156354674     6.633700542517746      NA       NA      NA      NA      NA      NA      NA      0.299   0.002   9.28    0.00727197      0.0245  -2.1383479214336867     FALSE   Abatus agassizi FALSE   72      4302298.533787006       NA      Animalia        NA     NA       Echinoidea      Spatangoida     Schizasteridae  Abatus  Abatus agassizi NA      -0.6534814211608199    -0.6405066270384477      11.065298198284022      4.431597655766276       4.42625265103009        -0.6547028847549656     4.432901908737623       11.066602451255369      175604021.7872247       8.244534458153213       NA     abatus agassizi
+```
+
+This looks like a tab seperated file (usually ending in .tsv). Tabs are special characters (often denoted as `\t`) are one of the two most common ways to delimit fields in the data. Many data files adopt a general structure typical to .tsv files:
+
+1\) The first line is a header - indicating the names of the columns of data.
+
+2\) The data is often organized as a *wide* data format: each row represents a single data point, including all of its metadata. Long data formats will separate out the metadata. This can be sometimes useful when the data is sparse (lots of missing values) as it is in this dataset, but it is harder to parse for humans at a glance.
+
+There are various packages/approaches to reading in data in most programming languages. The ones I'll recommend for `R` and `Julia` focus on making the user's life as simple as possible while catching *most* exceptions.
+
+## R
+
+`R` has a variety of libraries to read in data. `readr` is the one I will recommend, because it does a good job of automatically detecting various idiosyncracies in the data. To read the datafile in with `readr`, you'll need to run the following:
+
+```{r}
+#| eval: false
+require(readr)
+
+buffalo_data <- read_tsv("<path to your repository>/labs/data/buffalo_2021.txt",sep="\t")
+```
+
+This will read the data in as a `DataFrame` object that is easy to work with in `R`.
+
+## Julia
+
+Julia's `CSV` package does a good job reading in many data formats, but it also wants to know what kind of object you will turn the data into (a matrix, a vector, a dataframe?). We'll go for a DataFrame object:
+
+```{julia}
+#| eval: false
+using CSV, DataFrames
+
+buffalo_data = CSV.read("<path to your repository>/labs/data/buffalo_2021.txt",DataFrame)
+```
+
+Now that you have the data open, let's take a look at it!
+
+## Re-creating the main plot in Buffalo 2021
+
+Data exploration is often visual - it's a good idea to see what the distribution of data looks like before you decide what statistical model to use on it. We'll start with a relatively simple plot: a scatter plot of the population size vs
