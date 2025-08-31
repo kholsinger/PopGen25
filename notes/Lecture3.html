@@ -9,7 +9,7 @@
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.6.39">
 
-  <title>EEB5348-Fall25 – Discussion 1: LTEEs and Sex</title>
+  <title>EEB5348-Fall25 – Lecture 3</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -28,7 +28,7 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-79de7379233449a958139d6a18b1afaf.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-2a4c8bc07c7bed3f644724215556eb12.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -128,94 +128,81 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Discussion 1: LTEEs and Sex</h1>
+  <h1 class="title">Lecture 3</h1>
 
 <div class="quarto-title-authors">
 </div>
 
 </section>
-<section>
-<section id="discussion-1" class="title-slide slide level1 center">
-<h1>Discussion 1</h1>
-
-</section>
-<section id="quizlet-1-answers" class="slide level2">
-<h2>Quizlet 1 Answers</h2>
-<ol type="1">
-<li class="fragment"><p>Alleles initially appear at a frequency of 1/N in haploid, 1/2N in diploid populations.</p></li>
-<li class="fragment"><p>Fixation probability is <span class="math inline">\(p_0\)</span>, so 1/N (1/2N)</p></li>
-<li class="fragment"><p>Evolution seems to happen more rapidly in small populations - mutations are lost or fixed faster. BUT - this is ignoring any other evolutionary forces.</p></li>
-</ol>
-</section>
-<section id="long-term-evolutionary-experiments-ltee" class="slide level2">
-<h2>Long Term Evolutionary Experiments (LTEE)</h2>
-<p>Broadly popular type of study:</p>
-<ul>
-<li class="fragment"><p>Put a population in a new environment and track it</p></li>
-<li class="fragment"><p>Popular with yeast/bacteria, since ancestral populations can easily be preserved</p></li>
-<li class="fragment"><p>Useful to test how adaptation happens in the lab</p></li>
-<li class="fragment"><p>Useful to test how adaptation differs in slightly different circumstances</p></li>
-</ul>
-</section>
-<section id="leu-et-al-2020" class="slide level2">
-<h2>Leu et al 2020</h2>
-
-<img data-src="images/paste-1.png" class="r-stretch"></section>
-<section id="what-did-they-actually-do" class="slide level2">
-<h2>What did they actually do?</h2>
-
-<img data-src="images/paste-2.png" class="r-stretch"></section>
-<section id="why-did-they-do-this" class="slide level2">
-<h2>Why did they do this?</h2>
+<section id="many-places-we-simplified" class="slide level2">
+<h2>Many places we simplified</h2>
+<p>WF expectation is for a steady state - populations frequently undergo bottlenecks.</p>
 <div class="fragment">
-<p>Long-standing hypotheses about why sex even exists.</p>
+<p>Selection causes signals identical to bottlenecks - could perpetually keep <span class="math inline">\(N_E\)</span> depressed.</p>
 </div>
 <div class="fragment">
-<p>One with a lot of backing - adaptation is faster in sexual organisms (they avoid Clonal Interference)</p>
-<p>We’ll talk more about Clonal interference in Week 3.</p>
+<p>Assumption is that the loci used to calculate <span class="math inline">\(\pi\)</span> are independent - they are not.</p>
 </div>
 <div class="fragment">
-<p>LTEE experiments find mixed results - sometimes asexual evolve slower, other times equal.</p>
-</div>
-<div class="fragment">
-<p>State of the art only in haploids!</p>
+<p>WF expectation from simple model of mutation - mutations are more complex.</p>
 </div>
 </section>
-<section id="lets-discuss" class="slide level2">
-<h2>Let’s discuss</h2>
-<p>In small groups (4-5), try to figure out the following:</p>
-<p>1) What are some expected advantages of sexual reproduction? What are the disadvantages? Which ones are supported in this study?</p>
-<p>2) Why do the authors believe asexuals adapted as quickly/sexuals more slowly?</p>
-<p>3) Try to enumerate the actual differences between sexual and asexual treatments.</p>
-</section>
-<section id="figure-2" class="slide level2">
-<h2>Figure 2</h2>
-
-<img data-src="images/paste-3.png" class="r-stretch"></section>
-<section id="figure-3" class="slide level2">
-<h2>Figure 3</h2>
-
-<img data-src="images/paste-4.png" class="r-stretch"></section>
-<section id="figure-4" class="slide level2">
-<h2>Figure 4</h2>
-
-<img data-src="images/paste-5.png" class="r-stretch"></section>
-<section id="takeaways" class="slide level2">
-<h2>Takeaways</h2>
-<p>Really cool experiment!</p>
+<section id="more-complex-models-of-mutation" class="slide level2">
+<h2>More complex models of mutation</h2>
+<p>The model of mutation we have used so far is the simplest possible - a single parameter (<span class="math inline">\(\mu\)</span>) with equal backwards and forwards mutation rates.</p>
 <div class="fragment">
-<p>Unclear why asexual populations showed any fitness increase - not any of the individual mutations they identified.</p>
+<p>Works great for the ephemeral “loci” before we knew what genes actually were.</p>
+</div>
+<div class="fragment">
+<p>More realistically: we need to consider a molecular model.</p>
 </div>
 </section>
-<section id="lets-look-at-the-data" class="slide level2">
-<h2>Let’s look at the data!</h2>
-<p>Supplementary Data File 1 (available online, or on the github for this class).</p>
+<section id="jukes-cantor-jc69" class="slide level2">
+<h2>Jukes-Cantor (JC69)</h2>
+<p>One step up from our biallelic model is recognizing that there are, actually, four bases possible.</p>
 <div class="fragment">
-<p>In lab, we’ll see how Wright-Fisher simulations can match up to this data (if they can)</p>
+<p>We can think of these mutation rates along a _state _di</p>
+</div>
+<div class="fragment">
+<p>{dot} digraph G { layout=circo A T C G A -&gt; C [label=“μ”] A -&gt; T [label=“μ”] A -&gt; G [label=“μ”] C -&gt; T [label=“μ”] C -&gt; G [label=“μ”] C -&gt; A [label=“μ”] T -&gt; G [label=“μ”] T -&gt; A [label=“μ”] T -&gt; C [label=“μ”] G -&gt; A [label=“μ”] G -&gt; C [label=“μ”] G -&gt; T [label=“μ”] }</p>
+</div>
+</section>
+<section id="a-series-of-increasingly-more-complicated-models" class="slide level2">
+<h2>A series of increasingly more complicated models</h2>
+<p>More complex models have more parameters, distinguishing between transitions and transversion (Kimura 1981, K81).</p>
+<div class="fragment">
+<p>And allowing for different expected base frequencies (Felsenstein 81).</p>
+</div>
+<div class="fragment">
+<p>And specifying mutation/base frequencies for the type of sequence (HIV, MT models, etc)</p>
+</div>
+<div class="fragment">
+<p>Up to each mutation rate/base rate being specified.</p>
+</div>
+<div class="fragment">
+<p>That’s 12 mutation rates and four bases, for 16 parameters!</p>
+</div>
+</section>
+<section id="most-practical-model-gtr" class="slide level2">
+<h2>Most practical model: GTR</h2>
+<p>The General Time Reversible model still has 10 parameters, but they are simpler.</p>
+<p>{dot} digraph G { layout=circo A T C G A -&gt; C [label=“μ1”] A -&gt; T [label=“μ2”] A -&gt; G [label=“μ3”] C -&gt; T [label=“μ4”] C -&gt; G [label=“μ5”] C -&gt; A [label=“μ1”] T -&gt; G [label=“μ6”] T -&gt; A [label=“μ2”] T -&gt; C [label=“μ4”] G -&gt; A [label=“μ4”] G -&gt; C [label=“μ5”] G -&gt; T [label=“μ6”] }</p>
+<div class="fragment">
+<p>Time reversible because probability forward and back is the same.</p>
+</div>
+</section>
+<section id="will-we-use-these-more-complex-models" class="slide level2">
+<h2>Will we use these more complex models?</h2>
+<p>When possible, we’ll use a single parameter model.</p>
+<div class="fragment">
+<p>Most population genomics approaches, however, will try to fit a model to your data.</p>
+</div>
+<div class="fragment">
+<p>iqTree2 for instance, has ModelFinder which will try to detect the type of sequence and most appropriate evolutionary model.</p>
 
 
 </div>
-</section></section>
+</section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
