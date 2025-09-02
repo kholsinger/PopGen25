@@ -220,6 +220,7 @@ window.Quarto = {
   <li><a href="#r" id="toc-r" class="nav-link" data-scroll-target="#r">R</a></li>
   <li><a href="#julia" id="toc-julia" class="nav-link" data-scroll-target="#julia">Julia</a></li>
   <li><a href="#re-creating-the-main-plot-in-buffalo-2021" id="toc-re-creating-the-main-plot-in-buffalo-2021" class="nav-link" data-scroll-target="#re-creating-the-main-plot-in-buffalo-2021">Re-creating the main plot in Buffalo 2021</a></li>
+  <li><a href="#plotting-in-r" id="toc-plotting-in-r" class="nav-link" data-scroll-target="#plotting-in-r">Plotting in <code>R</code></a></li>
   </ul></li>
   </ul>
 </nav>
@@ -253,7 +254,7 @@ window.Quarto = {
 <li><p>Learn to import and manipulate data tables either in <code>R</code> or <code>Julia</code>.</p></li>
 <li><p>Understand how genomic data files are structured, and play around with one.</p></li>
 </ol>
-<p>I will supply both <code>Julia</code> and <code>R</code> code in the blocks below - it’s up to you which you use. However, in either case I would recommend using some kind of IDE (integrated development environment). An IDE lets you interact with a programming language by seperating out your code writing from your code execution, and generally supplies lots of convenience functions. If you’ve already been using <code>R</code>, you are likely already using an IDE: <code>RStudio</code>. <code>Pluto</code> actually functions as a lightweight IDE for <code>Julia</code>, but if you would like more bells and whistles, I will recommend some branch of <code>VSCode</code>, like <a href="https://vscodium.com/">VSCodium</a>. Setting it up should take you a few moments, but I am happy to help out.</p>
+<p>I will supply both <code>Julia</code> and <code>R</code> code in the blocks below - it’s up to you which you use. However, in either case I would recommend using some kind of IDE (integrated development environment). An IDE lets you interact with a programming language by seperating out your code writing from your code execution, and generally supplies lots of convenience functions. If you’ve already been using <code>R</code>, you are likely already using an IDE: <code>RStudio</code> (and if not, <a href="https://posit.co/download/rstudio-desktop/">try it</a> or <a href="https://positron.posit.co/download.html">positron</a> which is meant to replace it long run). <code>Pluto</code> actually functions as a lightweight IDE for <code>Julia</code>, but if you would like more bells and whistles, I will recommend some branch of <code>VSCode</code>, like <a href="https://vscodium.com/">VSCodium</a>. Setting it up should take you a few moments, but I am happy to help out.</p>
 <p>Before we start coding, whichever language/IDE you have chosen, let’s think about how you’ll organize code. If you have done coding in the past, you are probably used to <em>everything</em> you write for a single project living in a single file. You are also therefore probably used to having to scroll gigantic files trying to find where some small piece of code is. More troublingly, if you have to redo something multiple times (say, loop through some function for different subsets of data), you probably have to remember to edit each instance of doing that method when you change it. I’ll try to encourage you to write code in a way that is more modular: functions/approaches you reuse can live in a separate file, so that you can quickly find them, and edit them more consistently.</p>
 <p>In the case of my own projects, I organize them in a way that lets me reuse code, and edit it more consistently, by taking some pointers from the software development world. A typical project directory for me looks like:</p>
 <pre><code>project
@@ -334,7 +335,7 @@ window.Quarto = {
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>buffalo_data <span class="op">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"&lt;path to your repository&gt;/labs/data/buffalo_2021.txt"</span>,sep<span class="op">=</span><span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This will read the data in as a <code>DataFrame</code> object that is easy to work with in <code>R</code>.</p>
+<p>This will read the data in as a <code>tibble</code> object that is easy to work with in <code>R</code>. If you get an error stating the package does not exist, you ned to first install it. This can be done by running <code>install.packages("readr")</code>. You’ll then need to rerun the above block of code.</p>
 </section>
 <section id="julia" class="level2">
 <h2 class="anchored" data-anchor-id="julia">Julia</h2>
@@ -344,11 +345,54 @@ window.Quarto = {
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>buffalo_data <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="st">"&lt;path to your repository&gt;/labs/data/buffalo_2021.txt"</span>,DataFrame)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Now that you have the data open, let’s take a look at it!</p>
+<p>Unlike <code>R</code>, if the package is not installed <code>Julia</code> will just ask if you would like to install it, and if you say yes, it will automatically load it after installation. Now that you have the data open, let’s take a look at it!</p>
 </section>
 <section id="re-creating-the-main-plot-in-buffalo-2021" class="level2">
 <h2 class="anchored" data-anchor-id="re-creating-the-main-plot-in-buffalo-2021">Re-creating the main plot in Buffalo 2021</h2>
-<p>Data exploration is often visual - it’s a good idea to see what the distribution of data looks like before you decide what statistical model to use on it. We’ll start with a relatively simple plot: a scatter plot of the population size vs</p>
+<p>Data exploration is often visual - it’s a good idea to see what the distribution of data looks like before you decide what statistical model to use on it. We’ll start with a relatively simple plot: a scatter plot of the population size vs genetic diversity. To do this you’ll need to figure out some basics of how to refer to different data columns in your language of choice. Code to plot this will be your first reportable bit for the lab. If you are already comfortable plotting data - great! Focus on the rest of the lab and skip ahead to</p>
+</section>
+<section id="plotting-in-r" class="level2">
+<h2 class="anchored" data-anchor-id="plotting-in-r">Plotting in <code>R</code></h2>
+<p>Start by checking the opened data. Just like bash, <code>R</code> also has a <code>head</code> command. If you run</p>
+<div id="8" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(buffalo_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You should see:</p>
+<pre class="{output}"><code># A tibble: 6 × 60
+  species             phylum habitat mating_system range_cat sexual_system abbrv
+  &lt;chr&gt;               &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;         &lt;chr&gt;
+1 Abatus agassizi     Echin… NA      NA            NA        NA            NA   
+2 Acromyrmex echinat… Arthr… NA      NA            NA        male.haploid  NA   
+3 Acropora millepora  Cnida… NA      NA            NA        hermaphrodite NA   
+4 Acyrthosiphon pisum Arthr… Terres… Partial self… Cosmopol… parthenogenic NA   
+5 Aedes aegypti       Arthr… Terres… Obligatory o… Cosmopol… gonochorous   NA   
+6 Aedes albopictus    Arthr… NA      NA            NA        gonochorous   NA   </code></pre>
+<p>Note a couple of things: the data contains 60 columns, the names of the first 8 of which are listed above. Under each name of column the data type is specified (in this case, all <code>chr</code> - character data, e.g.&nbsp;text strings). Not visible in this text, but hopefully in yours - the NA entries should be a different color, highlighting where data is missing.</p>
+<p>You might want to know all of the different columns available: you can get that list by asking for the <code>names</code> of the data</p>
+<div id="10" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(buffalo_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And you should see:</p>
+<pre class="{output}"><code> [1] "species"               "phylum"                "habitat"              
+ [4] "mating_system"         "range_cat"             "sexual_system"        
+ [7] "abbrv"                 "neut_model_conf"       "genome_species"       
+[10] "self_est"              "maplen_data_source"    "diversity_data_source"
+[13] "site_type"             "hcn"                   "num_markers"          
+[16] "parpath"               "pred_pi"               "impact_of_sel"        
+[19] "log10_size"            "log10_range"           "num_chr"              
+[22] "totalMb_covered"       "ave_rec"               "assembly_size"        
+[25] "selfing"               "map_length"            "genome_size"          
+[28] "fecundity"             "propagule"             "bodymass_g"           
+[31] "diversity"             "size"                  "log10_diversity"      
+[34] "social"                "species_orig"          "is_terrestrial"       
+[37] "n_occ"                 "range"                 "id"                   
+[40] "kingdom"               "superphylum"           "subphylum"            
+[43] "class"                 "order"                 "family"               
+[46] "genus"                 "clean_name"            "redlist_cat"          
+[49] "log10_body_mass"       "log10_body_mass_pred"  "log10_popsize"        
+[52] "log10_density"         "log10_density_pred"    "pred_log10_body_mass" 
+[55] "pred_log10_density"    "pred_log10_N"          "RS"                   
+[58] "log10_RS"              "log10_map_length"      "species_lower" </code></pre>
 
 
 
