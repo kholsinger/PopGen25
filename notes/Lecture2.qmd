@@ -273,7 +273,26 @@ How can we account for missing data in calculating heterozygosity?
 
 ## Code examples
 
+Hahn's alignment:
+
 ```{julia}
+using StatsBase
+
+function sample_h(alleles)
+    obs_alleles=collect(skipmissing(alleles)) #Genotypes might be missing - we skip those.
+    n=length(obs_alleles)
+    freqs = values(countmap(obs_alleles)) ./ n #Get allele frequencies for each allele
+    return( n/(n-1)*(1-sum(freqs .^ 2))) #Return the expected sample h
+end
+
+function sample_π(genotype_matrix)
+    return(sum([sample_h(genotype_matrix[:,x]) for x in 1:size(genotype_matrix)[2]])/size(genotype_matrix)[2]) #Sum of h over all sites/number of sites
+end
+
+sample_π(replace(hahn_data,"-"=>missing))
+```
+
+```{.julia code-line-numbers="|5-6|7|8"}
 #| echo: true
 using StatsBase
 
@@ -421,7 +440,7 @@ $$
 \theta_W = \frac{S}{\sum_{i=1}^{n-1}{1/i}}
 $$
 
-```{julia}
+```{.julia code-line-numbers="|3|4|5"}
 #| echo: true
 function wat_theta(gm)
     S = sum([is_segregating(i) for i in eachcol(gm)])
