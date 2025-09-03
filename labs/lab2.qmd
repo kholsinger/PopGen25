@@ -39,11 +39,17 @@ Unprocessed data files can live in the `data/` folder, letting you avoid editing
 
 ## For this class:
 
-Try working in the directory structure that you've been given with this repository. There is a folder including some `Julia` code I've written in `src/` , and over time it will be populated with more of my own solutions, but you might as well add your own. To avoid `git` issues when you pull code in future weeks (and later help me when I'm grading code submissions), create a file in `src/` called `last_name.R` or `last_name.jl`, depending on whether you are writing in `R` or `Julia`, respectively. Any *functions* you write - try to keep them in that file. Any scripts you work on for labs can live in the `labs` folder, just call them `lab_{number of lab}last_name.R` or `.jl` or `.sh`
+Try working in the directory structure that you've been given with this repository. There is a folder including some `Julia` code I've written in `src/` , and over time it will be populated with more of my own solutions, but you might as well add your own. To avoid `git` issues when you pull code in future weeks (and later help me when I'm grading code submissions), create a file in `src/` called `last_name.R` or `last_name.jl`, depending on whether you are writing in `R` or `Julia`, respectively. Any *functions* you write - try to keep them in that file. Any scripts you work on for labs can live in the `labs` folder, just call them `lab_{number of lab}_{last name}.R` or `.jl` or `.sh` or whatever other format.
+
+### A note on version control with git
+
+Some of you are probably already used to using `git`. For others this might be an entirely new thing. I will not be enforcing, but I do strongly recommend you start getting acquainted with it - it will save you many headaches in the long run. [Check out this guide](https://swcarpentry.github.io/git-novice/) for a place to start.
 
 ## Virtual environments and package management
 
-In different projects, you'll often use different sets of software packages/libraries for your programming language. To make your workflow fully replicable, it's a good idea to keep track of the package environment with some sort of environment management approach. You don't need to do this right now, but feel free to come back to this section after you've run through the lab and figure out if you want to use any of these approaches.
+In different projects, you'll often use different sets of software packages/libraries for your programming language. To make your workflow fully replicable, it's a good idea to keep track of the package environment with some sort of environment management approach. Even if you are not worried about reporting your results eventually in a paper and having the correct package versions listed, consider a common work case: you run a script on your laptop and it runs *fine*. You then try to run it on data on the cluster, and it breaks: turns out a slightly different package version no longer behaves the way it does on your laptop - but you don't know that! Looking for help, you then go to send your code to your PI, and they cannot get it running either. So, a result you thought you had gets tossed because you assume you made a mistake *somewhere*, just not sure where. This can all be avoided by using virtual environments - when you send your code to the cluster, it should include a manifest of each package required AND its version. Same for when you send it to your PI.
+
+You don't need to do this right now, but feel free to come back to this section after you've run through the lab and figure out what virtual environment works for you.
 
 ### R: `renv`
 
@@ -79,7 +85,7 @@ You will find that in practice most bioinformatics is wrangling data formats. Ev
 It's useful to take a glance at the data before you try to import it. You can try to open the file using your operating system's choice of software, but Unix tools are built well to precisely do a quick glance. In the `labs/data` folder, there is a file called `buffalo.txt`. This is the data from [@Buffalo2021]. Before you import it, it's good to take a look at what the data actually looks like. We can do so in the terminal. Navigate to the right directory (if you are on Windows and using `wsl`, I can help you here). Once there, run the following
 
 ``` bash
-head -2 buffalo.txt
+head buffalo.txt
 ```
 
 You should see something like:
@@ -110,6 +116,12 @@ There are various packages/approaches to reading in data in most programming lan
 
 ## R
 
+If you are working in `R`, open up your IDE and create a new file that you'll store the commands you wrote here in. If you are using `RStudio`, consider creating a new R Markdown document. This is similar to the format this webpage is written in, with a mixture of text and executable code. Having good comments around what you've done is very helpful in the long run, so some form of Markdown can be great. Your screen should look something like this:
+
+![](images/Screenshot 2025-09-03 102539.png){fig-align="center"}
+
+You'll run code in the bottom left, and keep versions that ran/worked how you wanted in the top right.
+
 `R` has a variety of libraries to read in data. `readr` is the one I will recommend, because it does a good job of automatically detecting various idiosyncracies in the data. To read the datafile in with `readr`, you'll need to run the following:
 
 ```{r}
@@ -124,6 +136,19 @@ This will read the data in as a `tibble` object that is easy to work with in `R`
 
 ## Julia
 
+So, you've chosen `Julia`! If you are using `Pluto` as your coding environment, starting out will be as simple as creating a new Pluto notebook, and you can begin coding. If you are using VSCodium (or one of its branches), there'll be a bit more setup in getting some `Julia` extensions installed, and figuring out the oh-so-many options that Virtual Studio tosses at you. But once you do, open the folder for this repository, and create a new `.jl` file somewhere and you can start coding. I recommend opening this repository only because you'll then be able to piggyback off of the package environment for the course (which already has a bunch of packages you'll probably want/need).
+
+The way to activate that environment (assuming you run julia from the repository folder) is to open `Julia` and then hit the `]` key. This will enter you into `Pkg` mode (the line should start with `Pkg>`. Then type:
+
+```{julia}
+#| eval: false
+#| echo: true
+activate "PopGen25"
+instantiate
+```
+
+And all of the necessary packages should be installed and precompiled. Hit the backspace key to exit `Pkg` mode (the terminal should start with `julia>` ).
+
 Julia's `CSV` package does a good job reading in many data formats, but it also wants to know what kind of object you will turn the data into (a matrix, a vector, a dataframe?). We'll go for a DataFrame object:
 
 ```{julia}
@@ -131,15 +156,14 @@ Julia's `CSV` package does a good job reading in many data formats, but it also 
 #| echo: true
 using CSV, DataFrames
 
-buffalo_data = CSV.read("<path to your repository>/labs/data/buffalo_2021.txt",DataFrame)
+buffalo_data = CSV.read("<path to your repository>/labs/data/buffalo_2021.txt",DataFrame,delim="\t",missingstring=NA)
 ```
 
 Unlike `R`, if the package is not installed `Julia` will just ask if you would like to install it, and if you say yes, it will automatically load it after installation. Now that you have the data open, let's take a look at it!
 
 ## Re-creating the main plot in Buffalo 2021
 
-Data exploration is often visual - it's a good idea to see what the distribution of data looks like before you decide what statistical model to use on it. We'll start with a relatively simple plot: a scatter plot of the population size vs genetic diversity. To do this you'll need to figure out some basics of how to refer to different data columns in your language of choice. Code to plot this will be your first reportable bit for the lab. If you are already comfortable plotting data - great! Focus on the rest of the lab and skip ahead to 
-
+Data exploration is often visual - it's a good idea to see what the distribution of data looks like before you decide what statistical model to use on it. We'll start with a relatively simple plot: a scatter plot of the population size vs genetic diversity. To do this you'll need to figure out some basics of how to refer to different data columns in your language of choice. Code to plot this will be your first reportable bit for the lab. If you are already comfortable plotting data - great! Focus on the rest of the lab and skip ahead to
 
 ## Plotting in `R`
 
@@ -166,7 +190,7 @@ You should see:
 6 Aedes albopictus    Arthr… NA      NA            NA        gonochorous   NA   
 ```
 
-Note a couple of things: the data contains 60 columns, the names of the first 8 of which are listed above. Under each name of column the data type is specified (in this case, all `chr` - character data, e.g. text strings). Not visible in this text, but hopefully in yours - the NA entries should be a different color, highlighting where data is missing. 
+Note a couple of things: the data contains 60 columns, the names of the first 8 of which are listed above. Under each name of column the data type is specified (in this case, all `chr` - character data, e.g. text strings). Not visible in this text, but hopefully in yours - the NA entries should be a different color, highlighting where data is missing.
 
 You might want to know all of the different columns available: you can get that list by asking for the `names` of the data
 
@@ -201,3 +225,167 @@ And you should see:
 [58] "log10_RS"              "log10_map_length"      "species_lower" 
 ```
 
+For your plot, you'll want to plot `pred_log10_N` against `log10_diversity`. Calling a column from a table is done as: `<your data frame>$<your column_name>`. So, to look at just the predicted log 10 population size, you might call `buffalo_data$pred_log10_N`.
+
+::: {.callout-tip appearance="minimal"}
+## Hint
+
+Hitting the `Tab` key will automatically try to fill out the rest of a variable/function name in `R`, and will even give you an overview of arguments one could call. Don't be shy about mashing the `Tab` key as you code, just to avoid any coding issues.
+:::
+
+*How* you plot is an exercise left to the reader. You can do a very basic plot with `R`s innate `plot` functions, but I would recommend taking the time to look at something like `ggplot2` (follow [this](https://ggplot2.tidyverse.org/articles/ggplot2.html) guide, but just substitute your data in.)
+
+## Plotting in `Julia`
+
+Before we plot, let's see how the code differs compared to `R`. Just like `R`, we can take a look at the head of the data, but that's done by default when you import the data. So you should have already seen something like:
+
+```{julia-output}
+300×60 DataFrame
+ Row │ species                      phylum         habitat      mating_system           range_cat       sexual_system  abbrv     neut_model_conf  genome_species  self_est  maplen_data_source  diversity_data_source  site_type  hc ⋯
+     │ String                       String15       String31?    String31?               String15?       String31?      String7?  String3?         String31?       Float64?  String31?           String31?              Missing    In ⋯
+─────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   1 │ Abatus agassizi              Echinodermata  missing      missing                 missing         missing        missing   missing          missing          missing  missing             Romiguier et al.         missing  mi ⋯
+   2 │ Acromyrmex echinatior        Arthropoda     missing      missing                 missing         male.haploid   missing   missing          missing          missing  Stapley et al.      missing                  missing 
+   3 │ Acropora millepora           Cnidaria       missing      missing                 missing         hermaphrodite  missing   missing          missing          missing  Stapley et al.      missing                  missing 
+   4 │ Acyrthosiphon pisum          Arthropoda     Terrestrial  Partial selfing         Cosmopolitan    parthenogenic  missing   missing          missing          missing  Stapley et al.      Leffler et al.           missing 
+   5 │ Aedes aegypti                Arthropoda     Terrestrial  Obligatory outcrossing  Cosmopolitan    gonochorous    missing   missing          missing          missing  Stapley et al.      Leffler et al.           missing     ⋯
+   6 │ Aedes albopictus             Arthropoda     missing      missing                 missing         gonochorous    missing   missing          missing          missing  Stapley et al.      missing                  missing 
+   7 │ Agelaius phoeniceus          Chordata       Terrestrial  Obligatory outcrossing  Broad endemic   missing        missing   missing          missing          missing  missing             Leffler et al.           missing  mi
+   8 │ Ailuropoda melanoleuca       Chordata       Terrestrial  Obligatory outcrossing  Narrow endemic  missing        missing   missing          missing          missing  missing             Leffler et al.           missing  mi
+  ⋮  │              ⋮                     ⋮             ⋮                 ⋮                   ⋮               ⋮           ⋮             ⋮               ⋮            ⋮              ⋮                     ⋮                ⋮         ⋱
+ 294 │ Tupaia belangeri             Chordata       Terrestrial  Obligatory outcrossing  Broad endemic   missing        missing   missing          missing          missing  missing             Leffler et al.           missing  mi ⋯
+ 295 │ Varecia variegata            Chordata       missing      missing                 missing         missing        missing   missing          missing          missing  missing             Romiguier et al.         missing  mi
+ 296 │ Varecia variegata variegata  Chordata       Terrestrial  Obligatory outcrossing  Island          missing        missing   missing          missing          missing  missing             Leffler et al.           missing  mi
+ 297 │ Vespula vulgaris             Arthropoda     missing      missing                 missing         male.haploid   missing   missing          missing          missing  Stapley et al.      missing                  missing 
+ 298 │ Xenopus tropicalis           Chordata       missing      missing                 missing         gonochorous    missing   missing          missing          missing  Stapley et al.      missing                  missing     ⋯
+ 299 │ Xiphophorus maculatus        Chordata       missing      missing                 missing         gonochorous    missing   missing          missing          missing  Stapley et al.      missing                  missing 
+ 300 │ Zonotrichia albicollis       Chordata       Terrestrial  Obligatory outcrossing  Broad endemic   missing        missing   missing          missing          missing  missing             Leffler et al.           missing  mi
+                                                                                                                                                                                                       47 columns and 285 rows omitte
+```
+
+A couple worthwile notes - `Julia` recoded the NAs as `missing`, which is a special type in `Julia`, and will give you headaches sometimes. Second, to save on memory, it has used the minimal size of String as the `type` for each column. For instance, no Phylum is longer than 15 characters, so it uses the String15 type, which has no more than 15 characters. These tiny optimizations add up to one of the reasons `Julia` performs much faster than `R` for big projects.
+
+Julia has a bunch of approaches to plotting, probably more than either `R` or `python`, as there's lots of different subfields with their own plotting approaches. My goal is for you to write scripts *you* like using, so I'll recommend taking a look at the plotting backends [most are listed here](https://docs.juliaplots.org/dev/backends/) except for the `Makie` ecosystem, which you can take a glance at \[here\] . Overall - `Plots.jl` is a fine starting point, but `Makie` is popular because it allows some more fine-tuned customization for the plots. If you are working on a cluster, absolutely check out `UnicodePlots.jl`, as it can spit out nice summary plots without you having to download them/run interactive sessions.
+
+The syntax to get a particular column in `Julia` is `<data_frame>.<column_name>`, so to get the population size you'd write `buffalo_data.pred_log10_N`. Now, follow the guide for your chosen plotting package and plot `N` versus `diversity`.
+
+# Genomic data formats
+
+As with any recent field, the proliferation of data has also meant a giant proliferation of data formats for genomic data. All of this is because of, generally, good intentions:
+
+![](images/paste-2.png)
+
+The format we'll focus on working with has *mostly* won out the fight for being *the* standard for genomic data: VCF (Variant Call Format). If you want the nitty gritty [here](https://samtools.github.io/hts-specs/VCFv4.2.pdf) is the standard description, with way too many details. Below is a shorter summary.
+
+## How is a VCF file structured
+
+### Header(s)
+
+VCF files start with a whole bunch of lines starting with `##`. Some of these lines are mandatory, such as the first one which says which *version* of the VCF format is being used. Others are useful for good science, like keeping track of the commands that were used to generate this particular VCF. Additionally, there are many lines which determine what kind of details about the genotype calss are contained in the file. For today, we won't worry about almost all of them, as the file I'll have you play with is as basic as possible.
+
+The final line before the data *actually* starts only has a single `#`, and is the real header. This has the names of each data column, including eight fixed fields:
+
+```         
+#CHROM   POS   ID    REF    ALT    QUAL    FILTER    INFO    FORMAT
+```
+
+These are: the chromosome the variant is on, its position, a unique ID, what allele is present in the reference, what alterante allele(s) are found in the data, the quality of the call as a \[PHRED\]() score, whether the site is filtered out or not, and an INFO column that can contain a lot of information about how the allele, and a FORMAT tab that tells you how the genotypes are listed. Generally, this will start with `GT`, and can then have various bits after a `:`, like `GT:GQ` means that you will first see the genotype, and then the genotype quality. The rest of the header is a list of your individual samples:
+
+```         
+#CHROM   POS   ID    REF    ALT    QUAL    FILTER    INFO   
+FORMAT    Ind1     Ind2     Ind3   .... IndN
+```
+
+## Genotype information
+
+After this, the file is a list of sites, each of which starts with the 8 fixed columns of info, and then presents the genotype for each individual. They look something like:
+
+```         
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  HG00096 HG00092
+10   60523  rs148087467    T     G       100     PASS    -      GT:GL    0|0:-0.19  0/1:-0.12
+```
+
+What does this say? Well, individuals `HG00096` and `HG00092` have two different genotypes: `0|0` and `0/1` . A pipe character `|` means that the data is phased (we'll talk about this next week), while the `0/1` says that the data is unphased. `0`s indicate the reference allele (T, in this case), while 1 indicates the first ALT allele (G, in this case). You could also see something like:
+
+```         
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  HG00096 HG00092
+8   11200  -    T     G,C,A       100     PASS    -      GT    1|2    0/3
+```
+
+This tells you the individuals have genotypes: GC and TA, respectively.
+
+## Reading in VCF data
+
+There are many genomics packages in `R`, and so there are many ways to read in a VCF. Today, I'll have you try the `vcfR` package: \[link\](<https://cran.r-project.org/web/packages/vcfR/index.html>), which is fairly minimal. Once you have the package installed and loaded, find the .vcf file in the \`labs/data\` folder of the repository, and read it in. Because in practice you'll often work with the genotype matrix, I've gone ahead and added a line that converts the vcf to a genotype matrix:
+
+```{r}
+#| echo: true
+#| eval: false
+
+require(vcfR)
+vcf = read.vcfR("<path to file>")
+GT = extract.gt(vcf,element="GT",as.numeric=TRUE)
+```
+
+The file I've constructed is extremely minimal, in that it only contains genotype data. The goal today is to write a function that can calculate the per-site heterozygosity of the data. I have a scaffold of a function set up below, but I want you to play around with the data and find what works for you to actually extract the information.
+
+```{r}
+#| echo: true
+#| eval: false
+h_vcf = function(gt_matrix){
+    h_s = apply(gt_matrix,1,h_sample) # Apply takes a matrix (gt_matrix here), an argument specifying whether it should run across each row (1) or column(2) or entry(1:2), and a function to apply to that row/column. 
+    return(sum(h_s)/dim(gt_matrix)[1]) #h_s will be heterozygosities at each site, so we take their average.
+}
+
+h_sample = function(site){
+    #The above function makes sure you get passed an array of values, where 0 is aa, 1 is Aa and 2 is AA. How do we go from that to sample heterozygosity? 
+    #Take a look at the lecture notes. Remember that you need to account for how many sites are actually sampled.
+    allele_frequency = ???
+    n = ???
+    h = ???
+    return(h)
+}
+```
+
+## Julia solution
+
+You've already been given some code to calculate h_sample given a vector in class, so I'll instead ask you to calculate the Site Frequency Spectrum. Of course, feel free to work out by yourself how you would calculate `h` (the two are very closely linked). In `Julia`, the best package to deal with `vcf` files is `VCFTools`. Unlike `vcfR`, it will not try to read in and keep the whole vcf in memory. Rather, it has many utility functions to quickly allow you to read in only the data you are interested in. So, to get out the genotype matrix, you would run:
+
+```{julia}
+#| echo: true
+#| eval: false
+
+using VCFTools
+
+gt_matrix = convert_gt(Int8,"<path to vcf>";model=:additive,impute=false,scale=false,center=false)
+```
+
+Notice that because `Julia` is often column centric, each individual is a row, and each column is now a variant, unlike the VCF. Now, to calculate the SFS, you'll want to map a function that calculates frequency across the data.
+
+```{julia}
+#| echo: true
+#| eval: false
+
+function frequency(site)
+    freq = missing #Think about how you'd get allele frequencies from a genotype matrix. How do you account for missing data?
+    return(freq)
+end
+
+sitefreqs = [frequency(i) for i in eachcol(gt_matrix)]
+```
+
+## Bonus: Plot your heterozygosities
+
+Now that you have hopefully learned both how to plot data, and how to calculate heterozygosity (or the SFS), try to plot your data. As you do so, keep track of what bits of code you keep re-running/re-using. Could you have written your code in a way that made those bits modular? (e.g.: functions that are called, so that you only need to maintain one copy of the function).
+
+# Why do I need to write my own code for heterozygosity? Isn't there software for this?
+
+Absolutely! The problem is that different software packages make different assumptions/concessions when it comes to any population genetic analyses. In general, for any publication I would recommend using a well vetted external package for your final version, but I would also try to verify at least some of the analysis with your own code. For instance, if you use something like `vcftools --het` to calculate heterozygosity, it will *skip* any sites with missing data entirely, and also assume that any site *not* in the VCF is the reference allele (e.g. het==0). That means that it often under-estimates heterozygosity, especially when there is a lot of missing data. On the other hand, something like `pixy` ([link](https://github.com/ksamuk/pixy)) will do a much more thorough job (although see [@konopinski2022]), but requires you to prepare your vcf files in a specific way. `ANGSD` is a fairly good method, but requires you to convert your VCFs into `PLINK` input files (`.bed .bim .fam`). The estimates often don't *exactly* agree, and so it's good to understand what goes into coding *any* estimator, let alone a more robust one as implemented in many popular packages. The good news: SNP based estimates are probably robust [@miller2013], but keep in mind how these approaches work. To compare with what you obtained, try to run the following approaches:
+
+1\) `diversity.stats` from the `PopGenome` library in `R`: [link](https://popgenome.weebly.com/)
+
+2\) `vftools labs/data/test_data.vcf.gz --het` You can do this on the HPC if you have access, or just install `vcftools` locally: [link](https://vcftools.github.io/index.html). This is optional - if you have trouble setting up vcftools on your machine, don't worry about this for the moment, but I'm happy to help you get set-up.
+
+3\) `nucleotideDiversity` from `strataG` in `R`. You'll need to convert the vcf to a `genlight` object, good luck!
+
+You will probably find that each gives a subtly different answer - that is why population genomics studies are more and more persnickety about you specifying *exactly* what you did and how you got your results, as each pipeline is bespoke and has unique flaws that no others do.
