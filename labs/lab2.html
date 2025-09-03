@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.39">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -89,10 +89,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-f1ee3210ae63f1ea454c627e8e4588eb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-0f0490645a6a1a06582982a868fad8e8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -205,7 +205,10 @@ window.Quarto = {
   <ul>
   <li><a href="#data-structures-in-genomics" id="toc-data-structures-in-genomics" class="nav-link active" data-scroll-target="#data-structures-in-genomics">Data structures in genomics</a>
   <ul class="collapse">
-  <li><a href="#for-this-class" id="toc-for-this-class" class="nav-link" data-scroll-target="#for-this-class">For this class:</a></li>
+  <li><a href="#for-this-class" id="toc-for-this-class" class="nav-link" data-scroll-target="#for-this-class">For this class:</a>
+  <ul class="collapse">
+  <li><a href="#a-note-on-version-control-with-git" id="toc-a-note-on-version-control-with-git" class="nav-link" data-scroll-target="#a-note-on-version-control-with-git">A note on version control with git</a></li>
+  </ul></li>
   <li><a href="#virtual-environments-and-package-management" id="toc-virtual-environments-and-package-management" class="nav-link" data-scroll-target="#virtual-environments-and-package-management">Virtual environments and package management</a>
   <ul class="collapse">
   <li><a href="#r-renv" id="toc-r-renv" class="nav-link" data-scroll-target="#r-renv">R: <code>renv</code></a></li>
@@ -221,7 +224,20 @@ window.Quarto = {
   <li><a href="#julia" id="toc-julia" class="nav-link" data-scroll-target="#julia">Julia</a></li>
   <li><a href="#re-creating-the-main-plot-in-buffalo-2021" id="toc-re-creating-the-main-plot-in-buffalo-2021" class="nav-link" data-scroll-target="#re-creating-the-main-plot-in-buffalo-2021">Re-creating the main plot in Buffalo 2021</a></li>
   <li><a href="#plotting-in-r" id="toc-plotting-in-r" class="nav-link" data-scroll-target="#plotting-in-r">Plotting in <code>R</code></a></li>
+  <li><a href="#plotting-in-julia" id="toc-plotting-in-julia" class="nav-link" data-scroll-target="#plotting-in-julia">Plotting in <code>Julia</code></a></li>
   </ul></li>
+  <li><a href="#genomic-data-formats" id="toc-genomic-data-formats" class="nav-link" data-scroll-target="#genomic-data-formats">Genomic data formats</a>
+  <ul class="collapse">
+  <li><a href="#how-is-a-vcf-file-structured" id="toc-how-is-a-vcf-file-structured" class="nav-link" data-scroll-target="#how-is-a-vcf-file-structured">How is a VCF file structured</a>
+  <ul class="collapse">
+  <li><a href="#headers" id="toc-headers" class="nav-link" data-scroll-target="#headers">Header(s)</a></li>
+  </ul></li>
+  <li><a href="#genotype-information" id="toc-genotype-information" class="nav-link" data-scroll-target="#genotype-information">Genotype information</a></li>
+  <li><a href="#reading-in-vcf-data" id="toc-reading-in-vcf-data" class="nav-link" data-scroll-target="#reading-in-vcf-data">Reading in VCF data</a></li>
+  <li><a href="#julia-solution" id="toc-julia-solution" class="nav-link" data-scroll-target="#julia-solution">Julia solution</a></li>
+  <li><a href="#bonus-plot-your-heterozygosities" id="toc-bonus-plot-your-heterozygosities" class="nav-link" data-scroll-target="#bonus-plot-your-heterozygosities">Bonus: Plot your heterozygosities</a></li>
+  </ul></li>
+  <li><a href="#why-do-i-need-to-write-my-own-code-for-heterozygosity-isnt-there-software-for-this" id="toc-why-do-i-need-to-write-my-own-code-for-heterozygosity-isnt-there-software-for-this" class="nav-link" data-scroll-target="#why-do-i-need-to-write-my-own-code-for-heterozygosity-isnt-there-software-for-this">Why do I need to write my own code for heterozygosity? Isn’t there software for this?</a></li>
   </ul>
 </nav>
     </div>
@@ -273,11 +289,16 @@ window.Quarto = {
 <p>Unprocessed data files can live in the <code>data/</code> folder, letting you avoid editing them by accident and overwriting raw data. Scripts/pipelines to process the data go in <code>scripts/</code>, processed data that you don’t want to regenerate/results tables go in <code>results/</code>, and most importantly, any custom code goes into <code>src/</code>.</p>
 <section id="for-this-class" class="level2">
 <h2 class="anchored" data-anchor-id="for-this-class">For this class:</h2>
-<p>Try working in the directory structure that you’ve been given with this repository. There is a folder including some <code>Julia</code> code I’ve written in <code>src/</code> , and over time it will be populated with more of my own solutions, but you might as well add your own. To avoid <code>git</code> issues when you pull code in future weeks (and later help me when I’m grading code submissions), create a file in <code>src/</code> called <code>last_name.R</code> or <code>last_name.jl</code>, depending on whether you are writing in <code>R</code> or <code>Julia</code>, respectively. Any <em>functions</em> you write - try to keep them in that file. Any scripts you work on for labs can live in the <code>labs</code> folder, just call them <code>lab_{number of lab}last_name.R</code> or <code>.jl</code> or <code>.sh</code></p>
+<p>Try working in the directory structure that you’ve been given with this repository. There is a folder including some <code>Julia</code> code I’ve written in <code>src/</code> , and over time it will be populated with more of my own solutions, but you might as well add your own. To avoid <code>git</code> issues when you pull code in future weeks (and later help me when I’m grading code submissions), create a file in <code>src/</code> called <code>last_name.R</code> or <code>last_name.jl</code>, depending on whether you are writing in <code>R</code> or <code>Julia</code>, respectively. Any <em>functions</em> you write - try to keep them in that file. Any scripts you work on for labs can live in the <code>labs</code> folder, just call them <code>lab_{number of lab}_{last name}.R</code> or <code>.jl</code> or <code>.sh</code> or whatever other format.</p>
+<section id="a-note-on-version-control-with-git" class="level3">
+<h3 class="anchored" data-anchor-id="a-note-on-version-control-with-git">A note on version control with git</h3>
+<p>Some of you are probably already used to using <code>git</code>. For others this might be an entirely new thing. I will not be enforcing, but I do strongly recommend you start getting acquainted with it - it will save you many headaches in the long run. <a href="https://swcarpentry.github.io/git-novice/">Check out this guide</a> for a place to start.</p>
+</section>
 </section>
 <section id="virtual-environments-and-package-management" class="level2">
 <h2 class="anchored" data-anchor-id="virtual-environments-and-package-management">Virtual environments and package management</h2>
-<p>In different projects, you’ll often use different sets of software packages/libraries for your programming language. To make your workflow fully replicable, it’s a good idea to keep track of the package environment with some sort of environment management approach. You don’t need to do this right now, but feel free to come back to this section after you’ve run through the lab and figure out if you want to use any of these approaches.</p>
+<p>In different projects, you’ll often use different sets of software packages/libraries for your programming language. To make your workflow fully replicable, it’s a good idea to keep track of the package environment with some sort of environment management approach. Even if you are not worried about reporting your results eventually in a paper and having the correct package versions listed, consider a common work case: you run a script on your laptop and it runs <em>fine</em>. You then try to run it on data on the cluster, and it breaks: turns out a slightly different package version no longer behaves the way it does on your laptop - but you don’t know that! Looking for help, you then go to send your code to your PI, and they cannot get it running either. So, a result you thought you had gets tossed because you assume you made a mistake <em>somewhere</em>, just not sure where. This can all be avoided by using virtual environments - when you send your code to the cluster, it should include a manifest of each package required AND its version. Same for when you send it to your PI.</p>
+<p>You don’t need to do this right now, but feel free to come back to this section after you’ve run through the lab and figure out what virtual environment works for you.</p>
 <section id="r-renv" class="level3">
 <h3 class="anchored" data-anchor-id="r-renv">R: <code>renv</code></h3>
 <p><code>renv</code> is the best approach to manage your packages in <code>R</code>. Getting it set up is relatively easy, and <code>Rstudio</code> comes with some utility tools for it. Follow the guide <a href="https://rstudio.github.io/renv/">here</a>.</p>
@@ -307,7 +328,7 @@ window.Quarto = {
 <section id="looking-at-the-data-before-importing-it" class="level2">
 <h2 class="anchored" data-anchor-id="looking-at-the-data-before-importing-it">Looking at the data before importing it</h2>
 <p>It’s useful to take a glance at the data before you try to import it. You can try to open the file using your operating system’s choice of software, but Unix tools are built well to precisely do a quick glance. In the <code>labs/data</code> folder, there is a file called <code>buffalo.txt</code>. This is the data from <span class="citation" data-cites="Buffalo2021">(<a href="#ref-Buffalo2021" role="doc-biblioref">Buffalo 2021</a>)</span>. Before you import it, it’s good to take a look at what the data actually looks like. We can do so in the terminal. Navigate to the right directory (if you are on Windows and using <code>wsl</code>, I can help you here). Once there, run the following</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-2</span> buffalo.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> buffalo.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You should see something like:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">species</span> phylum  habitat mating_system   range_cat       sexual_system   abbrv   neut_model_conf genome_species self_est maplen_data_source      diversity_data_source   site_type       hcn     num_markers     parpath pred_piimpact_of_sel    log10_size      log10_range     num_chr totalMb_covered ave_rec assembly_size   selfing map_length      genome_size     fecundity       propagule       bodymass_g      diversity       size    log10_diversitysocial   species_orig    is_terrestrial  n_occ   range   id      kingdom superphylum     subphylum       class  order    family  genus   clean_name      redlist_cat     log10_body_mass log10_body_mass_pred    log10_popsize  log10_density    log10_density_pred      pred_log10_body_mass    pred_log10_density      pred_log10_N    RS     log10_RS log10_map_length        species_lower</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Abatus</span> agassizi Echinodermata   NA      NA      NA      NA      NA      NA      NA      NA      NA      Romiguier et al.        NA      NA      NA      FALSE   NA      NA      <span class="at">-1.6108339156354674</span>     6.633700542517746      NA       NA      NA      NA      NA      NA      NA      0.299   0.002   9.28    0.00727197      0.0245  <span class="at">-2.1383479214336867</span>     FALSE   Abatus agassizi FALSE   72      4302298.533787006       NA      Animalia        NA     NA       Echinoidea      Spatangoida     Schizasteridae  Abatus  Abatus agassizi NA      <span class="at">-0.6534814211608199</span>    <span class="at">-0.6405066270384477</span>      11.065298198284022      4.431597655766276       4.42625265103009        <span class="at">-0.6547028847549656</span>     4.432901908737623       11.066602451255369      175604021.7872247       8.244534458153213       NA     abatus agassizi</span>
@@ -329,6 +350,13 @@ window.Quarto = {
 </section>
 <section id="r" class="level2">
 <h2 class="anchored" data-anchor-id="r">R</h2>
+<p>If you are working in <code>R</code>, open up your IDE and create a new file that you’ll store the commands you wrote here in. If you are using <code>RStudio</code>, consider creating a new R Markdown document. This is similar to the format this webpage is written in, with a mixture of text and executable code. Having good comments around what you’ve done is very helpful in the long run, so some form of Markdown can be great. Your screen should look something like this:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Screenshot 2025-09-03 102539.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p>You’ll run code in the bottom left, and keep versions that ran/worked how you wanted in the top right.</p>
 <p><code>R</code> has a variety of libraries to read in data. <code>readr</code> is the one I will recommend, because it does a good job of automatically detecting various idiosyncracies in the data. To read the datafile in with <code>readr</code>, you’ll need to run the following:</p>
 <div id="4" class="cell" data-execution_count="0">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(readr)</span>
@@ -339,11 +367,18 @@ window.Quarto = {
 </section>
 <section id="julia" class="level2">
 <h2 class="anchored" data-anchor-id="julia">Julia</h2>
-<p>Julia’s <code>CSV</code> package does a good job reading in many data formats, but it also wants to know what kind of object you will turn the data into (a matrix, a vector, a dataframe?). We’ll go for a DataFrame object:</p>
+<p>So, you’ve chosen <code>Julia</code>! If you are using <code>Pluto</code> as your coding environment, starting out will be as simple as creating a new Pluto notebook, and you can begin coding. If you are using VSCodium (or one of its branches), there’ll be a bit more setup in getting some <code>Julia</code> extensions installed, and figuring out the oh-so-many options that Virtual Studio tosses at you. But once you do, open the folder for this repository, and create a new <code>.jl</code> file somewhere and you can start coding. I recommend opening this repository only because you’ll then be able to piggyback off of the package environment for the course (which already has a bunch of packages you’ll probably want/need).</p>
+<p>The way to activate that environment (assuming you run julia from the repository folder) is to open <code>Julia</code> and then hit the <code>]</code> key. This will enter you into <code>Pkg</code> mode (the line should start with <code>Pkg&gt;</code>. Then type:</p>
 <div id="6" class="cell" data-execution_count="0">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span>, <span class="bu">DataFrames</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>buffalo_data <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="st">"&lt;path to your repository&gt;/labs/data/buffalo_2021.txt"</span>,DataFrame)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>activate <span class="st">"PopGen25"</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>instantiate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And all of the necessary packages should be installed and precompiled. Hit the backspace key to exit <code>Pkg</code> mode (the terminal should start with <code>julia&gt;</code> ).</p>
+<p>Julia’s <code>CSV</code> package does a good job reading in many data formats, but it also wants to know what kind of object you will turn the data into (a matrix, a vector, a dataframe?). We’ll go for a DataFrame object:</p>
+<div id="8" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span>, <span class="bu">DataFrames</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>buffalo_data <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="st">"&lt;path to your repository&gt;/labs/data/buffalo_2021.txt"</span>,DataFrame,delim<span class="op">=</span><span class="st">"</span><span class="sc">\t</span><span class="st">"</span>,missingstring<span class="op">=</span>NA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Unlike <code>R</code>, if the package is not installed <code>Julia</code> will just ask if you would like to install it, and if you say yes, it will automatically load it after installation. Now that you have the data open, let’s take a look at it!</p>
 </section>
@@ -354,8 +389,8 @@ window.Quarto = {
 <section id="plotting-in-r" class="level2">
 <h2 class="anchored" data-anchor-id="plotting-in-r">Plotting in <code>R</code></h2>
 <p>Start by checking the opened data. Just like bash, <code>R</code> also has a <code>head</code> command. If you run</p>
-<div id="8" class="cell" data-execution_count="0">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(buffalo_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="10" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(buffalo_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You should see:</p>
 <pre class="{output}"><code># A tibble: 6 × 60
@@ -369,8 +404,8 @@ window.Quarto = {
 6 Aedes albopictus    Arthr… NA      NA            NA        gonochorous   NA   </code></pre>
 <p>Note a couple of things: the data contains 60 columns, the names of the first 8 of which are listed above. Under each name of column the data type is specified (in this case, all <code>chr</code> - character data, e.g.&nbsp;text strings). Not visible in this text, but hopefully in yours - the NA entries should be a different color, highlighting where data is missing.</p>
 <p>You might want to know all of the different columns available: you can get that list by asking for the <code>names</code> of the data</p>
-<div id="10" class="cell" data-execution_count="0">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(buffalo_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="12" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(buffalo_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And you should see:</p>
 <pre class="{output}"><code> [1] "species"               "phylum"                "habitat"              
@@ -393,15 +428,147 @@ window.Quarto = {
 [52] "log10_density"         "log10_density_pred"    "pred_log10_body_mass" 
 [55] "pred_log10_density"    "pred_log10_N"          "RS"                   
 [58] "log10_RS"              "log10_map_length"      "species_lower" </code></pre>
-
-
-
+<p>For your plot, you’ll want to plot <code>pred_log10_N</code> against <code>log10_diversity</code>. Calling a column from a table is done as: <code>&lt;your data frame&gt;$&lt;your column_name&gt;</code>. So, to look at just the predicted log 10 population size, you might call <code>buffalo_data$pred_log10_N</code>.</p>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Hitting the <code>Tab</code> key will automatically try to fill out the rest of a variable/function name in <code>R</code>, and will even give you an overview of arguments one could call. Don’t be shy about mashing the <code>Tab</code> key as you code, just to avoid any coding issues.</p>
+</div>
+</div>
+<p><em>How</em> you plot is an exercise left to the reader. You can do a very basic plot with <code>R</code>s innate <code>plot</code> functions, but I would recommend taking the time to look at something like <code>ggplot2</code> (follow <a href="https://ggplot2.tidyverse.org/articles/ggplot2.html">this</a> guide, but just substitute your data in.)</p>
 </section>
+<section id="plotting-in-julia" class="level2">
+<h2 class="anchored" data-anchor-id="plotting-in-julia">Plotting in <code>Julia</code></h2>
+<p>Before we plot, let’s see how the code differs compared to <code>R</code>. Just like <code>R</code>, we can take a look at the head of the data, but that’s done by default when you import the data. So you should have already seen something like:</p>
+<pre class="{julia-output}"><code>300×60 DataFrame
+ Row │ species                      phylum         habitat      mating_system           range_cat       sexual_system  abbrv     neut_model_conf  genome_species  self_est  maplen_data_source  diversity_data_source  site_type  hc ⋯
+     │ String                       String15       String31?    String31?               String15?       String31?      String7?  String3?         String31?       Float64?  String31?           String31?              Missing    In ⋯
+─────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   1 │ Abatus agassizi              Echinodermata  missing      missing                 missing         missing        missing   missing          missing          missing  missing             Romiguier et al.         missing  mi ⋯
+   2 │ Acromyrmex echinatior        Arthropoda     missing      missing                 missing         male.haploid   missing   missing          missing          missing  Stapley et al.      missing                  missing 
+   3 │ Acropora millepora           Cnidaria       missing      missing                 missing         hermaphrodite  missing   missing          missing          missing  Stapley et al.      missing                  missing 
+   4 │ Acyrthosiphon pisum          Arthropoda     Terrestrial  Partial selfing         Cosmopolitan    parthenogenic  missing   missing          missing          missing  Stapley et al.      Leffler et al.           missing 
+   5 │ Aedes aegypti                Arthropoda     Terrestrial  Obligatory outcrossing  Cosmopolitan    gonochorous    missing   missing          missing          missing  Stapley et al.      Leffler et al.           missing     ⋯
+   6 │ Aedes albopictus             Arthropoda     missing      missing                 missing         gonochorous    missing   missing          missing          missing  Stapley et al.      missing                  missing 
+   7 │ Agelaius phoeniceus          Chordata       Terrestrial  Obligatory outcrossing  Broad endemic   missing        missing   missing          missing          missing  missing             Leffler et al.           missing  mi
+   8 │ Ailuropoda melanoleuca       Chordata       Terrestrial  Obligatory outcrossing  Narrow endemic  missing        missing   missing          missing          missing  missing             Leffler et al.           missing  mi
+  ⋮  │              ⋮                     ⋮             ⋮                 ⋮                   ⋮               ⋮           ⋮             ⋮               ⋮            ⋮              ⋮                     ⋮                ⋮         ⋱
+ 294 │ Tupaia belangeri             Chordata       Terrestrial  Obligatory outcrossing  Broad endemic   missing        missing   missing          missing          missing  missing             Leffler et al.           missing  mi ⋯
+ 295 │ Varecia variegata            Chordata       missing      missing                 missing         missing        missing   missing          missing          missing  missing             Romiguier et al.         missing  mi
+ 296 │ Varecia variegata variegata  Chordata       Terrestrial  Obligatory outcrossing  Island          missing        missing   missing          missing          missing  missing             Leffler et al.           missing  mi
+ 297 │ Vespula vulgaris             Arthropoda     missing      missing                 missing         male.haploid   missing   missing          missing          missing  Stapley et al.      missing                  missing 
+ 298 │ Xenopus tropicalis           Chordata       missing      missing                 missing         gonochorous    missing   missing          missing          missing  Stapley et al.      missing                  missing     ⋯
+ 299 │ Xiphophorus maculatus        Chordata       missing      missing                 missing         gonochorous    missing   missing          missing          missing  Stapley et al.      missing                  missing 
+ 300 │ Zonotrichia albicollis       Chordata       Terrestrial  Obligatory outcrossing  Broad endemic   missing        missing   missing          missing          missing  missing             Leffler et al.           missing  mi
+                                                                                                                                                                                                       47 columns and 285 rows omitte</code></pre>
+<p>A couple worthwile notes - <code>Julia</code> recoded the NAs as <code>missing</code>, which is a special type in <code>Julia</code>, and will give you headaches sometimes. Second, to save on memory, it has used the minimal size of String as the <code>type</code> for each column. For instance, no Phylum is longer than 15 characters, so it uses the String15 type, which has no more than 15 characters. These tiny optimizations add up to one of the reasons <code>Julia</code> performs much faster than <code>R</code> for big projects.</p>
+<p>Julia has a bunch of approaches to plotting, probably more than either <code>R</code> or <code>python</code>, as there’s lots of different subfields with their own plotting approaches. My goal is for you to write scripts <em>you</em> like using, so I’ll recommend taking a look at the plotting backends <a href="https://docs.juliaplots.org/dev/backends/">most are listed here</a> except for the <code>Makie</code> ecosystem, which you can take a glance at [here] . Overall - <code>Plots.jl</code> is a fine starting point, but <code>Makie</code> is popular because it allows some more fine-tuned customization for the plots. If you are working on a cluster, absolutely check out <code>UnicodePlots.jl</code>, as it can spit out nice summary plots without you having to download them/run interactive sessions.</p>
+<p>The syntax to get a particular column in <code>Julia</code> is <code>&lt;data_frame&gt;.&lt;column_name&gt;</code>, so to get the population size you’d write <code>buffalo_data.pred_log10_N</code>. Now, follow the guide for your chosen plotting package and plot <code>N</code> versus <code>diversity</code>.</p>
+</section>
+</section>
+<section id="genomic-data-formats" class="level1">
+<h1>Genomic data formats</h1>
+<p>As with any recent field, the proliferation of data has also meant a giant proliferation of data formats for genomic data. All of this is because of, generally, good intentions:</p>
+<p><img src="images/paste-2.png" class="img-fluid"></p>
+<p>The format we’ll focus on working with has <em>mostly</em> won out the fight for being <em>the</em> standard for genomic data: VCF (Variant Call Format). If you want the nitty gritty <a href="https://samtools.github.io/hts-specs/VCFv4.2.pdf">here</a> is the standard description, with way too many details. Below is a shorter summary.</p>
+<section id="how-is-a-vcf-file-structured" class="level2">
+<h2 class="anchored" data-anchor-id="how-is-a-vcf-file-structured">How is a VCF file structured</h2>
+<section id="headers" class="level3">
+<h3 class="anchored" data-anchor-id="headers">Header(s)</h3>
+<p>VCF files start with a whole bunch of lines starting with <code>##</code>. Some of these lines are mandatory, such as the first one which says which <em>version</em> of the VCF format is being used. Others are useful for good science, like keeping track of the commands that were used to generate this particular VCF. Additionally, there are many lines which determine what kind of details about the genotype calss are contained in the file. For today, we won’t worry about almost all of them, as the file I’ll have you play with is as basic as possible.</p>
+<p>The final line before the data <em>actually</em> starts only has a single <code>#</code>, and is the real header. This has the names of each data column, including eight fixed fields:</p>
+<pre><code>#CHROM   POS   ID    REF    ALT    QUAL    FILTER    INFO    FORMAT</code></pre>
+<p>These are: the chromosome the variant is on, its position, a unique ID, what allele is present in the reference, what alterante allele(s) are found in the data, the quality of the call as a [PHRED]() score, whether the site is filtered out or not, and an INFO column that can contain a lot of information about how the allele, and a FORMAT tab that tells you how the genotypes are listed. Generally, this will start with <code>GT</code>, and can then have various bits after a <code>:</code>, like <code>GT:GQ</code> means that you will first see the genotype, and then the genotype quality. The rest of the header is a list of your individual samples:</p>
+<pre><code>#CHROM   POS   ID    REF    ALT    QUAL    FILTER    INFO   
+FORMAT    Ind1     Ind2     Ind3   .... IndN</code></pre>
+</section>
+</section>
+<section id="genotype-information" class="level2">
+<h2 class="anchored" data-anchor-id="genotype-information">Genotype information</h2>
+<p>After this, the file is a list of sites, each of which starts with the 8 fixed columns of info, and then presents the genotype for each individual. They look something like:</p>
+<pre><code>#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  HG00096 HG00092
+10   60523  rs148087467    T     G       100     PASS    -      GT:GL    0|0:-0.19  0/1:-0.12</code></pre>
+<p>What does this say? Well, individuals <code>HG00096</code> and <code>HG00092</code> have two different genotypes: <code>0|0</code> and <code>0/1</code> . A pipe character <code>|</code> means that the data is phased (we’ll talk about this next week), while the <code>0/1</code> says that the data is unphased. <code>0</code>s indicate the reference allele (T, in this case), while 1 indicates the first ALT allele (G, in this case). You could also see something like:</p>
+<pre><code>#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  HG00096 HG00092
+8   11200  -    T     G,C,A       100     PASS    -      GT    1|2    0/3</code></pre>
+<p>This tells you the individuals have genotypes: GC and TA, respectively.</p>
+</section>
+<section id="reading-in-vcf-data" class="level2">
+<h2 class="anchored" data-anchor-id="reading-in-vcf-data">Reading in VCF data</h2>
+<p>There are many genomics packages in <code>R</code>, and so there are many ways to read in a VCF. Today, I’ll have you try the <code>vcfR</code> package: [link](<a href="https://cran.r-project.org/web/packages/vcfR/index.html" class="uri">https://cran.r-project.org/web/packages/vcfR/index.html</a>), which is fairly minimal. Once you have the package installed and loaded, find the .vcf file in the `labs/data` folder of the repository, and read it in. Because in practice you’ll often work with the genotype matrix, I’ve gone ahead and added a line that converts the vcf to a genotype matrix:</p>
+<div id="14" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(vcfR)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>vcf <span class="op">=</span> read.<span class="fu">vcfR</span>(<span class="st">"&lt;path to file&gt;"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>GT <span class="op">=</span> extract.<span class="fu">gt</span>(vcf,element<span class="op">=</span><span class="st">"GT"</span>,as.numeric<span class="op">=</span>TRUE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The file I’ve constructed is extremely minimal, in that it only contains genotype data. The goal today is to write a function that can calculate the per-site heterozygosity of the data. I have a scaffold of a function set up below, but I want you to play around with the data and find what works for you to actually extract the information.</p>
+<div id="16" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>h_vcf <span class="op">=</span> <span class="kw">function</span>(gt_matrix){</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    h_s <span class="op">=</span> <span class="fu">apply</span>(gt_matrix,<span class="fl">1</span>,h_sample) <span class="co"># Apply takes a matrix (gt_matrix here), an argument specifying whether it should run across each row (1) or column(2) or entry(1:2), and a function to apply to that row/column. </span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>(<span class="fu">sum</span>(h_s)<span class="op">/</span><span class="fu">dim</span>(gt_matrix)[<span class="fl">1</span>]) <span class="co">#h_s will be heterozygosities at each site, so we take their average.</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>h_sample <span class="op">=</span> <span class="kw">function</span>(site){</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">#The above function makes sure you get passed an array of values, where 0 is aa, 1 is Aa and 2 is AA. How do we go from that to sample heterozygosity? </span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Take a look at the lecture notes. Remember that you need to account for how many sites are actually sampled.</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    allele_frequency <span class="op">=</span> ???</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> ???</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> ???</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>(h)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="julia-solution" class="level2">
+<h2 class="anchored" data-anchor-id="julia-solution">Julia solution</h2>
+<p>You’ve already been given some code to calculate h_sample given a vector in class, so I’ll instead ask you to calculate the Site Frequency Spectrum. Of course, feel free to work out by yourself how you would calculate <code>h</code> (the two are very closely linked). In <code>Julia</code>, the best package to deal with <code>vcf</code> files is <code>VCFTools</code>. Unlike <code>vcfR</code>, it will not try to read in and keep the whole vcf in memory. Rather, it has many utility functions to quickly allow you to read in only the data you are interested in. So, to get out the genotype matrix, you would run:</p>
+<div id="18" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">VCFTools</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>gt_matrix <span class="op">=</span> <span class="fu">convert_gt</span>(<span class="dt">Int8</span>,<span class="st">"&lt;path to vcf&gt;"</span>;model<span class="op">=:</span>additive,impute<span class="op">=</span><span class="cn">false</span>,scale<span class="op">=</span><span class="cn">false</span>,center<span class="op">=</span><span class="cn">false</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Notice that because <code>Julia</code> is often column centric, each individual is a row, and each column is now a variant, unlike the VCF. Now, to calculate the SFS, you’ll want to map a function that calculates frequency across the data.</p>
+<div id="20" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">frequency</span>(site)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    freq <span class="op">=</span> <span class="cn">missing</span> <span class="co">#Think about how you'd get allele frequencies from a genotype matrix. How do you account for missing data?</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>(freq)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>sitefreqs <span class="op">=</span> [<span class="fu">frequency</span>(i) for i <span class="kw">in</span> <span class="fu">eachcol</span>(gt_matrix)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="bonus-plot-your-heterozygosities" class="level2">
+<h2 class="anchored" data-anchor-id="bonus-plot-your-heterozygosities">Bonus: Plot your heterozygosities</h2>
+<p>Now that you have hopefully learned both how to plot data, and how to calculate heterozygosity (or the SFS), try to plot your data. As you do so, keep track of what bits of code you keep re-running/re-using. Could you have written your code in a way that made those bits modular? (e.g.: functions that are called, so that you only need to maintain one copy of the function).</p>
+</section>
+</section>
+<section id="why-do-i-need-to-write-my-own-code-for-heterozygosity-isnt-there-software-for-this" class="level1">
+<h1>Why do I need to write my own code for heterozygosity? Isn’t there software for this?</h1>
+<p>Absolutely! The problem is that different software packages make different assumptions/concessions when it comes to any population genetic analyses. In general, for any publication I would recommend using a well vetted external package for your final version, but I would also try to verify at least some of the analysis with your own code. For instance, if you use something like <code>vcftools --het</code> to calculate heterozygosity, it will <em>skip</em> any sites with missing data entirely, and also assume that any site <em>not</em> in the VCF is the reference allele (e.g.&nbsp;het==0). That means that it often under-estimates heterozygosity, especially when there is a lot of missing data. On the other hand, something like <code>pixy</code> (<a href="https://github.com/ksamuk/pixy">link</a>) will do a much more thorough job (although see <span class="citation" data-cites="konopinski2022">(<a href="#ref-konopinski2022" role="doc-biblioref">Konopiński 2022</a>)</span>), but requires you to prepare your vcf files in a specific way. <code>ANGSD</code> is a fairly good method, but requires you to convert your VCFs into <code>PLINK</code> input files (<code>.bed .bim .fam</code>). The estimates often don’t <em>exactly</em> agree, and so it’s good to understand what goes into coding <em>any</em> estimator, let alone a more robust one as implemented in many popular packages. The good news: SNP based estimates are probably robust <span class="citation" data-cites="miller2013">(<a href="#ref-miller2013" role="doc-biblioref">Miller et al. 2013</a>)</span>, but keep in mind how these approaches work. To compare with what you obtained, try to run the following approaches:</p>
+<p>1) <code>diversity.stats</code> from the <code>PopGenome</code> library in <code>R</code>: <a href="https://popgenome.weebly.com/">link</a></p>
+<p>2) <code>vftools labs/data/test_data.vcf.gz --het</code> You can do this on the HPC if you have access, or just install <code>vcftools</code> locally: <a href="https://vcftools.github.io/index.html">link</a>. This is optional - if you have trouble setting up vcftools on your machine, don’t worry about this for the moment, but I’m happy to help you get set-up.</p>
+<p>3) <code>nucleotideDiversity</code> from <code>strataG</code> in <code>R</code>. You’ll need to convert the vcf to a <code>genlight</code> object, good luck!</p>
+<p>You will probably find that each gives a subtly different answer - that is why population genomics studies are more and more persnickety about you specifying <em>exactly</em> what you did and how you got your results, as each pipeline is bespoke and has unique flaws that no others do.</p>
+
+
+
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-Buffalo2021" class="csl-entry" role="listitem">
 Buffalo, Vince. 2021. <span>“Quantifying the Relationship Between Genetic Diversity and Population Size Suggests Natural Selection Cannot Explain Lewontin<span>’</span>s Paradox.”</span> <em>eLife</em> 10 (August). <a href="https://doi.org/10.7554/elife.67509">https://doi.org/10.7554/elife.67509</a>.
+</div>
+<div id="ref-konopinski2022" class="csl-entry" role="listitem">
+Konopiński, Maciej K. 2022. <span>“Average Weighted Nucleotide Diversity Is More Precise Than Pixy in Estimating the True Value of <span><em>π</em></span> from Sequence Sets Containing Missing Data.”</span> <em>Molecular Ecology Resources</em> 23 (2): 348–54. <a href="https://doi.org/10.1111/1755-0998.13707">https://doi.org/10.1111/1755-0998.13707</a>.
+</div>
+<div id="ref-miller2013" class="csl-entry" role="listitem">
+Miller, J M, R M Malenfant, P David, C S Davis, J Poissant, J T Hogg, M Festa-Bianchet, and D W Coltman. 2013. <span>“Estimating Genome-Wide Heterozygosity: Effects of Demographic History and Marker Type.”</span> <em>Heredity</em> 112 (3): 240–47. <a href="https://doi.org/10.1038/hdy.2013.99">https://doi.org/10.1038/hdy.2013.99</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
