@@ -1,0 +1,74 @@
+---
+title: "Discussion 2: Ne versus N"
+execute:
+  freeze: auto  # re-render only when source changes
+format: 
+    revealjs:
+        theme: clean
+        incremental: true
+        preview-links: auto
+        chalkboard: true
+engine: julia
+julia:
+  exeflags: ["--project=../PopGen25"]
+---
+
+# Discussion 2
+
+## Richard Lewontin
+
+![Lewontin is famous for a lot of things: levels of selection, niche construction, spandrels, etc.](images/paste-1.jpeg)
+
+In our case - Lewontin's Paradox
+
+## Lewontin's Paradox
+
+Various formulations, my preferred:
+
+Population sizes vary over \~10 orders of magnitude, mutation over \~3, but diversity only around 2. Why?
+
+Favorite pastime of population geneticists: come up with an explanation.
+
+Demography, selection, mutation bias.
+
+## Demographic explanations
+
+Populations fluctuate, and they never really recover to equilbrium state. Bigger pops fluctuate more.
+
+. . .
+
+Populations were tiny at time of speciation, and there's enough speciation that you are never at equilbrium.
+
+. . .
+
+## Mutation bias
+
+Bigger populations have smaller mutation rates.
+
+. . .
+
+Mutations can only generate so much genetic diversity (caps at 3/4 for some models).
+
+. . .
+
+Gene conversion is biased?
+
+## Selection
+
+Nearly-neutral theory
+
+. . .
+
+Hitchhiking
+
+. . .
+
+Background selection
+
+. . .
+
+Recurrent sweeps
+
+# Buffalo 2021
+
+![](images/paste-2.jpeg){width="816"}
