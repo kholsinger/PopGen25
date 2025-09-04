@@ -399,81 +399,74 @@
     "text": "Putting it together - the basics of neutral theory\nIf we put all of this together, the rate of fixing mutations becomes quite predictable:\nEvery generation there are \\(2N_E\\mu\\) mutations coming in that are fixed at a rate of \\(\\frac{1}{2N_E}\\)\nThe neutral evolutionary rate is therefore:\n\\[\n\\frac{2N_E\\mu}{2N_E} = \\mu\n\\]"
   },
   {
-    "objectID": "notes/Discussion1.html#quizlet-1-answers",
-    "href": "notes/Discussion1.html#quizlet-1-answers",
-    "title": "Discussion 1: LTEEs and Sex",
-    "section": "Quizlet 1 Answers",
-    "text": "Quizlet 1 Answers\n\nAlleles initially appear at a frequency of 1/N in haploid, 1/2N in diploid populations.\nFixation probability is \\(p_0\\), so 1/N (1/2N)\nEvolution seems to happen more rapidly in small populations - mutations are lost or fixed faster. BUT - this is ignoring any other evolutionary forces."
+    "objectID": "notes/Discussion2.html#richard-lewontin",
+    "href": "notes/Discussion2.html#richard-lewontin",
+    "title": "Discussion 2: Ne versus N",
+    "section": "Richard Lewontin",
+    "text": "Richard Lewontin\n\nLewontin is famous for a lot of things: levels of selection, niche construction, spandrels, etc.In our case - Lewontin’s Paradox"
   },
   {
-    "objectID": "notes/Discussion1.html#long-term-evolutionary-experiments-ltee",
-    "href": "notes/Discussion1.html#long-term-evolutionary-experiments-ltee",
-    "title": "Discussion 1: LTEEs and Sex",
-    "section": "Long Term Evolutionary Experiments (LTEE)",
-    "text": "Long Term Evolutionary Experiments (LTEE)\nBroadly popular type of study:\n\nPut a population in a new environment and track it\nPopular with yeast/bacteria, since ancestral populations can easily be preserved\nUseful to test how adaptation happens in the lab\nUseful to test how adaptation differs in slightly different circumstances"
+    "objectID": "notes/Discussion2.html#lewontins-paradox",
+    "href": "notes/Discussion2.html#lewontins-paradox",
+    "title": "Discussion 2: Ne versus N",
+    "section": "Lewontin’s Paradox",
+    "text": "Lewontin’s Paradox\nVarious formulations, my preferred:\nPopulation sizes vary over ~10 orders of magnitude, mutation over ~3, but diversity only around 2. Why?\nFavorite pastime of population geneticists: come up with an explanation.\nDemography, selection, mutation bias."
   },
   {
-    "objectID": "notes/Discussion1.html#leu-et-al-2020",
-    "href": "notes/Discussion1.html#leu-et-al-2020",
-    "title": "Discussion 1: LTEEs and Sex",
-    "section": "Leu et al 2020",
-    "text": "Leu et al 2020"
+    "objectID": "notes/Discussion2.html#demographic-explanations",
+    "href": "notes/Discussion2.html#demographic-explanations",
+    "title": "Discussion 2: Ne versus N",
+    "section": "Demographic explanations",
+    "text": "Demographic explanations\nPopulations fluctuate, and they never really recover to equilbrium state. Bigger pops fluctuate more.\n\nPopulations were tiny at time of speciation, and there’s enough speciation that you are never at equilbrium."
   },
   {
-    "objectID": "notes/Discussion1.html#what-did-they-actually-do",
-    "href": "notes/Discussion1.html#what-did-they-actually-do",
-    "title": "Discussion 1: LTEEs and Sex",
-    "section": "What did they actually do?",
-    "text": "What did they actually do?"
+    "objectID": "notes/Discussion2.html#mutation-bias",
+    "href": "notes/Discussion2.html#mutation-bias",
+    "title": "Discussion 2: Ne versus N",
+    "section": "Mutation bias",
+    "text": "Mutation bias\nBigger populations have smaller mutation rates.\n\nMutations can only generate so much genetic diversity (caps at 3/4 for some models).\n\n\nGene conversion is biased?"
   },
   {
-    "objectID": "notes/Discussion1.html#why-did-they-do-this",
-    "href": "notes/Discussion1.html#why-did-they-do-this",
-    "title": "Discussion 1: LTEEs and Sex",
-    "section": "Why did they do this?",
-    "text": "Why did they do this?\n\nLong-standing hypotheses about why sex even exists.\n\n\nOne with a lot of backing - adaptation is faster in sexual organisms (they avoid Clonal Interference)\nWe’ll talk more about Clonal interference in Week 3.\n\n\nLTEE experiments find mixed results - sometimes asexual evolve slower, other times equal.\n\n\nState of the art only in haploids!"
+    "objectID": "notes/Discussion2.html#selection",
+    "href": "notes/Discussion2.html#selection",
+    "title": "Discussion 2: Ne versus N",
+    "section": "Selection",
+    "text": "Selection\nNearly-neutral theory\n\nHitchhiking\n\n\nBackground selection\n\n\nRecurrent sweeps"
   },
   {
-    "objectID": "notes/Discussion1.html#lets-discuss",
-    "href": "notes/Discussion1.html#lets-discuss",
-    "title": "Discussion 1: LTEEs and Sex",
-    "section": "Let’s discuss",
-    "text": "Let’s discuss\nIn small groups (4-5), try to figure out the following:\n1) What are some expected advantages of sexual reproduction? What are the disadvantages? Which ones are supported in this study?\n2) Why do the authors believe asexuals adapted as quickly/sexuals more slowly?\n3) Try to enumerate the actual differences between sexual and asexual treatments."
+    "objectID": "labs.html",
+    "href": "labs.html",
+    "title": "Labs",
+    "section": "",
+    "text": "Here you’ll find links for the labs on Thursdays, although they should all be available if you pull the latest version of the git before class time as well."
   },
   {
-    "objectID": "notes/Discussion1.html#figure-2",
-    "href": "notes/Discussion1.html#figure-2",
-    "title": "Discussion 1: LTEEs and Sex",
-    "section": "Figure 2",
-    "text": "Figure 2"
+    "objectID": "labs.html#git",
+    "href": "labs.html#git",
+    "title": "Labs",
+    "section": "Git?",
+    "text": "Git?\nThe code for the class is hosted at: https://github.com/adagilis/PopGen25. Lab assignments will be placed in the creatively titled labs folder there. To get the latest version of the code, you’ll need to download it from git. The easiest way to do this is to clone the whole repository, and pull any changes before class time. If that doesn’t make sense to you, we’ll cover it in slightly more detail in class, or do some self study."
   },
   {
-    "objectID": "notes/Discussion1.html#figure-3",
-    "href": "notes/Discussion1.html#figure-3",
-    "title": "Discussion 1: LTEEs and Sex",
-    "section": "Figure 3",
-    "text": "Figure 3"
+    "objectID": "labs.html#pluto",
+    "href": "labs.html#pluto",
+    "title": "Labs",
+    "section": "Pluto",
+    "text": "Pluto\nSome labs we will run using Pluto - an interactive notebook that uses Julia as the programming language, and will let us get on the same page faster for certain pieces of code.\nTo get runnning with Pluto, you’ll just want to follow the guide at Pluto’s website.\nOnce Pluto is running, load in the lab .jl file provided for each lab and we’ll work from there!"
   },
   {
-    "objectID": "notes/Discussion1.html#figure-4",
-    "href": "notes/Discussion1.html#figure-4",
-    "title": "Discussion 1: LTEEs and Sex",
-    "section": "Figure 4",
-    "text": "Figure 4"
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Population Genetics 2025",
+    "section": "",
+    "text": "Welome to PopGen!\nThis is the website for Population Genetics (EEB 5348) at UConn. Here you will find notes on each of the lectures, links to papers and other materials as they become needed.\n\n\nAbout the course\nThe focus of this course is to introduce graduate students to population genetic thinking. I firmly believe the greatest benefit of population genetics is not knowledge of any particular approach or methodology (there are too many for any course to cover adequately), but a firm grasp of how population genetics can be used to 1) test and hone your intuition of evolutionary processes, 2) understand how (and why) different population genetics approaches work and 3) develop heuristics to examine any system of interest. Throughout the course we will examine classic population genetics results, read recent literature that either uses those results or throws them completely into question and work on developing a set of scripts and skills in a language of your choice (although I will recommend either Julia or R) to investigate the population genetics of different data-sets.\n\n\nSchedule/General Logistics\nEach week, we will start with a lecture on Tuesday, followed by a paper discussion and lab on Thursday. The goal of this class structure is to be able to introduce general concepts/remind you of things you should remember from your Genetics/Evolution courses, introduce classic PopGen results, followed by a more in-depth dive in the state of the art uses of those results and some practical advice of coding how they work. Here’s a general week-by-week overlay of the topics. Lecture notes will be added as links as we go along\n\n\n\nWeek\nTopic(s)\nReading\nLecture Notes\n\n\n\n\nAug 26-28\nIntro, Wright-Fisher\nLeu et al\nLecture 1\n\n\nSep 2-4\nGenetic diversity measurements\nBuffalo\nLecture 2\n\n\nSep 9-11\nDivergence at a site, mutation, molecular models of evolution\nPeede et al\n\n\n\nSep 16-18\nSexual reproduction, Recombination, LD\nHahn and Mishra\n\n\n\nSep 23-25\nPopulation structure, migration, differentiation\n\n\n\n\nSep 30-Oct 2\nSelection at a single locus, types of selection\n\n\n\n\nOct 7-9\nProject Meetings, no regular class\nNA\n\n\n\nOct 14-16\nThe Coalescent\n\n\n\n\nOct 21-23\nConfounded selection, demography, mutation\n\n\n\n\nOct 28-30\nCo-estimating selection and demography\n\n\n\n\nNov 4-6\nAncestral Recombination Graphs\n\n\n\n\nNov 11-13\nStudents’ choice\n\n\n\n\nNov 18-20\nStudents’ choice\n\n\n\n\nNov 25-27\nTHANKSGIVING BREAK\n\n\n\n\nDec 2-4\nProject meetings, final projects due Dec 4\nNA"
   },
   {
-    "objectID": "notes/Discussion1.html#takeaways",
-    "href": "notes/Discussion1.html#takeaways",
-    "title": "Discussion 1: LTEEs and Sex",
-    "section": "Takeaways",
-    "text": "Takeaways\nReally cool experiment!\n\nUnclear why asexual populations showed any fitness increase - not any of the individual mutations they identified."
-  },
-  {
-    "objectID": "notes/Discussion1.html#lets-look-at-the-data",
-    "href": "notes/Discussion1.html#lets-look-at-the-data",
-    "title": "Discussion 1: LTEEs and Sex",
-    "section": "Let’s look at the data!",
-    "text": "Let’s look at the data!\nSupplementary Data File 1 (available online, or on the github for this class).\n\nIn lab, we’ll see how Wright-Fisher simulations can match up to this data (if they can)"
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "This website is build using Quarto markdown. The benefit for you is that all of the code for lectures/labs is available on its associated github repository."
   },
   {
     "objectID": "labs/lab2.html",
@@ -581,39 +574,81 @@
     "text": "Bonus: Plot your heterozygosities\nNow that you have hopefully learned both how to plot data, and how to calculate heterozygosity (or the SFS), try to plot your data. As you do so, keep track of what bits of code you keep re-running/re-using. Could you have written your code in a way that made those bits modular? (e.g.: functions that are called, so that you only need to maintain one copy of the function)."
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "This website is build using Quarto markdown. The benefit for you is that all of the code for lectures/labs is available on its associated github repository."
+    "objectID": "notes/Discussion1.html#quizlet-1-answers",
+    "href": "notes/Discussion1.html#quizlet-1-answers",
+    "title": "Discussion 1: LTEEs and Sex",
+    "section": "Quizlet 1 Answers",
+    "text": "Quizlet 1 Answers\n\nAlleles initially appear at a frequency of 1/N in haploid, 1/2N in diploid populations.\nFixation probability is \\(p_0\\), so 1/N (1/2N)\nEvolution seems to happen more rapidly in small populations - mutations are lost or fixed faster. BUT - this is ignoring any other evolutionary forces."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Population Genetics 2025",
-    "section": "",
-    "text": "Welome to PopGen!\nThis is the website for Population Genetics (EEB 5348) at UConn. Here you will find notes on each of the lectures, links to papers and other materials as they become needed.\n\n\nAbout the course\nThe focus of this course is to introduce graduate students to population genetic thinking. I firmly believe the greatest benefit of population genetics is not knowledge of any particular approach or methodology (there are too many for any course to cover adequately), but a firm grasp of how population genetics can be used to 1) test and hone your intuition of evolutionary processes, 2) understand how (and why) different population genetics approaches work and 3) develop heuristics to examine any system of interest. Throughout the course we will examine classic population genetics results, read recent literature that either uses those results or throws them completely into question and work on developing a set of scripts and skills in a language of your choice (although I will recommend either Julia or R) to investigate the population genetics of different data-sets.\n\n\nSchedule/General Logistics\nEach week, we will start with a lecture on Tuesday, followed by a paper discussion and lab on Thursday. The goal of this class structure is to be able to introduce general concepts/remind you of things you should remember from your Genetics/Evolution courses, introduce classic PopGen results, followed by a more in-depth dive in the state of the art uses of those results and some practical advice of coding how they work. Here’s a general week-by-week overlay of the topics. Lecture notes will be added as links as we go along\n\n\n\nWeek\nTopic(s)\nReading\nLecture Notes\n\n\n\n\nAug 26-28\nIntro, Wright-Fisher\nLeu et al\nLecture 1\n\n\nSep 2-4\nGenetic diversity measurements\nBuffalo\nLecture 2\n\n\nSep 9-11\nDivergence at a site, mutation, molecular models of evolution\nPeede et al\n\n\n\nSep 16-18\nSexual reproduction, Recombination, LD\nHahn and Mishra\n\n\n\nSep 23-25\nPopulation structure, migration, differentiation\n\n\n\n\nSep 30-Oct 2\nSelection at a single locus, types of selection\n\n\n\n\nOct 7-9\nProject Meetings, no regular class\nNA\n\n\n\nOct 14-16\nThe Coalescent\n\n\n\n\nOct 21-23\nConfounded selection, demography, mutation\n\n\n\n\nOct 28-30\nCo-estimating selection and demography\n\n\n\n\nNov 4-6\nAncestral Recombination Graphs\n\n\n\n\nNov 11-13\nStudents’ choice\n\n\n\n\nNov 18-20\nStudents’ choice\n\n\n\n\nNov 25-27\nTHANKSGIVING BREAK\n\n\n\n\nDec 2-4\nProject meetings, final projects due Dec 4\nNA"
+    "objectID": "notes/Discussion1.html#long-term-evolutionary-experiments-ltee",
+    "href": "notes/Discussion1.html#long-term-evolutionary-experiments-ltee",
+    "title": "Discussion 1: LTEEs and Sex",
+    "section": "Long Term Evolutionary Experiments (LTEE)",
+    "text": "Long Term Evolutionary Experiments (LTEE)\nBroadly popular type of study:\n\nPut a population in a new environment and track it\nPopular with yeast/bacteria, since ancestral populations can easily be preserved\nUseful to test how adaptation happens in the lab\nUseful to test how adaptation differs in slightly different circumstances"
   },
   {
-    "objectID": "labs.html",
-    "href": "labs.html",
-    "title": "Labs",
-    "section": "",
-    "text": "Here you’ll find links for the labs on Thursdays, although they should all be available if you pull the latest version of the git before class time as well."
+    "objectID": "notes/Discussion1.html#leu-et-al-2020",
+    "href": "notes/Discussion1.html#leu-et-al-2020",
+    "title": "Discussion 1: LTEEs and Sex",
+    "section": "Leu et al 2020",
+    "text": "Leu et al 2020"
   },
   {
-    "objectID": "labs.html#git",
-    "href": "labs.html#git",
-    "title": "Labs",
-    "section": "Git?",
-    "text": "Git?\nThe code for the class is hosted at: https://github.com/adagilis/PopGen25. Lab assignments will be placed in the creatively titled labs folder there. To get the latest version of the code, you’ll need to download it from git. The easiest way to do this is to clone the whole repository, and pull any changes before class time. If that doesn’t make sense to you, we’ll cover it in slightly more detail in class, or do some self study."
+    "objectID": "notes/Discussion1.html#what-did-they-actually-do",
+    "href": "notes/Discussion1.html#what-did-they-actually-do",
+    "title": "Discussion 1: LTEEs and Sex",
+    "section": "What did they actually do?",
+    "text": "What did they actually do?"
   },
   {
-    "objectID": "labs.html#pluto",
-    "href": "labs.html#pluto",
-    "title": "Labs",
-    "section": "Pluto",
-    "text": "Pluto\nSome labs we will run using Pluto - an interactive notebook that uses Julia as the programming language, and will let us get on the same page faster for certain pieces of code.\nTo get runnning with Pluto, you’ll just want to follow the guide at Pluto’s website.\nOnce Pluto is running, load in the lab .jl file provided for each lab and we’ll work from there!"
+    "objectID": "notes/Discussion1.html#why-did-they-do-this",
+    "href": "notes/Discussion1.html#why-did-they-do-this",
+    "title": "Discussion 1: LTEEs and Sex",
+    "section": "Why did they do this?",
+    "text": "Why did they do this?\n\nLong-standing hypotheses about why sex even exists.\n\n\nOne with a lot of backing - adaptation is faster in sexual organisms (they avoid Clonal Interference)\nWe’ll talk more about Clonal interference in Week 3.\n\n\nLTEE experiments find mixed results - sometimes asexual evolve slower, other times equal.\n\n\nState of the art only in haploids!"
+  },
+  {
+    "objectID": "notes/Discussion1.html#lets-discuss",
+    "href": "notes/Discussion1.html#lets-discuss",
+    "title": "Discussion 1: LTEEs and Sex",
+    "section": "Let’s discuss",
+    "text": "Let’s discuss\nIn small groups (4-5), try to figure out the following:\n1) What are some expected advantages of sexual reproduction? What are the disadvantages? Which ones are supported in this study?\n2) Why do the authors believe asexuals adapted as quickly/sexuals more slowly?\n3) Try to enumerate the actual differences between sexual and asexual treatments."
+  },
+  {
+    "objectID": "notes/Discussion1.html#figure-2",
+    "href": "notes/Discussion1.html#figure-2",
+    "title": "Discussion 1: LTEEs and Sex",
+    "section": "Figure 2",
+    "text": "Figure 2"
+  },
+  {
+    "objectID": "notes/Discussion1.html#figure-3",
+    "href": "notes/Discussion1.html#figure-3",
+    "title": "Discussion 1: LTEEs and Sex",
+    "section": "Figure 3",
+    "text": "Figure 3"
+  },
+  {
+    "objectID": "notes/Discussion1.html#figure-4",
+    "href": "notes/Discussion1.html#figure-4",
+    "title": "Discussion 1: LTEEs and Sex",
+    "section": "Figure 4",
+    "text": "Figure 4"
+  },
+  {
+    "objectID": "notes/Discussion1.html#takeaways",
+    "href": "notes/Discussion1.html#takeaways",
+    "title": "Discussion 1: LTEEs and Sex",
+    "section": "Takeaways",
+    "text": "Takeaways\nReally cool experiment!\n\nUnclear why asexual populations showed any fitness increase - not any of the individual mutations they identified."
+  },
+  {
+    "objectID": "notes/Discussion1.html#lets-look-at-the-data",
+    "href": "notes/Discussion1.html#lets-look-at-the-data",
+    "title": "Discussion 1: LTEEs and Sex",
+    "section": "Let’s look at the data!",
+    "text": "Let’s look at the data!\nSupplementary Data File 1 (available online, or on the github for this class).\n\nIn lab, we’ll see how Wright-Fisher simulations can match up to this data (if they can)"
   },
   {
     "objectID": "notes/Lecture1.html#welcome-to-the-class",
