@@ -588,6 +588,13 @@
     "text": "Pluto\nSome labs we will run using Pluto - an interactive notebook that uses Julia as the programming language, and will let us get on the same page faster for certain pieces of code.\nTo get runnning with Pluto, you’ll just want to follow the guide at Pluto’s website.\nOnce Pluto is running, load in the lab .jl file provided for each lab and we’ll work from there!"
   },
   {
+    "objectID": "labs.html#lab-files",
+    "href": "labs.html#lab-files",
+    "title": "Labs",
+    "section": "Lab files:",
+    "text": "Lab files:\nLab 1 can be accessed with Pluto, and will be found in the labs/lab1.jl file.\nLab 2 is here"
+  },
+  {
     "objectID": "notes/Discussion2.html#richard-lewontin",
     "href": "notes/Discussion2.html#richard-lewontin",
     "title": "Discussion 2: Ne versus N",
