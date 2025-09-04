@@ -3,6 +3,8 @@ title: Lab 2
 theme: cosmo
 bibliography: references.bib
 engine: julia
+execute:
+  freeze: auto  # re-render only when source changes
 ---
 
 # Data structures in genomics
