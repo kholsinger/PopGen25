@@ -27,7 +27,11 @@ Various formulations, my preferred:
 
 Population sizes vary over \~10 orders of magnitude, mutation over \~3, but diversity only around 2. Why?
 
+. . . 
+
 Favorite pastime of population geneticists: come up with an explanation.
+
+. . .
 
 Demography, selection, mutation bias.
 
@@ -72,3 +76,13 @@ Recurrent sweeps
 # Buffalo 2021
 
 ![](images/paste-2.jpeg){width="816"}
+
+## Discussion today
+
+Again, in small groups:
+
+1) Which reasons does Vince think are compelling explanations for LP?
+
+2) What reasons do _you_ think best explain the paradox, and why?
+
+3) For your favorite explanation, try to think of data you'd need to test it.

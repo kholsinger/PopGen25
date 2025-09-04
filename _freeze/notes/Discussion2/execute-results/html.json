@@ -1,0 +1,12 @@
+{
+  "hash": "0849140fd0d69bcd0da7d1090991e3cc",
+  "result": {
+    "engine": "julia",
+    "markdown": "---\ntitle: \"Discussion 2: Ne versus N\"\nexecute:\n  freeze: auto  # re-render only when source changes\nformat: \n    revealjs:\n        theme: clean\n        incremental: true\n        preview-links: auto\n        chalkboard: true\nengine: julia\njulia:\n  exeflags: [\"--project=../PopGen25\"]\n---\n\n\n\n# Discussion 2\n\n## Richard Lewontin\n\n![Lewontin is famous for a lot of things: levels of selection, niche construction, spandrels, etc.](images/paste-1.jpeg)\n\nIn our case - Lewontin's Paradox\n\n## Lewontin's Paradox\n\nVarious formulations, my preferred:\n\nPopulation sizes vary over \\~10 orders of magnitude, mutation over \\~3, but diversity only around 2. Why?\n\nFavorite pastime of population geneticists: come up with an explanation.\n\nDemography, selection, mutation bias.\n\n## Demographic explanations\n\nPopulations fluctuate, and they never really recover to equilbrium state. Bigger pops fluctuate more.\n\n. . .\n\nPopulations were tiny at time of speciation, and there's enough speciation that you are never at equilbrium.\n\n. . .\n\n## Mutation bias\n\nBigger populations have smaller mutation rates.\n\n. . .\n\nMutations can only generate so much genetic diversity (caps at 3/4 for some models).\n\n. . .\n\nGene conversion is biased?\n\n## Selection\n\nNearly-neutral theory\n\n. . .\n\nHitchhiking\n\n. . .\n\nBackground selection\n\n. . .\n\nRecurrent sweeps\n\n# Buffalo 2021\n\n![](images/paste-2.jpeg){width=\"816\"}\n\n",
+    "supporting": [
+      "Discussion2_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}
