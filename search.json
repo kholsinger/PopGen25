@@ -410,7 +410,7 @@
     "href": "notes/Discussion2.html#lewontins-paradox",
     "title": "Discussion 2: Ne versus N",
     "section": "Lewontin’s Paradox",
-    "text": "Lewontin’s Paradox\nVarious formulations, my preferred:\nPopulation sizes vary over ~10 orders of magnitude, mutation over ~3, but diversity only around 2. Why?\nFavorite pastime of population geneticists: come up with an explanation.\nDemography, selection, mutation bias."
+    "text": "Lewontin’s Paradox\nVarious formulations, my preferred:\nPopulation sizes vary over ~10 orders of magnitude, mutation over ~3, but diversity only around 2. Why?\n\nFavorite pastime of population geneticists: come up with an explanation.\n\n\nDemography, selection, mutation bias."
   },
   {
     "objectID": "notes/Discussion2.html#demographic-explanations",
@@ -432,6 +432,13 @@
     "title": "Discussion 2: Ne versus N",
     "section": "Selection",
     "text": "Selection\nNearly-neutral theory\n\nHitchhiking\n\n\nBackground selection\n\n\nRecurrent sweeps"
+  },
+  {
+    "objectID": "notes/Discussion2.html#discussion-today",
+    "href": "notes/Discussion2.html#discussion-today",
+    "title": "Discussion 2: Ne versus N",
+    "section": "Discussion today",
+    "text": "Discussion today\nAgain, in small groups:\n\nWhich reasons does Vince think are compelling explanations for LP?\nWhat reasons do you think best explain the paradox, and why?\nFor your favorite explanation, try to think of data you’d need to test it."
   },
   {
     "objectID": "labs.html",
