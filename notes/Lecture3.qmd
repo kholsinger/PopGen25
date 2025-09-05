@@ -4,14 +4,117 @@ execute:
   freeze: auto  # re-render only when source changes
 format: 
     revealjs:
-        theme: solarized
+        theme: dracula
         incremental: true
         preview-links: auto
         chalkboard: true
 engine: julia
 julia:
   exeflags: ["--project=../PopGen25"]
+bibliography: references.bib
 ---
+
+# Rate of evolution
+
+Last week we started incorporating some mutation into the WF model. This week, we'll consider what happens as two populations evolve independently.
+
+. . .
+
+We'll start with a very simple question:
+
+If populations are diverging over time, which should diverge faster: small or large populations?
+
+. . .
+
+## Rate of allele fixation
+
+Recall that any new allele that's starting at frequency $\frac{1}{2N_E}$ also has a probability of $\frac{1}{2N_E}$ of becoming fixed.
+
+. . .
+
+Let's say there are lots of these mutations, each with probability of $\frac{1}{2N_E}$ of becoming fixed. How long do we have to wait until an allele is fixed?
+
+. . .
+
+If they evolve independently, this is just the `geometric` probability distribution. We know that the $E[geom(\lambda)] = \frac{1}{\lambda}$ - the average waiting time for a success is inverse to the rate.
+
+## Geometric distribution
+
+Think of something like a dice roll. What's the waiting time to get a 6?
+
+. . .
+
+Each trial, probability is $\frac{1}{6}$. On average, 6 tries until you get it.
+
+```{julia}
+using Distributions, Plots, Measures
+theme(:dracula)
+dice_roll = rand(1:6,100000)
+idx = findall(dice_roll .== 6)
+histogram([idx[i+1]-idx[i] for i in 1:(length(idx)-1)],xlab="Dice rolls until a 6",ylab="Frequency",leg=false,normalized=true)
+```
+
+## Cntd.
+
+. . .
+
+So, on average of $2N_E$ generations for a mutation to fix, and each generation $\frac{1}{2N_E}$ mutations fix.
+
+. . .
+
+That tells us the rate of fixation, assuming there are infinite mutations.
+
+## But there are not infinite mutations
+
+. . .
+
+How many new alleles come in every generation?
+
+. . .
+
+There are $2N_E$ copies of the genome. Then - there are $2N_E\mu$ new mutations every generation.
+
+## Putting it together - the basics of neutral theory
+
+If we put all of this together, the rate of fixing mutations becomes quite predictable:
+
+Every generation there are $2N_E\mu$ mutations coming in that are fixed at a rate of $\frac{1}{2N_E}$
+
+The neutral evolutionary rate is therefore:
+
+$$
+\frac{2N_E\mu}{2N_E} = \mu
+$$
+
+## Neutral theory
+
+The result that evolutionary rate should be equal to the neutral mutation rate is at the core of Neutral Theory.
+
+. . .
+
+Pioneered by Motoo Kimura and Susano Ohta, with lots of subsequent results. [@Kimura1968; @Ohta1996; @Kern2018]
+
+. . .
+
+The idea is that *most* mutations are expected to be neutral.
+
+. . .
+
+Therefore *most* divergence is going to be described simply by the neutral mutation rate.
+
+. . .
+
+Is this true?
+
+## Support for Neutral Theory  {.smaller}
+
+Initial data: amino acid sequences from then available species showed a constant rate of evolution.
+
+. . .
+
+The distribution of fitness effects (DFE) of new mutations *looks* like it supports Neutral Theory [@Sanjuán2004]
+
+![](images/paste-3.jpeg){width="344"}
 
 ## Many places we simplified
 
@@ -47,30 +150,11 @@ One step up from our biallelic model is recognizing that there are, actually, fo
 
 . . .
 
-We can think of these mutation rates along a _state _di
+We can think of these mutation rates along a \_state \_di
 
 . . .
 
-{dot}
-digraph G {
-  layout=circo
-  A
-  T
-  C
-  G
-  A -> C [label="μ"]
-  A -> T [label="μ"]
-  A -> G [label="μ"]
-  C -> T [label="μ"]
-  C -> G [label="μ"]
-  C -> A [label="μ"]
-  T -> G [label="μ"]
-  T -> A [label="μ"]
-  T -> C [label="μ"]
-  G -> A [label="μ"]
-  G -> C [label="μ"]
-  G -> T [label="μ"]
-}
+{dot} digraph G { layout=circo A T C G A -\> C \[label="μ"\] A -\> T \[label="μ"\] A -\> G \[label="μ"\] C -\> T \[label="μ"\] C -\> G \[label="μ"\] C -\> A \[label="μ"\] T -\> G \[label="μ"\] T -\> A \[label="μ"\] T -\> C \[label="μ"\] G -\> A \[label="μ"\] G -\> C \[label="μ"\] G -\> T \[label="μ"\] }
 
 ## A series of increasingly more complicated models
 
@@ -96,26 +180,7 @@ That's 12 mutation rates and four bases, for 16 parameters!
 
 The General Time Reversible model still has 10 parameters, but they are simpler.
 
-{dot}
-digraph G {
-  layout=circo
-  A
-  T
-  C
-  G
-  A -> C [label="μ1"]
-  A -> T [label="μ2"]
-  A -> G [label="μ3"]
-  C -> T [label="μ4"]
-  C -> G [label="μ5"]
-  C -> A [label="μ1"]
-  T -> G [label="μ6"]
-  T -> A [label="μ2"]
-  T -> C [label="μ4"]
-  G -> A [label="μ4"]
-  G -> C [label="μ5"]
-  G -> T [label="μ6"]
-}
+{dot} digraph G { layout=circo A T C G A -\> C \[label="μ1"\] A -\> T \[label="μ2"\] A -\> G \[label="μ3"\] C -\> T \[label="μ4"\] C -\> G \[label="μ5"\] C -\> A \[label="μ1"\] T -\> G \[label="μ6"\] T -\> A \[label="μ2"\] T -\> C \[label="μ4"\] G -\> A \[label="μ4"\] G -\> C \[label="μ5"\] G -\> T \[label="μ6"\] }
 
 . . .
 
@@ -132,4 +197,3 @@ Most population genomics approaches, however, will try to fit a model to your da
 . . .
 
 iqTree2 for instance, has ModelFinder which will try to detect the type of sequence and most appropriate evolutionary model.
-
