@@ -63,8 +63,8 @@ default(guidefontsize=16,titlefontsize=18,legendfontsize=16)
 include("../src/Pop_gen_code.jl")
 
 
-sim1 = [WrightFisher(1000,0.0,100000,0.000001;every=1000) for _ in 1:1000]
-sim2 = [WrightFisher(1000,0.0,100000,0.000001;every=1000) for _ in 1:1000]
+sim1 = [WrightFisher(1000,0.0,100000;μ=0.000001,every=1000) for _ in 1:1000]
+sim2 = [WrightFisher(1000,0.0,100000;μ=0.000001,every=1000) for _ in 1:1000]
 p1=plot(sim1,leg=false,title="Pop1",c=:red,alpha=0.2,ylabel="Allele Frequency",xlabel="1k Generations")
 p2=plot(sim2,leg=false,title="Pop2",c=:orange,alpha=0.2,ylabel="Allele Frequency",xlabel="1k Generations")
 plot(p1,p2,margins=5mm,size=(1200,600))

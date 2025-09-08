@@ -2,7 +2,7 @@
 using Distributions
 
 
-function WrightFisher(N,p,t,μ;every=1)
+function WrightFisher(N,p,t;μ=0.0,every=1)
     g=1
     freqs=Float64[]
     append!(freqs,p)
