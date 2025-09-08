@@ -26,7 +26,48 @@ If populations are diverging over time, which should diverge faster: small or la
 
 . . .
 
-## Rate of allele fixation
+## What is divergence?
+
+To answer this question we first need to consider what it means for two sequences to be diverged.
+
+. . .
+
+Divergence is often measured as a simple pairwise distance between two sequences:
+
+```{generic}
+>species_1
+ATgcATgATTtA
+>species_2
+ATcgATcATTcA
+```
+
+. . .
+
+Raw differences: 4
+
+Per/base: 0.3
+
+## More formally:
+
+The pairwise divergence between two sequences is *d*.
+
+. . .
+
+Let *k* be the number of substitutions fixed per generation.
+
+. . .
+
+So, comparing a random sequence from an ancestor to a descendent:
+
+$$
+E[d_t] = kt+\theta_{Anc}
+$$
+
+$\theta_{Anc}$ accounts for the fact that there is genetic variation in the ancestor, so it depends on *who* you compare the descendant to.
+
+If $t>>1$, then $\theta_{Anc}$ is comparably small and can be ignored.
+
+## Rate of allele fixation: what is $k$
 
 Recall that any new allele that's starting at frequency $\frac{1}{2N_E}$ also has a probability of $\frac{1}{2N_E}$ of becoming fixed.
 
@@ -86,6 +127,8 @@ $$
 \frac{2N_E\mu}{2N_E} = \mu
 $$
 
+So: $d=\mu t$
+
 ## Neutral theory
 
 The result that evolutionary rate should be equal to the neutral mutation rate is at the core of Neutral Theory.
@@ -108,13 +151,29 @@ Is this true?
 
 ## Support for Neutral Theory  {.smaller}
 
-Initial data: amino acid sequences from then available species showed a constant rate of evolution.
+Some nucleotide and amino acid sequences show a constant rate of evolution [@Blair2003].
 
-. . .
+![](images/paste-8.png){width="507"}
 
-The distribution of fitness effects (DFE) of new mutations *looks* like it supports Neutral Theory [@Sanjuán2004]
+## More evidence
+
+The distribution of fitness effects (DFE) of new mutations *looks* like it supports Neutral Theory [@Sanjuán2004].
 
 ![](images/paste-3.jpeg){width="344"}
+
+## Evidence against neutral theory
+
+Long run: substitution rates are *not* constant across species [@Lynch2016]
+
+![](images/paste-6.png){width="386"}
+
+## More evidence against:
+
+Substitution rates are not even the same across a genome [@Mackay2012]
+
+![](images/paste-7.png)
+
+## 
 
 ## Many places we simplified
 
@@ -154,15 +213,34 @@ We can think of these mutation rates along a \_state \_di
 
 . . .
 
-{dot} digraph G { layout=circo A T C G A -\> C \[label="μ"\] A -\> T \[label="μ"\] A -\> G \[label="μ"\] C -\> T \[label="μ"\] C -\> G \[label="μ"\] C -\> A \[label="μ"\] T -\> G \[label="μ"\] T -\> A \[label="μ"\] T -\> C \[label="μ"\] G -\> A \[label="μ"\] G -\> C \[label="μ"\] G -\> T \[label="μ"\] }
+```{dot}
+digraph G { 
+layout=circo 
+A 
+T 
+C 
+G 
+A -> C [label="μ"] 
+A -> T [label="μ"] 
+A -> G [label="μ"] 
+C -> T [label="μ"] 
+C -> G [label="μ"] 
+C -> A [label="μ"] 
+T -> G [label="μ"] 
+T -> A [label="μ"] 
+T -> C [label="μ"] 
+G -> A [label="μ"] 
+G -> C [label="μ"] 
+G -> T [label="μ"] }
+```
 
 ## A series of increasingly more complicated models
 
-More complex models have more parameters, distinguishing between transitions and transversion (Kimura 1981, K81).
+More complex models have more parameters, distinguishing between transitions and transversion ([@Kimura1981] K81).
 
 . . .
 
-And allowing for different expected base frequencies (Felsenstein 81).
+And allowing for different expected base frequencies [@Felsenstein1981].
 
 . . .
 
@@ -192,8 +270,38 @@ When possible, we'll use a single parameter model.
 
 . . .
 
-Most population genomics approaches, however, will try to fit a model to your data.
+Most practical population genomics approaches, however, will either need you to specify or will fit a molecular model of sequence evolution.
 
 . . .
 
-iqTree2 for instance, has ModelFinder which will try to detect the type of sequence and most appropriate evolutionary model.
+`iqTree2` for instance, has `ModelFinder` which will try to detect the type of sequence and most appropriate evolutionary model.
+
+## Back to divergence
+
+Recognizing that sequences are not all equally likely to evolve leads us to needing to think about different rates of evolution.
+
+. . .
+
+A fully neutral sequence might still diverge at the rate of $\mu$, but what about a sequence where mutations are *not* neutral?
+
+. . .
+
+Sequence could be constrained - slower divergence, or be under positive selection: faster than neutral.
+
+. . .
+
+Even if Neutral Theory is not correct, the Neutral Model is a useful null model to measure against.
+
+## dN, dS
+
+Instead of considering divergence across a whole region, we might want to split among sites that are (presumably) neutral, and sites that may not be.
+
+. . .
+
+Generally, synonymous substitutions are unlikely to affect fitness, as they are not contributing to a difference in protein sequence.
+
+. . .
+
+On the other hand, changes which lead to a different amino acid (non-synonymous), are more likely to be selected.
+
+## What do they look like?
