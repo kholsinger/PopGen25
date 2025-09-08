@@ -14,6 +14,132 @@
     "text": "Leu et al, 2020: URL, PDF"
   },
   {
+    "objectID": "notes/Lecture3.html#visualizing-in-simulations",
+    "href": "notes/Lecture3.html#visualizing-in-simulations",
+    "title": "Lecture 3",
+    "section": "Visualizing in simulations:",
+    "text": "Visualizing in simulations:"
+  },
+  {
+    "objectID": "notes/Lecture3.html#allele-frequency-differences-between-populations",
+    "href": "notes/Lecture3.html#allele-frequency-differences-between-populations",
+    "title": "Lecture 3",
+    "section": "Allele frequency differences between populations?",
+    "text": "Allele frequency differences between populations?"
+  },
+  {
+    "objectID": "notes/Lecture3.html#what-is-divergence",
+    "href": "notes/Lecture3.html#what-is-divergence",
+    "title": "Lecture 3",
+    "section": "What is divergence?",
+    "text": "What is divergence?\nTo answer this question we first need to consider what it means for two sequences to be diverged.\n\nDivergence is often measured as a simple pairwise distance between two sequences:\n&gt;species_1\nATgcATgATTtA\n&gt;species_2\nATcgATcATTcA\n\n\nRaw differences: 4\nPer/site: 0.3"
+  },
+  {
+    "objectID": "notes/Lecture3.html#in-simulations",
+    "href": "notes/Lecture3.html#in-simulations",
+    "title": "Lecture 3",
+    "section": "In simulations",
+    "text": "In simulations"
+  },
+  {
+    "objectID": "notes/Lecture3.html#more-formally",
+    "href": "notes/Lecture3.html#more-formally",
+    "title": "Lecture 3",
+    "section": "More formally:",
+    "text": "More formally:\nThe pairwise divergence between two sequences is d.\n\nLet k be the number of substitutions fixed per generation.\n\n\nSo, comparing a random sequence from an ancestor to a descendent:\n\\[\nE[d_t] = kt+\\theta_{Anc}\n\\]\n\\(\\theta_{Anc}\\) accounts for the fact that there is genetic variation in the ancestor, so it depends on who you compare the descendant to.\nIf \\(t&gt;&gt;1\\), then \\(\\theta_{Anc}\\) is comparably small and can be ignored."
+  },
+  {
+    "objectID": "notes/Lecture3.html#d-in-simulations",
+    "href": "notes/Lecture3.html#d-in-simulations",
+    "title": "Lecture 3",
+    "section": "d in simulations:",
+    "text": "d in simulations:"
+  },
+  {
+    "objectID": "notes/Lecture3.html#d_xy---one-estimate-of-d",
+    "href": "notes/Lecture3.html#d_xy---one-estimate-of-d",
+    "title": "Lecture 3",
+    "section": "\\(d_{XY}\\) - one estimate of d",
+    "text": "\\(d_{XY}\\) - one estimate of d\nWe can estimate d with \\(d_{XY}\\):\n\\[\nd_{XY}=p_1(1-p_2)+(1-p_1)p_2\n\\]\nWhere \\(p_i\\) is the allele frequency in the \\(i^{th}\\) population.\n\nJust the probability that if two alleles grabbed at random mismatch."
+  },
+  {
+    "objectID": "notes/Lecture3.html#rate-of-allele-fixation-what-is-k",
+    "href": "notes/Lecture3.html#rate-of-allele-fixation-what-is-k",
+    "title": "Lecture 3",
+    "section": "Rate of allele fixation: what is \\(k\\)",
+    "text": "Rate of allele fixation: what is \\(k\\)\nRecall that any new allele that’s starting at frequency \\(\\frac{1}{2N_E}\\) also has a probability of \\(\\frac{1}{2N_E}\\) of becoming fixed.\n\nLet’s say there are lots of these mutations, each with probability of \\(\\frac{1}{2N_E}\\) of becoming fixed. How long do we have to wait until an allele is fixed?\n\n\nIf they evolve independently, this is just the geometric probability distribution. We know that the \\(E[geom(\\lambda)] = \\frac{1}{\\lambda}\\) - the average waiting time for a success is inverse to the rate."
+  },
+  {
+    "objectID": "notes/Lecture3.html#geometric-distribution",
+    "href": "notes/Lecture3.html#geometric-distribution",
+    "title": "Lecture 3",
+    "section": "Geometric distribution",
+    "text": "Geometric distribution\nThink of something like a dice roll. What’s the waiting time to get a 6?\n\nEach trial, probability is \\(\\frac{1}{6}\\). On average, 6 tries until you get it."
+  },
+  {
+    "objectID": "notes/Lecture3.html#cntd.",
+    "href": "notes/Lecture3.html#cntd.",
+    "title": "Lecture 3",
+    "section": "Cntd.",
+    "text": "Cntd.\n\nSo, on average of \\(2N_E\\) generations for a mutation to fix, and each generation \\(\\frac{1}{2N_E}\\) mutations fix.\n\n\nThat tells us the rate of fixation, assuming there are infinite mutations."
+  },
+  {
+    "objectID": "notes/Lecture3.html#but-there-are-not-infinite-mutations",
+    "href": "notes/Lecture3.html#but-there-are-not-infinite-mutations",
+    "title": "Lecture 3",
+    "section": "But there are not infinite mutations",
+    "text": "But there are not infinite mutations\n\nHow many new alleles come in every generation?\n\n\nThere are \\(2N_E\\) copies of the genome. Then - there are \\(2N_E\\mu\\) new mutations every generation."
+  },
+  {
+    "objectID": "notes/Lecture3.html#putting-it-together---the-basics-of-neutral-theory",
+    "href": "notes/Lecture3.html#putting-it-together---the-basics-of-neutral-theory",
+    "title": "Lecture 3",
+    "section": "Putting it together - the basics of neutral theory",
+    "text": "Putting it together - the basics of neutral theory\nIf we put all of this together, the rate of fixing mutations becomes quite predictable:\nEvery generation there are \\(2N_E\\mu\\) mutations coming in that are fixed at a rate of \\(\\frac{1}{2N_E}\\)\nThe neutral evolutionary rate is therefore:\n\\[\nk=\\frac{1}{2N_E}2N_E\\mu = \\mu\n\\]\nSo: \\(d=\\mu t\\)"
+  },
+  {
+    "objectID": "notes/Lecture3.html#back-to-simulations",
+    "href": "notes/Lecture3.html#back-to-simulations",
+    "title": "Lecture 3",
+    "section": "Back to simulations",
+    "text": "Back to simulations"
+  },
+  {
+    "objectID": "notes/Lecture3.html#neutral-theory",
+    "href": "notes/Lecture3.html#neutral-theory",
+    "title": "Lecture 3",
+    "section": "Neutral theory",
+    "text": "Neutral theory\nThe result that evolutionary rate should be equal to the neutral mutation rate is at the core of Neutral Theory.\n\nPioneered by Motoo Kimura and Susano Ohta, with lots of subsequent results. (KIMURA 1968; Ohta and Gillespie 1996; Kern and Hahn 2018)\n\n\nThe idea is that most mutations are expected to be neutral.\n\n\nTherefore most divergence is going to be described simply by the neutral mutation rate.\n\n\nIs this true?"
+  },
+  {
+    "objectID": "notes/Lecture3.html#support-for-neutral-theory",
+    "href": "notes/Lecture3.html#support-for-neutral-theory",
+    "title": "Lecture 3",
+    "section": "Support for Neutral Theory",
+    "text": "Support for Neutral Theory\nSome nucleotide and amino acid sequences show a constant rate of evolution (Blair Hedges and Kumar 2003)."
+  },
+  {
+    "objectID": "notes/Lecture3.html#more-evidence",
+    "href": "notes/Lecture3.html#more-evidence",
+    "title": "Lecture 3",
+    "section": "More evidence",
+    "text": "More evidence\nThe distribution of fitness effects (DFE) of new mutations looks like it supports Neutral Theory (Sanjuán, Moya, and Elena 2004)."
+  },
+  {
+    "objectID": "notes/Lecture3.html#evidence-against-neutral-theory",
+    "href": "notes/Lecture3.html#evidence-against-neutral-theory",
+    "title": "Lecture 3",
+    "section": "Evidence against neutral theory",
+    "text": "Evidence against neutral theory\nLong run: substitution rates are not constant across species (Lynch et al. 2016)"
+  },
+  {
+    "objectID": "notes/Lecture3.html#more-evidence-against",
+    "href": "notes/Lecture3.html#more-evidence-against",
+    "title": "Lecture 3",
+    "section": "More evidence against:",
+    "text": "More evidence against:\nSubstitution rates are not even the same across a genome (Mackay et al. 2012)"
+  },
+  {
     "objectID": "notes/Lecture3.html#many-places-we-simplified",
     "href": "notes/Lecture3.html#many-places-we-simplified",
     "title": "Lecture 3",
@@ -32,28 +158,98 @@
     "href": "notes/Lecture3.html#jukes-cantor-jc69",
     "title": "Lecture 3",
     "section": "Jukes-Cantor (JC69)",
-    "text": "Jukes-Cantor (JC69)\nOne step up from our biallelic model is recognizing that there are, actually, four bases possible.\n\nWe can think of these mutation rates along a _state _di\n\n\n{dot} digraph G { layout=circo A T C G A -&gt; C [label=“μ”] A -&gt; T [label=“μ”] A -&gt; G [label=“μ”] C -&gt; T [label=“μ”] C -&gt; G [label=“μ”] C -&gt; A [label=“μ”] T -&gt; G [label=“μ”] T -&gt; A [label=“μ”] T -&gt; C [label=“μ”] G -&gt; A [label=“μ”] G -&gt; C [label=“μ”] G -&gt; T [label=“μ”] }"
+    "text": "Jukes-Cantor (JC69)\nOne step up from our biallelic model is recognizing that there are, actually, four bases possible.\n\nWe can think of these mutation rates along a _state _di\n\n\n\n\n\n\n\n\n\nG\n\n\n\nA\n\nA\n\n\n\nT\n\nT\n\n\n\nA-&gt;T\n\n\nμ\n\n\n\nC\n\nC\n\n\n\nA-&gt;C\n\n\nμ\n\n\n\nG\n\nG\n\n\n\nA-&gt;G\n\n\nμ\n\n\n\nT-&gt;A\n\n\nμ\n\n\n\nT-&gt;C\n\n\nμ\n\n\n\nT-&gt;G\n\n\nμ\n\n\n\nC-&gt;A\n\n\nμ\n\n\n\nC-&gt;T\n\n\nμ\n\n\n\nC-&gt;G\n\n\nμ\n\n\n\nG-&gt;A\n\n\nμ\n\n\n\nG-&gt;T\n\n\nμ\n\n\n\nG-&gt;C\n\n\nμ"
   },
   {
     "objectID": "notes/Lecture3.html#a-series-of-increasingly-more-complicated-models",
     "href": "notes/Lecture3.html#a-series-of-increasingly-more-complicated-models",
     "title": "Lecture 3",
     "section": "A series of increasingly more complicated models",
-    "text": "A series of increasingly more complicated models\nMore complex models have more parameters, distinguishing between transitions and transversion (Kimura 1981, K81).\n\nAnd allowing for different expected base frequencies (Felsenstein 81).\n\n\nAnd specifying mutation/base frequencies for the type of sequence (HIV, MT models, etc)\n\n\nUp to each mutation rate/base rate being specified.\n\n\nThat’s 12 mutation rates and four bases, for 16 parameters!"
+    "text": "A series of increasingly more complicated models\nMore complex models have more parameters, distinguishing between transitions and transversion ((Kimura 1981) K81).\n\nAnd allowing for different expected base frequencies (Felsenstein 1981).\n\n\nAnd specifying mutation/base frequencies for the type of sequence (HIV, MT models, etc)\n\n\nUp to each mutation rate/base rate being specified.\n\n\nThat’s 12 mutation rates and four bases, for 16 parameters!"
   },
   {
     "objectID": "notes/Lecture3.html#most-practical-model-gtr",
     "href": "notes/Lecture3.html#most-practical-model-gtr",
     "title": "Lecture 3",
     "section": "Most practical model: GTR",
-    "text": "Most practical model: GTR\nThe General Time Reversible model still has 10 parameters, but they are simpler.\n{dot} digraph G { layout=circo A T C G A -&gt; C [label=“μ1”] A -&gt; T [label=“μ2”] A -&gt; G [label=“μ3”] C -&gt; T [label=“μ4”] C -&gt; G [label=“μ5”] C -&gt; A [label=“μ1”] T -&gt; G [label=“μ6”] T -&gt; A [label=“μ2”] T -&gt; C [label=“μ4”] G -&gt; A [label=“μ4”] G -&gt; C [label=“μ5”] G -&gt; T [label=“μ6”] }\n\nTime reversible because probability forward and back is the same."
+    "text": "Most practical model: GTR\nThe General Time Reversible model still has 10 parameters, but they are simpler: each pair of nucleotides has its own rate.\n\nTime reversible because probability forward and back is the same.\n\n\nMany more model considerations, especially for phylogenetics!"
   },
   {
     "objectID": "notes/Lecture3.html#will-we-use-these-more-complex-models",
     "href": "notes/Lecture3.html#will-we-use-these-more-complex-models",
     "title": "Lecture 3",
     "section": "Will we use these more complex models?",
-    "text": "Will we use these more complex models?\nWhen possible, we’ll use a single parameter model.\n\nMost population genomics approaches, however, will try to fit a model to your data.\n\n\niqTree2 for instance, has ModelFinder which will try to detect the type of sequence and most appropriate evolutionary model."
+    "text": "Will we use these more complex models?\nWhen possible, we’ll use a single parameter model.\n\nMost practical population genomics approaches, however, will either need you to specify or will fit a molecular model of sequence evolution.\n\n\niqTree2 for instance, has ModelFinder which will try to detect the type of sequence and most appropriate evolutionary model."
+  },
+  {
+    "objectID": "notes/Lecture3.html#back-to-divergence",
+    "href": "notes/Lecture3.html#back-to-divergence",
+    "title": "Lecture 3",
+    "section": "Back to divergence",
+    "text": "Back to divergence\n\\(d\\) and \\(d_{XY}\\) are fine estimates when we get rid of that pesky shared variation - \\(\\theta_{Anc}\\)\n\nBut, what if there is appreciable shared variation?"
+  },
+  {
+    "objectID": "notes/Lecture3.html#f-statistics-f_st",
+    "href": "notes/Lecture3.html#f-statistics-f_st",
+    "title": "Lecture 3",
+    "section": "F statistics: \\(F_{ST}\\)",
+    "text": "F statistics: \\(F_{ST}\\)\nLast time we learned about \\(F_{IS}\\), which is an inbreeding coefficient.\n\nYou may have thought it stands for “Inbreeding Statistic” - it’s actually “Individual - Subpopulation”\n\n\n\\(F_{ST}\\) - F statistic for “subpopulation - total population”\n\n\nHow is variation partition w/in populations vs between?"
+  },
+  {
+    "objectID": "notes/Lecture3.html#f_st-definition-cntd.",
+    "href": "notes/Lecture3.html#f_st-definition-cntd.",
+    "title": "Lecture 3",
+    "section": "\\(F_{ST}\\) definition, cntd.",
+    "text": "\\(F_{ST}\\) definition, cntd.\n\\[\nF_{ST} = \\frac{\\sigma_S^2}{\\sigma_T^2} = \\frac{\\sigma_S^2}{\\bar{p}(1-\\bar{p})}\n\\]\nWhere \\(\\sigma_S^2\\) is the variance of the frequency of an allele in sub-populations.\n\nHow do you actually calculate it?\n\n\nSlatkin estimator: if \\(f_i\\) is the frequency of samples from population i:\n\\[\nF_{ST} = \\frac{\\pi_{between}-\\pi_{within}}{\\pi_{between}} = 1- \\frac{f_1(p_1q_1)+f_2(p_2q_2)}{(f_1p_1+f_2p_2)(f_1q_1+f_2q_2)}\n\\]"
+  },
+  {
+    "objectID": "notes/Lecture3.html#f_st---really-useful",
+    "href": "notes/Lecture3.html#f_st---really-useful",
+    "title": "Lecture 3",
+    "section": "\\(F_{ST}\\) - really useful!",
+    "text": "\\(F_{ST}\\) - really useful!\nStudies will frequently look for regions of elevated \\(F_{ST}\\) as regions of divergence.\n\nNeat result from coalescent: \\(T \\approx -\\log(1-F_{ST})\\)\n\n\nSo, can estimate divergence at sites using \\(F_{ST}\\), can look for variation in genome."
+  },
+  {
+    "objectID": "notes/Lecture3.html#problems-with-f_st",
+    "href": "notes/Lecture3.html#problems-with-f_st",
+    "title": "Lecture 3",
+    "section": "Problems with \\(F_{ST}\\)",
+    "text": "Problems with \\(F_{ST}\\)\nDenominator is total genetic diversity.\n\nRegions of low diversity have higher \\(F_{ST}\\) - even if total allele frequency shift is low!"
+  },
+  {
+    "objectID": "notes/Lecture3.html#what-about-divergence-across-a-gene",
+    "href": "notes/Lecture3.html#what-about-divergence-across-a-gene",
+    "title": "Lecture 3",
+    "section": "What about divergence across a gene?",
+    "text": "What about divergence across a gene?\nRecognizing that sequences are not all equally likely to evolve leads us to needing to think about different rates of evolution.\n\nA fully neutral sequence might still diverge at the rate of \\(\\mu\\), but what about a sequence where mutations are not neutral?\n\n\nSequence could be constrained - slower divergence, or be under positive selection: faster than neutral.\n\n\nEven if Neutral Theory is not correct, the Neutral Model is a useful null model to measure against."
+  },
+  {
+    "objectID": "notes/Lecture3.html#d_n-d_s",
+    "href": "notes/Lecture3.html#d_n-d_s",
+    "title": "Lecture 3",
+    "section": "\\(d_N\\), \\(d_S\\)",
+    "text": "\\(d_N\\), \\(d_S\\)\nInstead of considering divergence across a whole region, we might want to split among sites that are (presumably) neutral, and sites that may not be.\n\nGenerally, synonymous substitutions are unlikely to affect fitness, as they are not contributing to a difference in protein sequence.\n\n\nOn the other hand, changes which lead to a different amino acid (non-synonymous), are more likely to be selected."
+  },
+  {
+    "objectID": "notes/Lecture3.html#omega-fracd_nd_s---constraint-on-gene-evolution",
+    "href": "notes/Lecture3.html#omega-fracd_nd_s---constraint-on-gene-evolution",
+    "title": "Lecture 3",
+    "section": "\\(\\omega = \\frac{d_N}{d_S}\\) - constraint on gene evolution",
+    "text": "\\(\\omega = \\frac{d_N}{d_S}\\) - constraint on gene evolution\nIf a sequence is truly neutral:\n\\(\\frac{d_N}{d_S}=1\\)\n\nIf sequence constrained:\n\\(\\frac{d_N}{d_S} &lt;&lt; 1\\)\nIf sequence positively selected:\n\\(\\frac{d_N}{d_S} &gt; 1\\)"
+  },
+  {
+    "objectID": "notes/Lecture3.html#how-to-estimate",
+    "href": "notes/Lecture3.html#how-to-estimate",
+    "title": "Lecture 3",
+    "section": "How to estimate?",
+    "text": "How to estimate?\nWe’ll talk Thursday, but many tools, we’ll focus on PaML .\nNeed trees, sequences (amino acid and nucleotide) - so many tools to learn.\nIf you are worried about your laptop holding up - let me know! We’ll try to get you on HPC ahead of class."
+  },
+  {
+    "objectID": "notes/Lecture3.html#references",
+    "href": "notes/Lecture3.html#references",
+    "title": "Lecture 3",
+    "section": "References",
+    "text": "References\n\n\n\n\nBlair Hedges, S., and Sudhir Kumar. 2003. “Genomic Clocks and Evolutionary Timescales.” Trends in Genetics 19 (4): 200–206. https://doi.org/10.1016/s0168-9525(03)00053-2.\n\n\nFelsenstein, Joseph. 1981. “Evolutionary Trees from DNA Sequences: A Maximum Likelihood Approach.” Journal of Molecular Evolution 17 (6): 368–76. https://doi.org/10.1007/bf01734359.\n\n\nKern, Andrew D, and Matthew W Hahn. 2018. “The Neutral Theory in Light of Natural Selection.” Edited by Sudhir Kumar. Molecular Biology and Evolution 35 (6): 1366–71. https://doi.org/10.1093/molbev/msy092.\n\n\nKimura, M. 1981. “Estimation of Evolutionary Distances Between Homologous Nucleotide Sequences.” Proceedings of the National Academy of Sciences 78 (1): 454–58. https://doi.org/10.1073/pnas.78.1.454.\n\n\nKIMURA, MOTOO. 1968. “Evolutionary Rate at the Molecular Level.” Nature 217 (5129): 624–26. https://doi.org/10.1038/217624a0.\n\n\nLynch, Michael, Matthew S. Ackerman, Jean-Francois Gout, Hongan Long, Way Sung, W. Kelley Thomas, and Patricia L. Foster. 2016. “Genetic Drift, Selection and the Evolution of the Mutation Rate.” Nature Reviews Genetics 17 (11): 704–14. https://doi.org/10.1038/nrg.2016.104.\n\n\nMackay, Trudy F. C., Stephen Richards, Eric A. Stone, Antonio Barbadilla, Julien F. Ayroles, Dianhui Zhu, Sònia Casillas, et al. 2012. “The Drosophila Melanogaster Genetic Reference Panel.” Nature 482 (7384): 173–78. https://doi.org/10.1038/nature10811.\n\n\nOhta, Tomoko, and John H. Gillespie. 1996. “Development of Neutral and Nearly Neutral Theories.” Theoretical Population Biology 49 (2): 128–42. https://doi.org/10.1006/tpbi.1996.0007.\n\n\nSanjuán, Rafael, Andrés Moya, and Santiago F. Elena. 2004. “The Distribution of Fitness Effects Caused by Single-Nucleotide Substitutions in an RNA Virus.” Proceedings of the National Academy of Sciences 101 (22): 8396–8401. https://doi.org/10.1073/pnas.0400146101."
   },
   {
     "objectID": "notes/Lecture1.html#welcome-to-the-class",
@@ -704,14 +900,14 @@
     "href": "notes/Lecture2.html#lets-check-simulations",
     "title": "Lecture 2",
     "section": "Let’s check simulations",
-    "text": "Let’s check simulations\nWe can take a look at our simulations:\n\nusing Plots, Measures, LaTeXStrings\ntheme(:solarized_light)\ndefault(legendfontsize=18,guidefontsize=18)\ninclude(\"../src/Pop_gen_code.jl\")\nsims = [WrightFisher(1000,0.5,1000) for _ in 1:500]\nh = broadcast(x -&gt; 2 .* x .*(1 .- x),sims)\np1 = plot(h,label=\"\",c=:black,alpha=0.2,\nxlabel=\"Generations\",ylabel=L\"H\",margins=4mm,size=(800,500))\nm = [mean(col) for col in eachcol(h)]\nplot!(p1,m,c=:red,label=\"Mean\",linewidth=2)"
+    "text": "Let’s check simulations\nWe can take a look at our simulations:"
   },
   {
     "objectID": "notes/Lecture2.html#versus-expectation",
     "href": "notes/Lecture2.html#versus-expectation",
     "title": "Lecture 2",
     "section": "Versus expectation:",
-    "text": "Versus expectation:\n\nfunction exp_h(h,N,t)\n    hs = zeros(t)\n    hs[1] = h\n    for g in 1:(t-1)\n        hs[g+1] = (1-1/N)*hs[g]\n    end\n    return(hs)\nend\nplot!(p1,exp_h(0.5,1000,1000),label=\"Theory\",linewidth=2)"
+    "text": "Versus expectation:"
   },
   {
     "objectID": "notes/Lecture2.html#how-quickly-does-heterozygosity-decay",
@@ -732,14 +928,14 @@
     "href": "notes/Lecture2.html#lets-check-some-intuition",
     "title": "Lecture 2",
     "section": "Let’s check some intuition",
-    "text": "Let’s check some intuition\nHere, we’ll use the example data from Hahn’s textbook :\n\nhahn_data = \n[\"T\" \"T\" \"A\" \"C\" \"A\" \"A\" \"T\" \"C\" \"C\" \"G\" \"A\" \"T\" \"C\" \"G\" \"T\";\n \"-\" \"-\" \"A\" \"C\" \"G\" \"A\" \"T\" \"G\" \"C\" \"G\" \"C\" \"T\" \"C\" \"G\" \"T\";\n \"T\" \"C\" \"A\" \"C\" \"A\" \"A\" \"T\" \"G\" \"C\" \"G\" \"A\" \"T\" \"G\" \"G\" \"A\";\n \"T\" \"T\" \"A\" \"C\" \"G\" \"A\" \"T\" \"G\" \"-\" \"-\" \"C\" \"T\" \"C\" \"G\" \"T\"]\n[join(i) for i in eachrow(hahn_data)]\n\n4-element Vector{String}:\n \"TTACAATCCGATCGT\"\n \"--ACGATGCGCTCGT\"\n \"TCACAATGCGATGGA\"\n \"TTACGATG--CTCGT\"\n\n\nEach row is an individual, each column is a site. Notice how some sites have missing data “-”.\n\nWhat is the heterozygosity at the third site?\n\n\nHow can we account for missing data in calculating heterozygosity?"
+    "text": "Let’s check some intuition\nHere, we’ll use the example data from Hahn’s textbook :\n\n\n4-element Vector{String}:\n \"TTACAATCCGATCGT\"\n \"--ACGATGCGCTCGT\"\n \"TCACAATGCGATGGA\"\n \"TTACGATG--CTCGT\"\n\n\nEach row is an individual, each column is a site. Notice how some sites have missing data “-”.\n\nWhat is the heterozygosity at the third site?\n\n\nHow can we account for missing data in calculating heterozygosity?"
   },
   {
     "objectID": "notes/Lecture2.html#code-examples",
     "href": "notes/Lecture2.html#code-examples",
     "title": "Lecture 2",
     "section": "Code examples",
-    "text": "Code examples\nHahn’s alignment:\n\nusing StatsBase\n\nfunction sample_h(alleles)\n    obs_alleles=collect(skipmissing(alleles)) #Genotypes might be missing - we skip those.\n    n=length(obs_alleles)\n    freqs = values(countmap(obs_alleles)) ./ n #Get allele frequencies for each allele\n    return( n/(n-1)*(1-sum(freqs .^ 2))) #Return the expected sample h\nend\n\nfunction sample_π(genotype_matrix)\n    return(sum([sample_h(genotype_matrix[:,x]) for x in 1:size(genotype_matrix)[2]])/size(genotype_matrix)[2]) #Sum of h over all sites/number of sites\nend\n\nsample_π(replace(hahn_data,\"-\"=&gt;missing))\n\n0.23333333333333334\n\n\n#| echo: true\nusing StatsBase\n\nfunction sample_h(alleles)\n    obs_alleles=collect(skipmissing(alleles)) #Genotypes might be missing - we skip those.\n    n=length(obs_alleles)\n    freqs = values(countmap(obs_alleles)) ./ n #Get allele frequencies for each allele\n    return( n/(n-1)*(1-sum(freqs .^ 2))) #Return the expected sample h\nend\n\nfunction sample_π(genotype_matrix)\n    return(sum([sample_h(genotype_matrix[:,x]) for x in 1:size(genotype_matrix)[2]])/size(genotype_matrix)[2]) #Sum of h over all sites/number of sites\nend\n\nsample_π(replace(hahn_data,\"-\"=&gt;missing))"
+    "text": "Code examples\nHahn’s alignment:\n\n\n0.23333333333333334\n\n\n#| echo: true\nusing StatsBase\n\nfunction sample_h(alleles)\n    obs_alleles=collect(skipmissing(alleles)) #Genotypes might be missing - we skip those.\n    n=length(obs_alleles)\n    freqs = values(countmap(obs_alleles)) ./ n #Get allele frequencies for each allele\n    return( n/(n-1)*(1-sum(freqs .^ 2))) #Return the expected sample h\nend\n\nfunction sample_π(genotype_matrix)\n    return(sum([sample_h(genotype_matrix[:,x]) for x in 1:size(genotype_matrix)[2]])/size(genotype_matrix)[2]) #Sum of h over all sites/number of sites\nend\n\nsample_π(replace(hahn_data,\"-\"=&gt;missing))"
   },
   {
     "objectID": "notes/Lecture2.html#what-should-pi-look-like",
@@ -795,7 +991,7 @@
     "href": "notes/Lecture2.html#not-the-only-heterozygosity",
     "title": "Lecture 2",
     "section": "Not the only heterozygosity",
-    "text": "Not the only heterozygosity\n\\(\\pi\\) is a commonly used estimator for genetic diversity, but it has some issues. The biggest is that when true diversity is high, variance in sample diversity is also really high. That is, it’s hard to get an accurate estimate.\n\nusing Plots, LaTeXStrings, Measures\nfunction var_pi(θ,n)\n    (n+1)/(3*(n-1))*θ+2(n^2+n+3)/(9*n*(n-1))*θ^2\nend\nns=range(10,1000,length=50)\nthetas = [var_pi.(theta,ns) for theta in [0.01,0.1,0.5,1.0]]\nplot(ns,thetas,xlabel=\"n\",ylabel=L\"Var(\\pi)\",label=[\"0.01\" \"0.1\" \"0.5\" \"1.0\"],margins=5mm)"
+    "text": "Not the only heterozygosity\n\\(\\pi\\) is a commonly used estimator for genetic diversity, but it has some issues. The biggest is that when true diversity is high, variance in sample diversity is also really high. That is, it’s hard to get an accurate estimate."
   },
   {
     "objectID": "notes/Lecture2.html#alternatives-to-pi-theta_w",
@@ -809,7 +1005,7 @@
     "href": "notes/Lecture2.html#theta_w---lower-variance-with-greater-sampling",
     "title": "Lecture 2",
     "section": "\\(\\theta_W\\) - lower variance with greater sampling",
-    "text": "\\(\\theta_W\\) - lower variance with greater sampling\nUnlike \\(\\pi\\), \\(\\theta_W\\) shows a nice decrease in sample variance with more samples.\n\nfunction theta_var(n,theta)\n    vars =sum([theta/i for i in 1:(n-1)])+sum([theta^2/(i^2) for i in 1:(n-1)])\n    a = sum([1/i for i in 1:(n-1)])\n    return(vars/(a^2))\nend\n\nthetas_w = [theta_var.(ns,i) for i in [0.01,0.1,0.5,1.0]]\nplot(ns,thetas_w,xlabel=\"n\",ylabel=L\"Var(\\theta_W)\",label=[\"0.1\" \"1\" \"5\" \"10\"],margins=5mm)"
+    "text": "\\(\\theta_W\\) - lower variance with greater sampling\nUnlike \\(\\pi\\), \\(\\theta_W\\) shows a nice decrease in sample variance with more samples."
   },
   {
     "objectID": "notes/Lecture2.html#why-is-theta_w-not-the-standard",
@@ -830,14 +1026,14 @@
     "href": "notes/Lecture2.html#single-data-point-for-whole-genome",
     "title": "Lecture 2",
     "section": "Single data point for whole genome?",
-    "text": "Single data point for whole genome?\n\\(\\theta\\), \\(\\pi\\), \\(h\\) and similar are summary statistics - they reduce potentially huge amounts of data into a single number. That can be useful, but sometimes it’s better to look at a denser view of the data. Let’s make a larger/more complicated data-set.\n\ninclude(\"../src/Pop_gen_code.jl\")\ninclude(\"../src/Stats_utilities.jl\")\nancestral=vec(fake_alignment(1,10000))\n#Just to make the PCA more exciting later - generate two \"independent\" pops here, one of which willl be more diverged within a middle chunk of the data.\npop1 = fake_alignment_biallelic(ancestral,50;gaps=0.01,adj=30)\npop2_1 = fake_alignment_biallelic(ancestral[1:4450],50;gaps=0.01)\npop2_2 = vcat(fake_alignment(10,500),fake_alignment_biallelic(ancestral[4451:4950],40;gaps=0,adj=50))\npop2_3 = fake_alignment_biallelic(ancestral[4951:10000],50;gaps=0.01)\npop2 = hcat(pop2_1,pop2_2,pop2_3)\ngeno_matrix = vcat(pop1,pop2)\n[join(replace(i,missing=&gt;\"-\")) for i in eachrow(geno_matrix)]\n\n100-element Vector{String}:\n \"AAGTTCGTACGCAAAGATCCCTGCTTTCGA\" ⋯ 9940 bytes ⋯ \"C-AGTAAAGGTTTGCTCCTGGCTAAACATA\"\n \"ATGTATGTACGCAAAGATCCGTGCGTTCGT\" ⋯ 9940 bytes ⋯ \"CTAGTAAAGGATGTCTACTCGCTAAACATG\"\n \"ATGTTTGTACGCAAAGATCCCTTCGTACGT\" ⋯ 9940 bytes ⋯ \"CATGTAAAGG-TTTCTCCTGGCTAAACAG-\"\n \"ATGTACGTACGCAAAGATC-CGTCGTTCGA\" ⋯ 9940 bytes ⋯ \"CATGTAAAGGTTGTCTCCGGGCGAAACAGA\"\n \"-TGTTTGTACGCAAAGATCCCTTCGTTCGA\" ⋯ 9940 bytes ⋯ \"CAAGTAAAGGATTTCTCCTGGCTAAACAGG\"\n \"AAGTTTGTACGC-AATATCCGTTCGTACGA\" ⋯ 9940 bytes ⋯ \"CATGTA-CGGTTTTCTCCTGGCTAAACATG\"\n \"AAGTTTGTAC-CAAAGATCCGTTCGTACGA\" ⋯ 9940 bytes ⋯ \"CAAGTAACGGATGGCTCCTGGCTAAACATG\"\n \"ATGTTTGTACGCAAAGATCAGTTCGGTCAA\" ⋯ 9940 bytes ⋯ \"CATGTAACGGA-GGCTCCTGGCTAAACAGG\"\n \"ATGTTTGTACGCAACGATCCGTTCGTTCGA\" ⋯ 9940 bytes ⋯ \"CTAGTAAAGGATTTCTCCTGGCTAAACATG\"\n \"ATGTACGTACGCAAAGATCCGTTCGTACGA\" ⋯ 9940 bytes ⋯ \"AAAGTAACGGATTTC-CCTGGCTAAACAGG\"\n ⋮\n \"ATGTTTGGACGCATACATTTATACGTTCCA\" ⋯ 9940 bytes ⋯ \"CTAGTAACGGTTTTCTCCTG-CACAATTTA\"\n \"GTATTTAGACGCATACATTCATACGATAGA\" ⋯ 9940 bytes ⋯ \"CTAGTAACGGTTTTCTCCTGGCTCAATTTG\"\n \"ATGTTTAGACGCATACATTCATACGTTCGA\" ⋯ 9940 bytes ⋯ \"CAAGTAACGGTTTTCGCCTGGCACAACTTA\"\n \"GTGTTTAGACGCATACATTTGTAGGTTAGA\" ⋯ 9940 bytes ⋯ \"CAAGTAACGGTTTTCTCCTGGAAAAATTTG\"\n \"ATGTTTGGATGCCTACATTTATAGGTTCGA\" ⋯ 9940 bytes ⋯ \"CTAGTAACGGTTTTCTCCTGGCTCAATTTA\"\n \"ATGTTTATACGCATACATTCGTAGGATC-A\" ⋯ 9940 bytes ⋯ \"CAAGTAACGGTTTTCTCCTGACAAAATTAG\"\n \"ATGTTAGGACGGATACAT-CATTCGATACA\" ⋯ 9940 bytes ⋯ \"CTAGTAAC-GTTTTCTCCTCGCTCAATTTG\"\n \"ATGTTTGGACGCATAGATTTATACGATCGA\" ⋯ 9940 bytes ⋯ \"GTAGTAACGGTTTTCTCCTGGCTCAATAAG\"\n \"GTGTTTGGACGGATTCATTCGTAGGTTAGG\" ⋯ 9940 bytes ⋯ \"CAAGTAACGGTTTACTCCTGGCTAAATTTG\""
+    "text": "Single data point for whole genome?\n\\(\\theta\\), \\(\\pi\\), \\(h\\) and similar are summary statistics - they reduce potentially huge amounts of data into a single number. That can be useful, but sometimes it’s better to look at a denser view of the data. Let’s make a larger/more complicated data-set.\n\n\n100-element Vector{String}:\n \"CGCCACTACGTGTCGAAACGTCATGTGCAC\" ⋯ 9940 bytes ⋯ \"CTCCCAGTCTTATGAATATGCACGGTGTAC\"\n \"CGCCGCTCCTGCACCAAACGTCATGTTCAC\" ⋯ 9940 bytes ⋯ \"CTCCCAGTCGTATGAATGTGCACGGTGTGC\"\n \"CCCTACTACGTCTCCAAACGTCATGTGTAC\" ⋯ 9940 bytes ⋯ \"TTCCCAGTCTTATGAAGGTGCACGGTGCAC\"\n \"CCCCATGACGTCTCGAAACGTCATGTGCAC\" ⋯ 9940 bytes ⋯ \"CTCCCAGCCTTATGTA-GTGCATGGGGTGC\"\n \"CCCCACTACTTGTCCAAGCGTCA-GTTTAC\" ⋯ 9940 bytes ⋯ \"CTCACAGTCTTATGTATGTACACGGTGTAC\"\n \"CGCCATTACTTGTCCAAGCGTCATATGTAC\" ⋯ 9940 bytes ⋯ \"CTCACAGTCGTATGAAGGTGGATGGTGTGC\"\n \"CCCCACTACGTCTCGAAACGTCATGTTCAC\" ⋯ 9940 bytes ⋯ \"CTCACAGTCGTATGAATGTACACGGTGTAC\"\n \"CGCTGCTACTGCTCCAAAGGTCCTGTGCAC\" ⋯ 9940 bytes ⋯ \"CTCCCAGTCTTATGAATGTACACGGGGTAC\"\n \"CCCCATTCTTTCTAGAAACGGCATATGTAC\" ⋯ 9940 bytes ⋯ \"CTCCAAGCCTTATGAAGGGGCATGGTGTAC\"\n \"CCCCACTCTTGC-AGAAGCGTCATGTGCAC\" ⋯ 9940 bytes ⋯ \"CTCCAAGCCTTATGAAGATGCACGGTGTAC\"\n ⋮\n \"CCCGACTTCGTAGAGAAGCGGCATGTGTAC\" ⋯ 9940 bytes ⋯ \"GGCAGATTATTGAGATGTTAAAC-GTGGAC\"\n \"CCCGACTTCGTGGCTAAACGTCATGTGTAC\" ⋯ 9940 bytes ⋯ \"CGCAGATTCTTAAGATGGTGCCCGGTGGAA\"\n \"CGCGTCTCCGTGGCTAAACGGCATGTGTAC\" ⋯ 9940 bytes ⋯ \"CGCACATTATTAAGAAGGTACACGGTGGAC\"\n \"CCCGACTCCA-GGCTAAACGTCATATGTAC\" ⋯ 9940 bytes ⋯ \"-TCAGATTATTAAGCAGGAACACGGTGTAA\"\n \"CCCGACTCCATGGATAAACGTCATGTGTAC\" ⋯ 9940 bytes ⋯ \"CTCAGATTACTATGAAGTTGAATGGTGGAC\"\n \"CGCGACTCCGTGGCTAAACGGCATGTGTAC\" ⋯ 9940 bytes ⋯ \"CTCAGATTCTTAAGCTTTTAAATGGAGGAC\"\n \"CCCGACTCGGTAGCTAAACGTCATGTGTGC\" ⋯ 9940 bytes ⋯ \"GTCAGATTCTTATGATGGTGAATGGTCGAA\"\n \"CCCGACTTGATGGCTAAACGTCATATGTAC\" ⋯ 9940 bytes ⋯ \"CGCACATTCTTAAGCATGTAACTGGAGGAA\"\n \"CGCGACTCGGTAGCTAGACGTCATGTGTAC\" ⋯ 9940 bytes ⋯ \"GTCAGATTATTATAAAGTAAACCGGAGGAC\""
   },
   {
     "objectID": "notes/Lecture2.html#windowed-statistics",
     "href": "notes/Lecture2.html#windowed-statistics",
     "title": "Lecture 2",
     "section": "Windowed statistics",
-    "text": "Windowed statistics\n\nfunction window_map(f,data,wnd_size)\n    start = 1\n    stop = start+wnd_size\n    centers = []\n    result = []\n    while(stop &lt; size(data)[2])\n        append!(centers,(start+stop)/2)\n        append!(result,f(data[:,start:stop]))\n        start = stop\n        stop = start + wnd_size\n    end\n    return(centers,result)\nend\nscatter([sample_h(i) for i in eachcol(geno_matrix)],\nlabel=\"\",\nxlabel=\"Window Center\",\nylabel=L\"\\pi\",\nsize=(1000,500),margins=5mm,legend=:outertopright;\nmarkersize=1,markerstrokewidth=0)\nplot!(window_map(sample_π,geno_matrix,1000),label=\"Windowed (1000)\",linewidth=1.5,linecolor=:black)\nplot!(window_map(sample_π,geno_matrix,500),label=\"Windowed (500)\",linewidth=1.5,linecolor=:red)"
+    "text": "Windowed statistics"
   },
   {
     "objectID": "notes/Lecture2.html#but-window-choice-not-arbitrary",
@@ -851,7 +1047,7 @@
     "href": "notes/Lecture2.html#sliding-windows",
     "title": "Lecture 2",
     "section": "Sliding windows",
-    "text": "Sliding windows\n\nfunction sliding_window_map(f,data,wnd_size,wnd_step;first_pos=0)\n    start = 1\n    stop = start+wnd_size\n    centers = []\n    result = []\n    while(stop &lt; size(data)[2])\n        append!(centers,(start+stop)/2)\n        append!(result,f(data[:,start:stop]))\n        start = start + wnd_step\n        stop = start + wnd_size\n    end\n    return(centers .+ first_pos,result)\nend\n\nxlims!(4000,6000)\nylims!(0.2,0.4)\nplot!(sliding_window_map(sample_π,geno_matrix[:,3000:7000],1000,50;first_pos=3000),label=\"Sliding (1000,50)\",linewidth=2)\nplot!(sliding_window_map(sample_π,geno_matrix[:,3500:6500],500,25;first_pos=3500),label=\"Sliding (500,25)\",linewidth=2)\nplot!(sliding_window_map(sample_π,geno_matrix[:,3750:6250],250,10;first_pos=3750),label=\"Sliding (250,10)\",linewidth=2)"
+    "text": "Sliding windows"
   },
   {
     "objectID": "notes/Lecture2.html#longer-alignment---more-information",
@@ -879,7 +1075,7 @@
     "href": "notes/Lecture2.html#unfolded-sfs",
     "title": "Lecture 2",
     "section": "Unfolded SFS",
-    "text": "Unfolded SFS\n\nfunction SFS(geno_matrix)\n    #This assumes the ancestral sequence is labeled as \"1\", diverged as greater ints.\n    return([countmap(i)[1]/length(i) for i in eachcol(geno_matrix)])\nend\n\n#In this case, we'll take a random sample from pop 1 as the \"ancestor\"\ngm_matrix = geno_mat_to_Int(geno_matrix)\n\nhistogram(SFS(only_segregating(gm_matrix)),legend=false,xlabel=\"Derived Allele Frequency\",ylabel=\"Count\",margins=5mm,bins=50,size=(1000,500))"
+    "text": "Unfolded SFS"
   },
   {
     "objectID": "notes/Lecture2.html#what-do-you-do-with-the-sfs",
@@ -900,14 +1096,14 @@
     "href": "notes/Lecture2.html#summarizing-complex-data-pca",
     "title": "Lecture 2",
     "section": "Summarizing complex data: PCA",
-    "text": "Summarizing complex data: PCA\nPrincipal component analysis (PCA) is an approach to take complex, highly dimensional data (like the genotypes of a bunch of individuals at very many sites), and reduce it to something simpler.\n\nusing MultivariateStats\nx = randn(1000)\ny = x+randn(1000)\n\npca_test_plot=scatter(x,y,leg=false,size=(900,500),xlabel=\"X\",ylabel=\"Y\",margins=4mm)"
+    "text": "Summarizing complex data: PCA\nPrincipal component analysis (PCA) is an approach to take complex, highly dimensional data (like the genotypes of a bunch of individuals at very many sites), and reduce it to something simpler."
   },
   {
     "objectID": "notes/Lecture2.html#pc1-identifies-the-axis-of-highest-variability",
     "href": "notes/Lecture2.html#pc1-identifies-the-axis-of-highest-variability",
     "title": "Lecture 2",
     "section": "PC1 identifies the axis of highest variability",
-    "text": "PC1 identifies the axis of highest variability\n\npca_m = fit(PCA,transpose(hcat(x,y)))\nplot!(pca_test_plot,i-&gt;i*scaled_loadings(pca_m)[1,1],-4,4)"
+    "text": "PC1 identifies the axis of highest variability"
   },
   {
     "objectID": "notes/Lecture2.html#each-pc-explains-the-next-most-variation",
@@ -921,21 +1117,21 @@
     "href": "notes/Lecture2.html#works-in-genomic-data-too",
     "title": "Lecture 2",
     "section": "Works in genomic data too!",
-    "text": "Works in genomic data too!\nHere’s our toy sequence data along the first two PCs.\n\ngm_matrix = geno_mat_to_Int(vcat(reshape(ancestral,1,length(ancestral)),geno_matrix))\ngm_PCA = fit(PCA,gm_matrix[2:101,:])\nproc = round.(gm_PCA.prinvars/sum(gm_PCA.prinvars)*100;digits=2)\nlab =  string.(proc)\nscatter(gm_PCA.proj[:,1],gm_PCA.proj[:,2],leg=false,size=(1000,500),\n    xlabel=\"PC 1 (\"*lab[1]*\" %)\",ylabel=\"PC 2 (\"*lab[2]*\" %)\",margins=5mm)"
+    "text": "Works in genomic data too!\nHere’s our toy sequence data along the first two PCs."
   },
   {
     "objectID": "notes/Lecture2.html#is-pca-always-worth-it",
     "href": "notes/Lecture2.html#is-pca-always-worth-it",
     "title": "Lecture 2",
     "section": "Is PCA always worth it?",
-    "text": "Is PCA always worth it?\nHow do you know how many PCs are “enough” to describe your data?\n\nPCA significance can be evaluated using the broken stick model.\n\n\nIf you choose n random break points of a stick of length 1, then the size of these segments follows a typical distribution:\n\nscatter(reverse([broken_stick_dist(i,10) for i in 1:10]),legend=false,xlabel=\"PC\",ylabel=\"Variance explained\",margins=5mm,size=(800,400),xticks=(1:10))"
+    "text": "Is PCA always worth it?\nHow do you know how many PCs are “enough” to describe your data?\n\nPCA significance can be evaluated using the broken stick model.\n\n\nIf you choose n random break points of a stick of length 1, then the size of these segments follows a typical distribution:"
   },
   {
     "objectID": "notes/Lecture2.html#how-does-that-compare-to-our-toy-sequence-data",
     "href": "notes/Lecture2.html#how-does-that-compare-to-our-toy-sequence-data",
     "title": "Lecture 2",
     "section": "How does that compare to our toy sequence data?",
-    "text": "How does that compare to our toy sequence data?\n\np2 = scree(gm_PCA;broken_stick=true)\nplot(p2,size=(800,600))"
+    "text": "How does that compare to our toy sequence data?"
   },
   {
     "objectID": "notes/Lecture2.html#pca-can-be-deceiving",
@@ -985,27 +1181,6 @@
     "title": "Lecture 2",
     "section": "Inbred population, or inbred individuals?",
     "text": "Inbred population, or inbred individuals?\nOne way to look for individuals who may be inbred is to look for Runs of Homozygosity (ROH)\n\nWe’ll talk more when we cover LD and recombination, but not only should inbred individuals have more homozygous alleles than expected, these alleles should also be clustered."
-  },
-  {
-    "objectID": "notes/Lecture2.html#rate-of-allele-fixation",
-    "href": "notes/Lecture2.html#rate-of-allele-fixation",
-    "title": "Lecture 2",
-    "section": "Rate of allele fixation",
-    "text": "Rate of allele fixation\nRecall that any new allele that’s starting at frequency \\(\\frac{1}{2N_E}\\) also has a probability of \\(\\frac{1}{2N_E}\\) of becoming fixed.\n\nLet’s say there are lots of these mutations, each with probability of \\(\\frac{1}{2N_E}\\) of becoming fixed. How long do we have to wait until an allele is fixed?\n\n\nIf they evolve independently, this is just the geometric probability distribution: takes a rate parameter == chance of success.\n\n\nSo, on average of \\(2N_E\\) generations for a mutation to fix, and each generation \\(\\frac{1}{2N_E}\\) mutations fix."
-  },
-  {
-    "objectID": "notes/Lecture2.html#but-there-are-not-infinite-mutations",
-    "href": "notes/Lecture2.html#but-there-are-not-infinite-mutations",
-    "title": "Lecture 2",
-    "section": "But there are not infinite mutations",
-    "text": "But there are not infinite mutations\n\nHow many new alleles come in every generation?\n\n\nThere are \\(2N_E\\) copies of the allele. Then - there are \\(2N_E\\mu\\) new mutations every generation."
-  },
-  {
-    "objectID": "notes/Lecture2.html#putting-it-together---the-basics-of-neutral-theory",
-    "href": "notes/Lecture2.html#putting-it-together---the-basics-of-neutral-theory",
-    "title": "Lecture 2",
-    "section": "Putting it together - the basics of neutral theory",
-    "text": "Putting it together - the basics of neutral theory\nIf we put all of this together, the rate of fixing mutations becomes quite predictable:\nEvery generation there are \\(2N_E\\mu\\) mutations coming in that are fixed at a rate of \\(\\frac{1}{2N_E}\\)\nThe neutral evolutionary rate is therefore:\n\\[\n\\frac{2N_E\\mu}{2N_E} = \\mu\n\\]"
   },
   {
     "objectID": "notes.html",
