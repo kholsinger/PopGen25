@@ -1,0 +1,12 @@
+{
+  "hash": "6a68e8cbd07e9db5c850c2beacca9252",
+  "result": {
+    "engine": "julia",
+    "markdown": "---\ntitle: Lab 2\ntheme: cosmo\nbibliography: references.bib\nengine: julia\nexecute:\n  freeze: auto  # re-render only when source changes\n---\n\n\n\n# Lab 3: Genetic divergence estimates\n\nToday's goal is fairly simple. We will take publicly available data on `MUC19`, construct a multi-species alignment, and calculate divergence. This time, we will be using a bunch of publicly available (and fairly lightweight) tools. If you are having trouble running code/getting software to actually complete running, you may want to run this on the CBC HPC.\n\n## Downloading data\n\nOne of the things we'll learn today is how to access public data and download sequences of interest. While for your final project you will not be expected to take a deeply gene-centric point of view, you may want to investigate specific sequences you are interested in\n\n",
+    "supporting": [
+      "lab3_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

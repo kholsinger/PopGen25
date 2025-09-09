@@ -190,7 +190,7 @@ Each trial, probability of getting 6 is $\frac{1}{6}$. On average, 6 tries until
 ```{julia}
 dice_roll = rand(1:6,100000)
 idx = findall(dice_roll .== 6)
-steps = [idx[i+1]-idx[i] for in in 1:(length(idx)-1)]
+steps = [idx[i+1]-idx[i] for i in 1:(length(idx)-1)]
 histogram(steps,xlab="Dice rolls until a 6",ylab="Frequency",leg=false,normalized=true)
 vline!([mean(steps)],linewidth=2)
 ```
