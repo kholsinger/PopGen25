@@ -32,21 +32,28 @@
     "href": "notes/Lecture3.html#what-is-divergence",
     "title": "Lecture 3",
     "section": "What is divergence?",
-    "text": "What is divergence?\nTo answer this question we first need to consider what it means for two sequences to be diverged.\n\nDivergence is often measured as a simple pairwise distance between two sequences:\n&gt;species_1\nATgcATgATTtA\n&gt;species_2\nATcgATcATTcA\n\n\nRaw differences: 4\nPer/site: 0.3"
+    "text": "What is divergence?\nTo answer this question we first need to consider what it means for two sequences to be diverged.\n\nDivergence is often measured as a simple pairwise distance between two sequences:\n&gt;species_1\nATgcATgATTtA\n&gt;species_2\nATcgATcATTcA\n\n\nRaw differences: 4\nPer/site: 0.3\n\n\nBut what if there’s variation w/in populations?"
   },
   {
-    "objectID": "notes/Lecture3.html#in-simulations",
-    "href": "notes/Lecture3.html#in-simulations",
+    "objectID": "notes/Lecture3.html#in-simulations-simplest",
+    "href": "notes/Lecture3.html#in-simulations-simplest",
     "title": "Lecture 3",
-    "section": "In simulations",
-    "text": "In simulations"
+    "section": "In simulations: simplest",
+    "text": "In simulations: simplest"
   },
   {
-    "objectID": "notes/Lecture3.html#more-formally",
-    "href": "notes/Lecture3.html#more-formally",
+    "objectID": "notes/Lecture3.html#afd-allele-frequency-difference-problems",
+    "href": "notes/Lecture3.html#afd-allele-frequency-difference-problems",
     "title": "Lecture 3",
-    "section": "More formally:",
-    "text": "More formally:\nThe pairwise divergence between two sequences is d.\n\nLet k be the number of substitutions fixed per generation.\n\n\nSo, comparing a random sequence from an ancestor to a descendent:\n\\[\nE[d_t] = kt+\\theta_{Anc}\n\\]\n\\(\\theta_{Anc}\\) accounts for the fact that there is genetic variation in the ancestor, so it depends on who you compare the descendant to.\nIf \\(t&gt;&gt;1\\), then \\(\\theta_{Anc}\\) is comparably small and can be ignored."
+    "section": "AFD (allele frequency difference) problems",
+    "text": "AFD (allele frequency difference) problems\nSeems intuitive, but does not scale linearly with time.\n\nRemember fastest change when allele frequencies are intermediate.\n\n\nSwing of 0.1 easily happens when allele common - hard when rare.\n\n\nSo, which takes longer to evolve: 0.4-0.6 or 0.1-0.3?"
+  },
+  {
+    "objectID": "notes/Lecture3.html#a-better-approach",
+    "href": "notes/Lecture3.html#a-better-approach",
+    "title": "Lecture 3",
+    "section": "A better approach:",
+    "text": "A better approach:\nThe pairwise divergence between two sequences is d, measuring the probability two sites sampled are different.\n\nLet k be the number of substitutions fixed per generation.\n\n\nSo, comparing a random sequence from an ancestor to a descendent:\n\\[\nE[d_t] = kt+\\theta_{Anc}\n\\]\n\\(\\theta_{Anc}\\) accounts for the fact that there is genetic variation in the ancestor, so it depends on who you compare the descendant to.\nIf \\(t&gt;&gt;1\\), then \\(\\theta_{Anc}\\) is comparably small and can be ignored."
   },
   {
     "objectID": "notes/Lecture3.html#d-in-simulations",
@@ -60,21 +67,21 @@
     "href": "notes/Lecture3.html#d_xy---one-estimate-of-d",
     "title": "Lecture 3",
     "section": "\\(d_{XY}\\) - one estimate of d",
-    "text": "\\(d_{XY}\\) - one estimate of d\nWe can estimate d with \\(d_{XY}\\):\n\\[\nd_{XY}=p_1(1-p_2)+(1-p_1)p_2\n\\]\nWhere \\(p_i\\) is the allele frequency in the \\(i^{th}\\) population.\n\nJust the probability that if two alleles grabbed at random mismatch."
+    "text": "\\(d_{XY}\\) - one estimate of d\nWe can estimate d with \\(d_{XY}\\):\n\\[\nd_{XY}=p_1(1-p_2)+(1-p_1)p_2\n\\]\nWhere \\(p_i\\) is the allele frequency in the \\(i^{th}\\) population.\n\nJust the probability that if two alleles grabbed at random mismatch, when alleles biallelic and polymorphic.\n\n\nOften makes sense to ignore polymorphism for highly diverged species.\n\n\nInfinite sites model - mutations are never repeated, ancestral variation is lost, so only comparing differences per base pair at fixed substitutions."
   },
   {
     "objectID": "notes/Lecture3.html#rate-of-allele-fixation-what-is-k",
     "href": "notes/Lecture3.html#rate-of-allele-fixation-what-is-k",
     "title": "Lecture 3",
-    "section": "Rate of allele fixation: what is \\(k\\)",
-    "text": "Rate of allele fixation: what is \\(k\\)\nRecall that any new allele that’s starting at frequency \\(\\frac{1}{2N_E}\\) also has a probability of \\(\\frac{1}{2N_E}\\) of becoming fixed.\n\nLet’s say there are lots of these mutations, each with probability of \\(\\frac{1}{2N_E}\\) of becoming fixed. How long do we have to wait until an allele is fixed?\n\n\nIf they evolve independently, this is just the geometric probability distribution. We know that the \\(E[geom(\\lambda)] = \\frac{1}{\\lambda}\\) - the average waiting time for a success is inverse to the rate."
+    "section": "Rate of allele fixation: what is \\(k\\)?",
+    "text": "Rate of allele fixation: what is \\(k\\)?\nRecall that any new allele that’s starting at frequency \\(\\frac{1}{2N_E}\\) also has a probability of \\(\\frac{1}{2N_E}\\) of becoming fixed.\n\nLet’s say there are lots of these mutations, each with probability of \\(\\frac{1}{2N_E}\\) of becoming fixed. How long do we have to wait until an allele is fixed?\n\n\nIf they evolve independently, this is just the geometric probability distribution. We know that the \\(E[geom(\\lambda)] = \\frac{1}{\\lambda}\\) - the average waiting time for a success is inverse to the rate."
   },
   {
-    "objectID": "notes/Lecture3.html#geometric-distribution",
-    "href": "notes/Lecture3.html#geometric-distribution",
+    "objectID": "notes/Lecture3.html#geometric-distribution-dice-example",
+    "href": "notes/Lecture3.html#geometric-distribution-dice-example",
     "title": "Lecture 3",
-    "section": "Geometric distribution",
-    "text": "Geometric distribution\nThink of something like a dice roll. What’s the waiting time to get a 6?\n\nEach trial, probability is \\(\\frac{1}{6}\\). On average, 6 tries until you get it."
+    "section": "Geometric distribution: dice example",
+    "text": "Geometric distribution: dice example\nEach trial, probability of getting 6 is \\(\\frac{1}{6}\\). On average, 6 tries until you get it."
   },
   {
     "objectID": "notes/Lecture3.html#cntd.",
@@ -109,7 +116,7 @@
     "href": "notes/Lecture3.html#neutral-theory",
     "title": "Lecture 3",
     "section": "Neutral theory",
-    "text": "Neutral theory\nThe result that evolutionary rate should be equal to the neutral mutation rate is at the core of Neutral Theory.\n\nPioneered by Motoo Kimura and Susano Ohta, with lots of subsequent results. (KIMURA 1968; Ohta and Gillespie 1996; Kern and Hahn 2018)\n\n\nThe idea is that most mutations are expected to be neutral.\n\n\nTherefore most divergence is going to be described simply by the neutral mutation rate.\n\n\nIs this true?"
+    "text": "Neutral theory\nThe result that evolutionary rate should be equal to the neutral mutation rate is at the core of Neutral Theory.\n\nPioneered by Motoo Kimura and Tomoko Ohta, with lots of subsequent results. (KIMURA 1968; Ohta and Gillespie 1996; Kern and Hahn 2018)\n\n\nThe idea is that most mutations are expected to be neutral.\n\n\nTherefore most divergence is going to be described simply by the neutral mutation rate.\n\n\nIs this true?"
   },
   {
     "objectID": "notes/Lecture3.html#support-for-neutral-theory",
@@ -193,7 +200,7 @@
     "href": "notes/Lecture3.html#f-statistics-f_st",
     "title": "Lecture 3",
     "section": "F statistics: \\(F_{ST}\\)",
-    "text": "F statistics: \\(F_{ST}\\)\nLast time we learned about \\(F_{IS}\\), which is an inbreeding coefficient.\n\nYou may have thought it stands for “Inbreeding Statistic” - it’s actually “Individual - Subpopulation”\n\n\n\\(F_{ST}\\) - F statistic for “subpopulation - total population”\n\n\nHow is variation partition w/in populations vs between?"
+    "text": "F statistics: \\(F_{ST}\\)\nLast time we learned about \\(F_{IS}\\), which is an inbreeding coefficient.\n\nYou may have thought it stands for “Inbreeding Statistic” - it’s actually “Individual - Subpopulation”\n\n\n\\(F_{ST}\\) - F statistic for “subpopulation - total population”\n\n\nHow is variation partitioned w/in populations vs between?"
   },
   {
     "objectID": "notes/Lecture3.html#f_st-definition-cntd.",
@@ -207,14 +214,28 @@
     "href": "notes/Lecture3.html#f_st---really-useful",
     "title": "Lecture 3",
     "section": "\\(F_{ST}\\) - really useful!",
-    "text": "\\(F_{ST}\\) - really useful!\nStudies will frequently look for regions of elevated \\(F_{ST}\\) as regions of divergence.\n\nNeat result from coalescent: \\(T \\approx -\\log(1-F_{ST})\\)\n\n\nSo, can estimate divergence at sites using \\(F_{ST}\\), can look for variation in genome."
+    "text": "\\(F_{ST}\\) - really useful!\nStudies will frequently look for regions of elevated \\(F_{ST}\\) as regions of divergence.\n\nNeat result from coalescent: \\(T \\approx -\\log(1-F_{ST})\\)\n\n\nSo, can estimate divergence at sites using \\(F_{ST}\\), can look for variation in genome, can look for significant outliers.\n\n\nMany estimators using various data and approaches."
+  },
+  {
+    "objectID": "notes/Lecture3.html#cool-use-of-f_st---pbs",
+    "href": "notes/Lecture3.html#cool-use-of-f_st---pbs",
+    "title": "Lecture 3",
+    "section": "Cool use of \\(F_{ST}\\) - PBS",
+    "text": "Cool use of \\(F_{ST}\\) - PBS\nPopulation Branch Score: test to look for places in genome where some population is much more differentiated than expected.\n\nRequires focal population (1), sister without adaptive pressure (2), and outgroup (3).\n\n\n\\[\nPBS = \\frac{T_{12}+T_{13}-T{23}}{2}\n\\]\n\n\nNormally hard to get \\(T\\) - but easy transform from \\(F_{ST}\\)."
+  },
+  {
+    "objectID": "notes/Lecture3.html#epas1-and-tibetans",
+    "href": "notes/Lecture3.html#epas1-and-tibetans",
+    "title": "Lecture 3",
+    "section": "EPAS1 and Tibetans",
+    "text": "EPAS1 and Tibetans\nFirst use case of PBS - identifying adaptive gene for high altitude adaptation (Yi et al. 2010)"
   },
   {
     "objectID": "notes/Lecture3.html#problems-with-f_st",
     "href": "notes/Lecture3.html#problems-with-f_st",
     "title": "Lecture 3",
     "section": "Problems with \\(F_{ST}\\)",
-    "text": "Problems with \\(F_{ST}\\)\nDenominator is total genetic diversity.\n\nRegions of low diversity have higher \\(F_{ST}\\) - even if total allele frequency shift is low!"
+    "text": "Problems with \\(F_{ST}\\)\nDenominator is total genetic diversity.\n\nRegions of low diversity have higher \\(F_{ST}\\) - even if total allele frequency shift is low!\n\n\nSame as estimators of diversity - software has various assumptions about missing data, and biases abound.\n\n\nTurns out - all \\(F_{ST}\\) estimates across a region are strongly affected by rare variants (Bhatia et al. 2013; Berner 2019; Cruickshank and Hahn 2014)"
   },
   {
     "objectID": "notes/Lecture3.html#what-about-divergence-across-a-gene",
@@ -238,6 +259,20 @@
     "text": "\\(\\omega = \\frac{d_N}{d_S}\\) - constraint on gene evolution\nIf a sequence is truly neutral:\n\\(\\frac{d_N}{d_S}=1\\)\n\nIf sequence constrained:\n\\(\\frac{d_N}{d_S} &lt;&lt; 1\\)\nIf sequence positively selected:\n\\(\\frac{d_N}{d_S} &gt; 1\\)"
   },
   {
+    "objectID": "notes/Lecture3.html#mcdonald-kreitman-test-mk",
+    "href": "notes/Lecture3.html#mcdonald-kreitman-test-mk",
+    "title": "Lecture 3",
+    "section": "McDonald-Kreitman Test (MK)",
+    "text": "McDonald-Kreitman Test (MK)\nThe problems of a regular \\(\\frac{d_N}{d_S}\\) test can be alleviated by looking at polymorphisms within populations.\n\n\\[\n\\begin{cases}\nd_S = 2L_S\\mu t \\\\\nd_N = 2L_N\\mu t \\frac{f}{1-\\alpha} \\\\\nP_N = L_SN_E\\mu k \\\\\nP_S = L_NN_E\\mu f\n\\end{cases}\n\\]\n\n\n\\(\\alpha = 1-\\frac{d_S}{d_N}\\frac{P_N}{P_S}\\)"
+  },
+  {
+    "objectID": "notes/Lecture3.html#how-much-evolution-is-adaptive",
+    "href": "notes/Lecture3.html#how-much-evolution-is-adaptive",
+    "title": "Lecture 3",
+    "section": "How much evolution is adaptive?",
+    "text": "How much evolution is adaptive?\nVaries heavily by system and sequence type, but more than you may think! (EYREWALKER 2006)"
+  },
+  {
     "objectID": "notes/Lecture3.html#how-to-estimate",
     "href": "notes/Lecture3.html#how-to-estimate",
     "title": "Lecture 3",
@@ -249,7 +284,7 @@
     "href": "notes/Lecture3.html#references",
     "title": "Lecture 3",
     "section": "References",
-    "text": "References\n\n\n\n\nBlair Hedges, S., and Sudhir Kumar. 2003. “Genomic Clocks and Evolutionary Timescales.” Trends in Genetics 19 (4): 200–206. https://doi.org/10.1016/s0168-9525(03)00053-2.\n\n\nFelsenstein, Joseph. 1981. “Evolutionary Trees from DNA Sequences: A Maximum Likelihood Approach.” Journal of Molecular Evolution 17 (6): 368–76. https://doi.org/10.1007/bf01734359.\n\n\nKern, Andrew D, and Matthew W Hahn. 2018. “The Neutral Theory in Light of Natural Selection.” Edited by Sudhir Kumar. Molecular Biology and Evolution 35 (6): 1366–71. https://doi.org/10.1093/molbev/msy092.\n\n\nKimura, M. 1981. “Estimation of Evolutionary Distances Between Homologous Nucleotide Sequences.” Proceedings of the National Academy of Sciences 78 (1): 454–58. https://doi.org/10.1073/pnas.78.1.454.\n\n\nKIMURA, MOTOO. 1968. “Evolutionary Rate at the Molecular Level.” Nature 217 (5129): 624–26. https://doi.org/10.1038/217624a0.\n\n\nLynch, Michael, Matthew S. Ackerman, Jean-Francois Gout, Hongan Long, Way Sung, W. Kelley Thomas, and Patricia L. Foster. 2016. “Genetic Drift, Selection and the Evolution of the Mutation Rate.” Nature Reviews Genetics 17 (11): 704–14. https://doi.org/10.1038/nrg.2016.104.\n\n\nMackay, Trudy F. C., Stephen Richards, Eric A. Stone, Antonio Barbadilla, Julien F. Ayroles, Dianhui Zhu, Sònia Casillas, et al. 2012. “The Drosophila Melanogaster Genetic Reference Panel.” Nature 482 (7384): 173–78. https://doi.org/10.1038/nature10811.\n\n\nOhta, Tomoko, and John H. Gillespie. 1996. “Development of Neutral and Nearly Neutral Theories.” Theoretical Population Biology 49 (2): 128–42. https://doi.org/10.1006/tpbi.1996.0007.\n\n\nSanjuán, Rafael, Andrés Moya, and Santiago F. Elena. 2004. “The Distribution of Fitness Effects Caused by Single-Nucleotide Substitutions in an RNA Virus.” Proceedings of the National Academy of Sciences 101 (22): 8396–8401. https://doi.org/10.1073/pnas.0400146101."
+    "text": "References\n\n\n\n\nBerner, Daniel. 2019. “Allele Frequency Difference AFDAn Intuitive Alternative to FST for Quantifying Genetic Population Differentiation.” Genes 10 (4): 308. https://doi.org/10.3390/genes10040308.\n\n\nBhatia, Gaurav, Nick Patterson, Sriram Sankararaman, and Alkes L. Price. 2013. “Estimating and Interpreting FST: The Impact of Rare Variants.” Genome Research 23 (9): 1514–21. https://doi.org/10.1101/gr.154831.113.\n\n\nBlair Hedges, S., and Sudhir Kumar. 2003. “Genomic Clocks and Evolutionary Timescales.” Trends in Genetics 19 (4): 200–206. https://doi.org/10.1016/s0168-9525(03)00053-2.\n\n\nCruickshank, Tami E., and Matthew W. Hahn. 2014. “Reanalysis Suggests That Genomic Islands of Speciation Are Due to Reduced Diversity, Not Reduced Gene Flow.” Molecular Ecology 23 (13): 3133–57. https://doi.org/10.1111/mec.12796.\n\n\nEYREWALKER, A. 2006. “The Genomic Rate of Adaptive Evolution.” Trends in Ecology & Evolution 21 (10): 569–75. https://doi.org/10.1016/j.tree.2006.06.015.\n\n\nFelsenstein, Joseph. 1981. “Evolutionary Trees from DNA Sequences: A Maximum Likelihood Approach.” Journal of Molecular Evolution 17 (6): 368–76. https://doi.org/10.1007/bf01734359.\n\n\nKern, Andrew D, and Matthew W Hahn. 2018. “The Neutral Theory in Light of Natural Selection.” Edited by Sudhir Kumar. Molecular Biology and Evolution 35 (6): 1366–71. https://doi.org/10.1093/molbev/msy092.\n\n\nKimura, M. 1981. “Estimation of Evolutionary Distances Between Homologous Nucleotide Sequences.” Proceedings of the National Academy of Sciences 78 (1): 454–58. https://doi.org/10.1073/pnas.78.1.454.\n\n\nKIMURA, MOTOO. 1968. “Evolutionary Rate at the Molecular Level.” Nature 217 (5129): 624–26. https://doi.org/10.1038/217624a0.\n\n\nLynch, Michael, Matthew S. Ackerman, Jean-Francois Gout, Hongan Long, Way Sung, W. Kelley Thomas, and Patricia L. Foster. 2016. “Genetic Drift, Selection and the Evolution of the Mutation Rate.” Nature Reviews Genetics 17 (11): 704–14. https://doi.org/10.1038/nrg.2016.104.\n\n\nMackay, Trudy F. C., Stephen Richards, Eric A. Stone, Antonio Barbadilla, Julien F. Ayroles, Dianhui Zhu, Sònia Casillas, et al. 2012. “The Drosophila Melanogaster Genetic Reference Panel.” Nature 482 (7384): 173–78. https://doi.org/10.1038/nature10811.\n\n\nOhta, Tomoko, and John H. Gillespie. 1996. “Development of Neutral and Nearly Neutral Theories.” Theoretical Population Biology 49 (2): 128–42. https://doi.org/10.1006/tpbi.1996.0007.\n\n\nSanjuán, Rafael, Andrés Moya, and Santiago F. Elena. 2004. “The Distribution of Fitness Effects Caused by Single-Nucleotide Substitutions in an RNA Virus.” Proceedings of the National Academy of Sciences 101 (22): 8396–8401. https://doi.org/10.1073/pnas.0400146101.\n\n\nYi, Xin, Yu Liang, Emilia Huerta-Sanchez, Xin Jin, Zha Xi Ping Cuo, John E. Pool, Xun Xu, et al. 2010. “Sequencing of 50 Human Exomes Reveals Adaptation to High Altitude.” Science 329 (5987): 75–78. https://doi.org/10.1126/science.1190371."
   },
   {
     "objectID": "notes/Lecture1.html#welcome-to-the-class",
@@ -644,6 +679,34 @@
     "text": "Let’s look at the data!\nSupplementary Data File 1 (available online, or on the github for this class).\n\nIn lab, we’ll see how Wright-Fisher simulations can match up to this data (if they can)"
   },
   {
+    "objectID": "labs/lab3.html",
+    "href": "labs/lab3.html",
+    "title": "Lab 2",
+    "section": "",
+    "text": "Today’s goal is fairly simple. We will take publicly available data on MUC19, construct a multi-species alignment, and calculate divergence. This time, we will be using a bunch of publicly available (and fairly lightweight) tools. If you are having trouble running code/getting software to actually complete running, you may want to run this on the CBC HPC.\n\n\nOne of the things we’ll learn today is how to access public data and download sequences of interest. While for your final project you will not be expected to take a deeply gene-centric point of view, you may want to investigate specific sequences you are interested in"
+  },
+  {
+    "objectID": "labs/lab3.html#downloading-data",
+    "href": "labs/lab3.html#downloading-data",
+    "title": "Lab 2",
+    "section": "",
+    "text": "One of the things we’ll learn today is how to access public data and download sequences of interest. While for your final project you will not be expected to take a deeply gene-centric point of view, you may want to investigate specific sequences you are interested in"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Population Genetics 2025",
+    "section": "",
+    "text": "Welome to PopGen!\nThis is the website for Population Genetics (EEB 5348) at UConn. Here you will find notes on each of the lectures, links to papers and other materials as they become needed.\n\n\nAbout the course\nThe focus of this course is to introduce graduate students to population genetic thinking. I firmly believe the greatest benefit of population genetics is not knowledge of any particular approach or methodology (there are too many for any course to cover adequately), but a firm grasp of how population genetics can be used to 1) test and hone your intuition of evolutionary processes, 2) understand how (and why) different population genetics approaches work and 3) develop heuristics to examine any system of interest. Throughout the course we will examine classic population genetics results, read recent literature that either uses those results or throws them completely into question and work on developing a set of scripts and skills in a language of your choice (although I will recommend either Julia or R) to investigate the population genetics of different data-sets.\n\n\nSchedule/General Logistics\nEach week, we will start with a lecture on Tuesday, followed by a paper discussion and lab on Thursday. The goal of this class structure is to be able to introduce general concepts/remind you of things you should remember from your Genetics/Evolution courses, introduce classic PopGen results, followed by a more in-depth dive in the state of the art uses of those results and some practical advice of coding how they work. Here’s a general week-by-week overlay of the topics. Lecture notes will be added as links as we go along\n\n\n\nWeek\nTopic(s)\nReading\nLecture Notes\n\n\n\n\nAug 26-28\nIntro, Wright-Fisher\nLeu et al\nLecture 1\n\n\nSep 2-4\nGenetic diversity measurements\nBuffalo\nLecture 2\n\n\nSep 9-11\nDivergence at a site, mutation, molecular models of evolution\nPeede et al\nLecture 3\n\n\nSep 16-18\nSexual reproduction, Recombination, LD\nHahn and Mishra\n\n\n\nSep 23-25\nPopulation structure, migration, the coalescent\nCousins et al\n\n\n\nSep 30-Oct 2\nSelection at a single locus, types of selection\n\n\n\n\nOct 7-9\nProject Meetings, no regular class\nNA\n\n\n\nOct 14-16\nQuantitative trait evolution\n\n\n\n\nOct 21-23\nConfounded selection, demography, mutation\n\n\n\n\nOct 28-30\nAccounting for selection/demography in quantitative traits\n\n\n\n\nNov 4-6\nAncestral Recombination Graphs\n\n\n\n\nNov 11-13\nStudents’ choice\n\n\n\n\nNov 18-20\nStudents’ choice\n\n\n\n\nNov 25-27\nTHANKSGIVING BREAK\n\n\n\n\nDec 2-4\nProject meetings, final projects due Dec 4\nNA"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "This website is build using Quarto markdown. The benefit for you is that all of the code for lectures/labs is available on its associated github repository."
+  },
+  {
     "objectID": "labs/lab2.html",
     "href": "labs/lab2.html",
     "title": "Lab 2",
@@ -747,20 +810,6 @@
     "title": "Lab 2",
     "section": "Bonus: Plot your heterozygosities",
     "text": "Bonus: Plot your heterozygosities\nNow that you have hopefully learned both how to plot data, and how to calculate heterozygosity (or the SFS), try to plot your data. As you do so, keep track of what bits of code you keep re-running/re-using. Could you have written your code in a way that made those bits modular? (e.g.: functions that are called, so that you only need to maintain one copy of the function)."
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "This website is build using Quarto markdown. The benefit for you is that all of the code for lectures/labs is available on its associated github repository."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Population Genetics 2025",
-    "section": "",
-    "text": "Welome to PopGen!\nThis is the website for Population Genetics (EEB 5348) at UConn. Here you will find notes on each of the lectures, links to papers and other materials as they become needed.\n\n\nAbout the course\nThe focus of this course is to introduce graduate students to population genetic thinking. I firmly believe the greatest benefit of population genetics is not knowledge of any particular approach or methodology (there are too many for any course to cover adequately), but a firm grasp of how population genetics can be used to 1) test and hone your intuition of evolutionary processes, 2) understand how (and why) different population genetics approaches work and 3) develop heuristics to examine any system of interest. Throughout the course we will examine classic population genetics results, read recent literature that either uses those results or throws them completely into question and work on developing a set of scripts and skills in a language of your choice (although I will recommend either Julia or R) to investigate the population genetics of different data-sets.\n\n\nSchedule/General Logistics\nEach week, we will start with a lecture on Tuesday, followed by a paper discussion and lab on Thursday. The goal of this class structure is to be able to introduce general concepts/remind you of things you should remember from your Genetics/Evolution courses, introduce classic PopGen results, followed by a more in-depth dive in the state of the art uses of those results and some practical advice of coding how they work. Here’s a general week-by-week overlay of the topics. Lecture notes will be added as links as we go along\n\n\n\nWeek\nTopic(s)\nReading\nLecture Notes\n\n\n\n\nAug 26-28\nIntro, Wright-Fisher\nLeu et al\nLecture 1\n\n\nSep 2-4\nGenetic diversity measurements\nBuffalo\nLecture 2\n\n\nSep 9-11\nDivergence at a site, mutation, molecular models of evolution\nPeede et al\n\n\n\nSep 16-18\nSexual reproduction, Recombination, LD\nHahn and Mishra\n\n\n\nSep 23-25\nPopulation structure, migration, differentiation\n\n\n\n\nSep 30-Oct 2\nSelection at a single locus, types of selection\n\n\n\n\nOct 7-9\nProject Meetings, no regular class\nNA\n\n\n\nOct 14-16\nThe Coalescent\n\n\n\n\nOct 21-23\nConfounded selection, demography, mutation\n\n\n\n\nOct 28-30\nCo-estimating selection and demography\n\n\n\n\nNov 4-6\nAncestral Recombination Graphs\n\n\n\n\nNov 11-13\nStudents’ choice\n\n\n\n\nNov 18-20\nStudents’ choice\n\n\n\n\nNov 25-27\nTHANKSGIVING BREAK\n\n\n\n\nDec 2-4\nProject meetings, final projects due Dec 4\nNA"
   },
   {
     "objectID": "labs.html",
