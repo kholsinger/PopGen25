@@ -457,7 +457,7 @@ Requires focal population (1), sister without adaptive pressure (2), and outgrou
 . . .
 
 $$
-PBS = \frac{T_{12}+T_{13}-T{23}}{2}
+PBS = \frac{T_{12}+T_{13}-T_{23}}{2}
 $$
 
 . . .
@@ -485,6 +485,32 @@ Same as estimators of diversity - software has various assumptions about missing
 . . .
 
 Turns out - all $F_{ST}$ estimates across a region are strongly affected by rare variants [@Bhatia2013; @Berner2019a; @Cruickshank2014]
+
+## Example in simulations:
+
+```{julia}
+sim_very_low = [WrightFisher(200,0.01,200;μ=0.001,every=200) for _ in 1:200] 
+sim_low = [WrightFisher(200,0.01,200;μ=0.01,every=200) for _ in 1:200]
+sim_high = [WrightFisher(200,0.25,200;μ=0.01,every=200) for _ in 1:200] 
+
+pop1 = vcat(sim_very_low[1:100],sim_low[1:100],sim_high[1:100])
+pop2 = vcat(sim_very_low[101:200],sim_low[101:200],sim_high[101:200])
+pop_tot = (pop1 .+ pop2)./2
+
+pi_1 = [2*p[2]*(1-p[2]) for p in pop1] 
+pi_2 = [2*p[2]*(1-p[2]) for p in pop2]
+pi_tot = [2*p[2]*(1-p[2]) for p in pop_tot]
+fst = 1 .-(pi_1 .+ pi_2)./(pi_tot.*2)
+scatter(fst,xlabel="Position",ylabel=L"F_{ST}")
+```
+
+## But!
+
+```{julia}
+scatter(1:100,fst[1:100],label=L"\mu=0.001, p=0.01",xlabel="Position",ylabel=L"F_{ST}")
+scatter!(101:200,fst[101:200],label=L"\mu=0.01, p=0.01")
+scatter!(201:300,fst[201:300],label=L"\mu=0.01, p=0.25")
+```
 
 ## What about divergence across a gene?
 
