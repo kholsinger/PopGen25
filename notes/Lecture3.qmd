@@ -93,7 +93,11 @@ Raw differences: 4
 
 Per/site: 0.3
 
-## In simulations
+. . .
+
+But what if there's variation w/in populations?
+
+## In simulations: simplest
 
 ```{julia}
 diffs = [abs.(sim1[i].-sim2[i]) for i in 1:1000]
@@ -102,9 +106,25 @@ plot(diffs,leg=false,ylabel="Allele Frequency Difference",xlabel="1k Generations
 plot!([mean(i) for i in eachcol(diffs)],c=:white,linewidth=2,size=(800,600))
 ```
 
-## More formally:
+## AFD (allele frequency difference) problems
 
-The pairwise divergence between two sequences is *d*.
+Seems intuitive, but does not scale linearly with time.
+
+. . .
+
+Remember fastest change when allele frequencies are intermediate.
+
+. . .
+
+Swing of 0.1 easily happens when allele common - hard when rare.
+
+. . .
+
+So, which takes longer to evolve: 0.4-0.6 or 0.1-0.3?
+
+## A better approach:  {.smaller}
+
+The pairwise divergence between two sequences is *d*, measuring the probability two sites sampled are different.
 
 . . .
 
@@ -131,7 +151,7 @@ simplot=plot(dxy,leg=false,alpha=0.2,ylabel=L"d_{XY}",xlabel="1k Generations",co
 plot!(simplot,[mean(i) for i in eachcol(dxy)],c=:white,linewidth=2)
 ```
 
-##  $d_{XY}$ - one estimate of *d*
+##  $d_{XY}$ - one estimate of *d*  {.smaller}
 
 We can estimate *d* with $d_{XY}$:
 
@@ -143,9 +163,17 @@ Where $p_i$ is the allele frequency in the $i^{th}$ population.
 
 . . .
 
-Just the probability that if two alleles grabbed at random mismatch.
+Just the probability that if two alleles grabbed at random mismatch, when alleles biallelic and polymorphic.
 
-## Rate of allele fixation: what is $k$
+. . .
+
+Often makes sense to ignore polymorphism for highly diverged species.
+
+. . .
+
+Infinite sites model - mutations are never repeated, ancestral variation is lost, so only comparing differences per base pair at fixed substitutions.
+
+## Rate of allele fixation: what is $k$?
 
 Recall that any new allele that's starting at frequency $\frac{1}{2N_E}$ also has a probability of $\frac{1}{2N_E}$ of becoming fixed.
 
@@ -157,19 +185,16 @@ Let's say there are lots of these mutations, each with probability of $\frac{1}{
 
 If they evolve independently, this is just the `geometric` probability distribution. We know that the $E[geom(\lambda)] = \frac{1}{\lambda}$ - the average waiting time for a success is inverse to the rate.
 
-## Geometric distribution
+## Geometric distribution: dice example
 
-Think of something like a dice roll. What's the waiting time to get a 6?
-
-. . .
-
-Each trial, probability is $\frac{1}{6}$. On average, 6 tries until you get it.
+Each trial, probability of getting 6 is $\frac{1}{6}$. On average, 6 tries until you get it.
 
 ```{julia}
-
 dice_roll = rand(1:6,100000)
 idx = findall(dice_roll .== 6)
-histogram([idx[i+1]-idx[i] for i in 1:(length(idx)-1)],xlab="Dice rolls until a 6",ylab="Frequency",leg=false,normalized=true)
+steps = [idx[i+1]-idx[i] for in in 1:(length(idx)-1)]
+histogram(steps,xlab="Dice rolls until a 6",ylab="Frequency",leg=false,normalized=true)
+vline!([mean(steps)],linewidth=2)
 ```
 
 ## Cntd.
@@ -385,7 +410,7 @@ $F_{ST}$ - F statistic for "subpopulation - total population"
 
 . . .
 
-How is variation partition w/in populations vs between?
+How is variation partitioned w/in populations vs between?
 
 ## $F_{ST}$ definition, cntd.  {smaller=""}
 
@@ -417,7 +442,35 @@ Neat result from coalescent: $T \approx -\log(1-F_{ST})$
 
 . . .
 
-So, can estimate divergence at sites using $F_{ST}$, can look for variation in genome.
+So, can estimate divergence at sites using $F_{ST}$, can look for variation in genome, can look for significant outliers.
+
+. . .
+
+Many estimators using various data and approaches.
+
+## Cool use of $F_{ST}$ - PBS  {.smaller}
+
+Population Branch Score: test to look for places in genome where some population is much more differentiated than expected.
+
+. . .
+
+Requires focal population (1), sister without adaptive pressure (2), and outgroup (3).
+
+. . .
+
+$$
+PBS = \frac{T_{12}+T_{13}-T{23}}{2}
+$$
+
+. . .
+
+Normally hard to get $T$ - but easy transform from $F_{ST}$.
+
+## EPAS1 and Tibetans
+
+First use case of PBS - identifying adaptive gene for high altitude adaptation [@Yi2010]
+
+![](images/paste-5.jpeg){width="711"}
 
 ## Problems with $F_{ST}$
 
@@ -426,6 +479,14 @@ Denominator is total genetic diversity.
 . . .
 
 Regions of low diversity have higher $F_{ST}$ - even if total allele frequency shift is low!
+
+. . .
+
+Same as estimators of diversity - software has various assumptions about missing data, and biases abound.
+
+. . .
+
+Turns out - all $F_{ST}$ estimates across a region are strongly affected by rare variants [@Bhatia2013; @Berner2019a; @Cruickshank2014]
 
 ## What about divergence across a gene?
 
@@ -470,6 +531,31 @@ $\frac{d_N}{d_S} << 1$
 If sequence positively selected:
 
 $\frac{d_N}{d_S} > 1$
+
+## McDonald-Kreitman Test (MK)
+
+The problems of a regular $\frac{d_N}{d_S}$ test can be alleviated by looking at polymorphisms within populations.
+
+. . .
+
+$$
+\begin{cases}
+d_S = 2L_S\mu t \\
+d_N = 2L_N\mu t \frac{f}{1-\alpha} \\
+P_N = L_SN_E\mu k \\
+P_S = L_NN_E\mu f
+\end{cases}
+$$
+
+. . .
+
+$\alpha = 1-\frac{d_S}{d_N}\frac{P_N}{P_S}$
+
+## How much evolution is adaptive?
+
+Varies heavily by system and sequence type, but more than you may think! [@Eyre-Walker2006]
+
+![](images/paste-9.png)
 
 ## How to estimate?
 
