@@ -2,16 +2,19 @@
 using Distributions
 
 
-function WrightFisher(N,p,t)
+function WrightFisher(N,p,t;μ=0.0,every=1)
     g=1
     freqs=Float64[]
     append!(freqs,p)
     while g<t
-        next = only(rand(Binomial(N,freqs[g]),1)/N)
+        current = freqs[g]
+        current = current*(1-μ)+(1-current)*μ
+        next = only(rand(Binomial(N,current),1)/N)
         append!(freqs,next)
         g += 1
     end
-    return(freqs)
+    ret = union(1:every:t,t)
+    return(freqs[ret])
 end
 
 

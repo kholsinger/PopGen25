@@ -14,17 +14,63 @@ julia:
 bibliography: references.bib
 ---
 
+# Quick recap {.smaller}
+
+So far, we have learned about:
+
+. . .
+
+What happens to a population when there are no evolutionary forces (or drift) present. H-W equilibrium
+
+. . .
+
+What happens when drift is present (Wright-Fisher).
+
+. . .
+
+How we can describe variation across/within a population, and how mutation impacts this quantity.
+
+. . .
+
+Today, we'll keep focusing on mutation, but we'll also add another layer of complication - a comparison with a second population.
+
+. . .
+
+This can be the ancestor, or a sister species, or a distantly related one.
+
+. . .
+
+Key - how different are the populations?
+
 # Rate of evolution
 
-Last week we started incorporating some mutation into the WF model. This week, we'll consider what happens as two populations evolve independently.
+Let's start by thinking about how rapidly a population becomes different from its ancestor.
 
 . . .
 
-We'll start with a very simple question:
-
-If populations are diverging over time, which should diverge faster: small or large populations?
+As a population evolves in WF + $\mu$, new mutations appear and may be fixed, old variants may be lost or fixed due to drift.
 
 . . .
+
+Over time - two identical populations become different.
+
+## Visualizing in simulations:
+
+```{julia}
+using Plots, Distributions, Measures
+theme(:dracula)
+default(guidefontsize=16,titlefontsize=18,legendfontsize=16)
+include("../src/Pop_gen_code.jl")
+
+
+sim1 = [WrightFisher(1000,0.0,100000;μ=0.000001,every=1000) for _ in 1:1000]
+sim2 = [WrightFisher(1000,0.0,100000;μ=0.000001,every=1000) for _ in 1:1000]
+p1=plot(sim1,leg=false,title="Pop1",c=:red,alpha=0.2,ylabel="Allele Frequency",xlabel="1k Generations")
+p2=plot(sim2,leg=false,title="Pop2",c=:orange,alpha=0.2,ylabel="Allele Frequency",xlabel="1k Generations")
+plot(p1,p2,margins=5mm,size=(1200,600))
+```
+
+## Allele frequency differences between populations?
 
 ## What is divergence?
 
@@ -45,11 +91,40 @@ ATcgATcATTcA
 
 Raw differences: 4
 
-Per/base: 0.3
+Per/site: 0.3
 
-## More formally:
+. . .
 
-The pairwise divergence between two sequences is *d*.
+But what if there's variation w/in populations?
+
+## In simulations: simplest
+
+```{julia}
+diffs = [abs.(sim1[i].-sim2[i]) for i in 1:1000]
+diffs = reshape(diffs,1000)
+plot(diffs,leg=false,ylabel="Allele Frequency Difference",xlabel="1k Generations",alpha=0.2,c=:red)
+plot!([mean(i) for i in eachcol(diffs)],c=:white,linewidth=2,size=(800,600))
+```
+
+## AFD (allele frequency difference) problems
+
+Seems intuitive, but does not scale linearly with time.
+
+. . .
+
+Remember fastest change when allele frequencies are intermediate.
+
+. . .
+
+Swing of 0.1 easily happens when allele common - hard when rare.
+
+. . .
+
+So, which takes longer to evolve: 0.4-0.6 or 0.1-0.3?
+
+## A better approach:  {.smaller}
+
+The pairwise divergence between two sequences is *d*, measuring the probability two sites sampled are different.
 
 . . .
 
@@ -67,7 +142,38 @@ $\theta_{Anc}$ accounts for the fact that there is genetic variation in the ance
 
 If $t>>1$, then $\theta_{Anc}$ is comparably small and can be ignored.
 
-## Rate of allele fixation: what is $k$
+## *d* in simulations:
+
+```{julia}
+using LaTeXStrings
+dxy = [(sim1[i].*(1 .-sim2[i])+ (1 .-sim1[i]).*sim2[i]) for i in 1:1000]
+simplot=plot(dxy,leg=false,alpha=0.2,ylabel=L"d_{XY}",xlabel="1k Generations",color=:red,size=(800,600))
+plot!(simplot,[mean(i) for i in eachcol(dxy)],c=:white,linewidth=2)
+```
+
+##  $d_{XY}$ - one estimate of *d*  {.smaller}
+
+We can estimate *d* with $d_{XY}$:
+
+$$
+d_{XY}=p_1(1-p_2)+(1-p_1)p_2
+$$
+
+Where $p_i$ is the allele frequency in the $i^{th}$ population.
+
+. . .
+
+Just the probability that if two alleles grabbed at random mismatch, when alleles biallelic and polymorphic.
+
+. . .
+
+Often makes sense to ignore polymorphism for highly diverged species.
+
+. . .
+
+Infinite sites model - mutations are never repeated, ancestral variation is lost, so only comparing differences per base pair at fixed substitutions.
+
+## Rate of allele fixation: what is $k$?
 
 Recall that any new allele that's starting at frequency $\frac{1}{2N_E}$ also has a probability of $\frac{1}{2N_E}$ of becoming fixed.
 
@@ -79,20 +185,16 @@ Let's say there are lots of these mutations, each with probability of $\frac{1}{
 
 If they evolve independently, this is just the `geometric` probability distribution. We know that the $E[geom(\lambda)] = \frac{1}{\lambda}$ - the average waiting time for a success is inverse to the rate.
 
-## Geometric distribution
+## Geometric distribution: dice example
 
-Think of something like a dice roll. What's the waiting time to get a 6?
-
-. . .
-
-Each trial, probability is $\frac{1}{6}$. On average, 6 tries until you get it.
+Each trial, probability of getting 6 is $\frac{1}{6}$. On average, 6 tries until you get it.
 
 ```{julia}
-using Distributions, Plots, Measures
-theme(:dracula)
 dice_roll = rand(1:6,100000)
 idx = findall(dice_roll .== 6)
-histogram([idx[i+1]-idx[i] for i in 1:(length(idx)-1)],xlab="Dice rolls until a 6",ylab="Frequency",leg=false,normalized=true)
+steps = [idx[i+1]-idx[i] for in in 1:(length(idx)-1)]
+histogram(steps,xlab="Dice rolls until a 6",ylab="Frequency",leg=false,normalized=true)
+vline!([mean(steps)],linewidth=2)
 ```
 
 ## Cntd.
@@ -124,10 +226,18 @@ Every generation there are $2N_E\mu$ mutations coming in that are fixed at a rat
 The neutral evolutionary rate is therefore:
 
 $$
-\frac{2N_E\mu}{2N_E} = \mu
+k=\frac{1}{2N_E}2N_E\mu = \mu
 $$
 
 So: $d=\mu t$
+
+## Back to simulations
+
+```{julia}
+#Scaled mutation rate (1k generations instead of 1, two pops so time doubled)
+plot!(simplot,[0.002*t for t in 1:100],c=:blue,linewidth=2)
+annotate!(simplot,100,0.25,("theory",16,:blue,:center))
+```
 
 ## Neutral theory
 
@@ -149,7 +259,7 @@ Therefore *most* divergence is going to be described simply by the neutral mutat
 
 Is this true?
 
-## Support for Neutral Theory  {.smaller}
+## Support for Neutral Theory {.smaller}
 
 Some nucleotide and amino acid sequences show a constant rate of evolution [@Blair2003].
 
@@ -172,8 +282,6 @@ Long run: substitution rates are *not* constant across species [@Lynch2016]
 Substitution rates are not even the same across a genome [@Mackay2012]
 
 ![](images/paste-7.png)
-
-## 
 
 ## Many places we simplified
 
@@ -256,13 +364,15 @@ That's 12 mutation rates and four bases, for 16 parameters!
 
 ## Most practical model: GTR
 
-The General Time Reversible model still has 10 parameters, but they are simpler.
-
-{dot} digraph G { layout=circo A T C G A -\> C \[label="μ1"\] A -\> T \[label="μ2"\] A -\> G \[label="μ3"\] C -\> T \[label="μ4"\] C -\> G \[label="μ5"\] C -\> A \[label="μ1"\] T -\> G \[label="μ6"\] T -\> A \[label="μ2"\] T -\> C \[label="μ4"\] G -\> A \[label="μ4"\] G -\> C \[label="μ5"\] G -\> T \[label="μ6"\] }
+The General Time Reversible model still has 10 parameters, but they are simpler: each pair of nucleotides has its own rate.
 
 . . .
 
 Time reversible because probability forward and back is the same.
+
+. . .
+
+Many more model considerations, especially for phylogenetics!
 
 ## Will we use these more complex models?
 
@@ -278,6 +388,108 @@ Most practical population genomics approaches, however, will either need you to 
 
 ## Back to divergence
 
+$d$ and $d_{XY}$ are fine estimates when we get rid of that pesky shared variation - $\theta_{Anc}$
+
+. . .
+
+But, what if there *is* appreciable shared variation?
+
+. . .
+
+## F statistics: $F_{ST}$
+
+Last time we learned about $F_{IS}$, which is an inbreeding coefficient.
+
+. . .
+
+You may have thought it stands for "Inbreeding Statistic" - it's actually "Individual - Subpopulation"
+
+. . .
+
+$F_{ST}$ - F statistic for "subpopulation - total population"
+
+. . .
+
+How is variation partitioned w/in populations vs between?
+
+## $F_{ST}$ definition, cntd.  {smaller=""}
+
+$$
+F_{ST} = \frac{\sigma_S^2}{\sigma_T^2} = \frac{\sigma_S^2}{\bar{p}(1-\bar{p})}
+$$
+
+Where $\sigma_S^2$ is the variance of the frequency of an allele in sub-populations.
+
+. . .
+
+How do you actually calculate it?
+
+. . .
+
+Slatkin estimator: if $f_i$ is the frequency of samples from population *i*:
+
+$$
+F_{ST} = \frac{\pi_{between}-\pi_{within}}{\pi_{between}} = 1- \frac{f_1(p_1q_1)+f_2(p_2q_2)}{(f_1p_1+f_2p_2)(f_1q_1+f_2q_2)}
+$$
+
+## $F_{ST}$ - really useful!
+
+Studies will frequently look for regions of elevated $F_{ST}$ as regions of divergence.
+
+. . .
+
+Neat result from coalescent: $T \approx -\log(1-F_{ST})$
+
+. . .
+
+So, can estimate divergence at sites using $F_{ST}$, can look for variation in genome, can look for significant outliers.
+
+. . .
+
+Many estimators using various data and approaches.
+
+## Cool use of $F_{ST}$ - PBS  {.smaller}
+
+Population Branch Score: test to look for places in genome where some population is much more differentiated than expected.
+
+. . .
+
+Requires focal population (1), sister without adaptive pressure (2), and outgroup (3).
+
+. . .
+
+$$
+PBS = \frac{T_{12}+T_{13}-T{23}}{2}
+$$
+
+. . .
+
+Normally hard to get $T$ - but easy transform from $F_{ST}$.
+
+## EPAS1 and Tibetans
+
+First use case of PBS - identifying adaptive gene for high altitude adaptation [@Yi2010]
+
+![](images/paste-5.jpeg){width="711"}
+
+## Problems with $F_{ST}$
+
+Denominator is total genetic diversity.
+
+. . .
+
+Regions of low diversity have higher $F_{ST}$ - even if total allele frequency shift is low!
+
+. . .
+
+Same as estimators of diversity - software has various assumptions about missing data, and biases abound.
+
+. . .
+
+Turns out - all $F_{ST}$ estimates across a region are strongly affected by rare variants [@Bhatia2013; @Berner2019a; @Cruickshank2014]
+
+## What about divergence across a gene?
+
 Recognizing that sequences are not all equally likely to evolve leads us to needing to think about different rates of evolution.
 
 . . .
@@ -292,7 +504,7 @@ Sequence could be constrained - slower divergence, or be under positive selectio
 
 Even if Neutral Theory is not correct, the Neutral Model is a useful null model to measure against.
 
-## dN, dS
+## $d_N$, $d_S$
 
 Instead of considering divergence across a whole region, we might want to split among sites that are (presumably) neutral, and sites that may not be.
 
@@ -304,4 +516,53 @@ Generally, synonymous substitutions are unlikely to affect fitness, as they are 
 
 On the other hand, changes which lead to a different amino acid (non-synonymous), are more likely to be selected.
 
-## What do they look like?
+## $\omega = \frac{d_N}{d_S}$ - constraint on gene evolution
+
+If a sequence is truly neutral:
+
+$\frac{d_N}{d_S}=1$
+
+. . .
+
+If sequence constrained:
+
+$\frac{d_N}{d_S} << 1$
+
+If sequence positively selected:
+
+$\frac{d_N}{d_S} > 1$
+
+## McDonald-Kreitman Test (MK)
+
+The problems of a regular $\frac{d_N}{d_S}$ test can be alleviated by looking at polymorphisms within populations.
+
+. . .
+
+$$
+\begin{cases}
+d_S = 2L_S\mu t \\
+d_N = 2L_N\mu t \frac{f}{1-\alpha} \\
+P_N = L_SN_E\mu k \\
+P_S = L_NN_E\mu f
+\end{cases}
+$$
+
+. . .
+
+$\alpha = 1-\frac{d_S}{d_N}\frac{P_N}{P_S}$
+
+## How much evolution is adaptive?
+
+Varies heavily by system and sequence type, but more than you may think! [@Eyre-Walker2006]
+
+![](images/paste-9.png)
+
+## How to estimate?
+
+We'll talk Thursday, but many tools, we'll focus on `PaML` .
+
+Need trees, sequences (amino acid *and* nucleotide) - so many tools to learn.
+
+If you are worried about your laptop holding up - let me know! We'll try to get you on HPC ahead of class.
+
+## References
