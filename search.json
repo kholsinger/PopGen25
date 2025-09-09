@@ -214,7 +214,7 @@
     "href": "notes/Lecture3.html#cool-use-of-f_st---pbs",
     "title": "Lecture 3",
     "section": "Cool use of \\(F_{ST}\\) - PBS",
-    "text": "Cool use of \\(F_{ST}\\) - PBS\nPopulation Branch Score: test to look for places in genome where some population is much more differentiated than expected.\n\nRequires focal population (1), sister without adaptive pressure (2), and outgroup (3).\n\n\n\\[\nPBS = \\frac{T_{12}+T_{13}-T{23}}{2}\n\\]\n\n\nNormally hard to get \\(T\\) - but easy transform from \\(F_{ST}\\)."
+    "text": "Cool use of \\(F_{ST}\\) - PBS\nPopulation Branch Score: test to look for places in genome where some population is much more differentiated than expected.\n\nRequires focal population (1), sister without adaptive pressure (2), and outgroup (3).\n\n\n\\[\nPBS = \\frac{T_{12}+T_{13}-T_{23}}{2}\n\\]\n\n\nNormally hard to get \\(T\\) - but easy transform from \\(F_{ST}\\)."
   },
   {
     "objectID": "notes/Lecture3.html#epas1-and-tibetans",
@@ -229,6 +229,20 @@
     "title": "Lecture 3",
     "section": "Problems with \\(F_{ST}\\)",
     "text": "Problems with \\(F_{ST}\\)\nDenominator is total genetic diversity.\n\nRegions of low diversity have higher \\(F_{ST}\\) - even if total allele frequency shift is low!\n\n\nSame as estimators of diversity - software has various assumptions about missing data, and biases abound.\n\n\nTurns out - all \\(F_{ST}\\) estimates across a region are strongly affected by rare variants (Bhatia et al. 2013; Berner 2019; Cruickshank and Hahn 2014)"
+  },
+  {
+    "objectID": "notes/Lecture3.html#example-in-simulations",
+    "href": "notes/Lecture3.html#example-in-simulations",
+    "title": "Lecture 3",
+    "section": "Example in simulations:",
+    "text": "Example in simulations:"
+  },
+  {
+    "objectID": "notes/Lecture3.html#but",
+    "href": "notes/Lecture3.html#but",
+    "title": "Lecture 3",
+    "section": "But!",
+    "text": "But!"
   },
   {
     "objectID": "notes/Lecture3.html#what-about-divergence-across-a-gene",
