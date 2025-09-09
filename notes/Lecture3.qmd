@@ -70,8 +70,6 @@ p2=plot(sim2,leg=false,title="Pop2",c=:orange,alpha=0.2,ylabel="Allele Frequency
 plot(p1,p2,margins=5mm,size=(1200,600))
 ```
 
-## Allele frequency differences between populations?
-
 ## What is divergence?
 
 To answer this question we first need to consider what it means for two sequences to be diverged.
