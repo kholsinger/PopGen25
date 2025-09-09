@@ -1,0 +1,16 @@
+---
+title: Lab 2
+theme: cosmo
+bibliography: references.bib
+engine: julia
+execute:
+  freeze: auto  # re-render only when source changes
+---
+
+# Lab 3: Genetic divergence estimates
+
+Today's goal is fairly simple. We will take publicly available data on `MUC19`, construct a multi-species alignment, and calculate divergence. This time, we will be using a bunch of publicly available (and fairly lightweight) tools. If you are having trouble running code/getting software to actually complete running, you may want to run this on the CBC HPC.
+
+## Downloading data
+
+One of the things we'll learn today is how to access public data and download sequences of interest. While for your final project you will not be expected to take a deeply gene-centric point of view, you may want to investigate specific sequences you are interested in

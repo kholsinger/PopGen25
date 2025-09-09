@@ -135,7 +135,7 @@ The result that evolutionary rate should be equal to the neutral mutation rate i
 
 . . .
 
-Pioneered by Motoo Kimura and Susano Ohta, with lots of subsequent results. [@Kimura1968; @Ohta1996; @Kern2018]
+Pioneered by Motoo Kimura and Tomoko Ohta, with lots of subsequent results. [@Kimura1968; @Ohta1996; @Kern2018]
 
 . . .
 
