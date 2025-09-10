@@ -2,9 +2,10 @@
 title: Lab 2
 theme: cosmo
 bibliography: references.bib
-engine: julia
 execute:
   freeze: auto  # re-render only when source changes
+  eval: false
+  echo: true
 ---
 
 # Lab 3: Genetic divergence estimates
@@ -17,4 +18,307 @@ In this first part, we'll continue to work on calculating heterozygosity, and ca
 
 ## Importing VCFs:
 
-Today we'll work with a different vcf than last time. In the data folder you should be able to find `muc19.vcf.gz`. This is a subsample of the 1000 genomes project data centered around the MUC19 gene. This dataset includes
+Today we'll work with a different vcf than last time. In the data folder you should be able to find `muc19.vcf.gz`. This is a subsample of the 1000 genomes project data centered around the MUC19 gene. This dataset includes three different populations (MXL,CEU,CHB) which should capture various degrees of divergence. The goal today is:
+
+1)  Read in VCFs if you have not yet.
+
+2)  Write functions to calculate sample allele frequency.
+
+3)  Describe genetic variation in each of the three populations.
+
+4)  Calculate $d_{XY}$ and $F_{ST}$ between these populations.
+
+For those who get through all of that, we'll then consider how you can try to obtain sequence information to calculate $dN/dS$ and the kinds of tools you'll need to do that.
+
+## Opening a VCF
+
+Go back to last week's [notes](lab2.qmd) to look at how one can use the `vcfR` package to read in data, and see example code to get a genotype matrix. For convenience, the code is given below, but if you never took a look at this last week - now is the time!
+
+```{r}
+require("vcfR")
+require("readr")
+samples = read_table("labs/data/muc_samples.txt")
+vcf = read.vcfR("labs/data/muc19_samples.vcf.gz")
+GT = extract.gt(vcf,element="GT",as.numeric=TRUE)
+```
+
+At this point, you should have two data structures inside `R`: one is a `tibble` containing two columns: `sample_id` and `population`. We'll use these later, but for now let's focus on the matrix which includes the genotype data. Again, recall that each row is formatted as:
+
+| ind1 | ind2 | ind3 | ... | indN |
+|------|------|------|-----|------|
+| 0    | 1    | 0    | 1   | 2    |
+
+Where a 0 stands for an individual homozygous for ancestral allele (`a`), a 1 is a heterozygote (`aA`) and a 2 is a homozygote for derived alleles (`AA`).
+
+## Finding an allele frequency
+
+Last week many people struggled with getting an allele frequency out of this genotype matrix, so let's walk through it systematically. Remember that an allele frequency is just the count of that allele divided by the number of chromosomes examined.
+
+$$
+p = \frac{n_{AA}+1/2n_{Aa}}{n_{AA}+n_{Aa}+n_{aa}}
+$$
+
+We actually don't even need to work *that* hard. The way the GT matrix is formatted, each entry tells you how many derived alleles each individual carries (0,1 or 2). So, we can actually just sum up the values and divide by the number of entries:
+
+```{r}
+freq_GT = function(site){
+  num_derived = sum(site)
+  total_sites = 2*length(site)
+  return(num_derived/total_sites)
+}
+```
+
+So, if all we want is to get out $p$ and there are no missing values, the code is nice and simple. But, we need to edit the above function to make sure it works even when there are missing sites (it will crash currently - you can test with the `test_data.vcf.gz` file). Instead of using sites to generate values for `num_derived` and `total_sites`, consider first making a new vector that skips any entries with missing data, say `clean_site`, and use that to calculate the allele frequency.
+
+Now, how do we get out sample heterozygosity? The below code, again, works for data where there are no missing values. Change it so it does work with missing values (should only need to change the `n=` line, if you have fixed the `freq_GT` function to work right).
+
+```{r}
+sample_het = function(site){
+  n = ???
+  p = freq_GT(site)
+  h = n/(n-1)*2*p*(1-p)
+  return(h)
+}
+```
+
+How do we actually use these functions along the whole VCF? There are two ways to loop over whole data frame, with one being more intuitive, and the other being fast and efficient. You may have learned about `for` loops if you've programmed before, but they are heinously inefficient in `R`. You will instead want to learn to use `apply` functions (`apply`,`sapply`,`lapply`). `apply` will take a dataframe, a dimension (1-row,2-column,1:2-cell) and a function. Then, it applies that function along each dimension of that dataframe. So, running `apply(GT,1,sample_het)` will return the sample heterozygosity along each row of GT (each site).
+
+Let's do that and vizualize:
+
+```{r}
+require(ggplot2)
+require(scales)
+hets = apply(GT,1,sample_het)
+
+ggplot()+geom_histogram(aes(x=hets),bins=50)+
+          labs(x="Heterozygosity",y="Count")+
+          scale_y_continuous(trans="log10")
+```
+
+If you don't get a nice looking distribution out of this - raise your hand!
+
+## Calculating divergence between pops
+
+To calculate divergence between populations, we'll need to be able to split the GT matrix into separate GT matrices for each population. Again, there are multiple ways of doing this, but just so you see how things work explicitly, let's actually make these matrices. Which columns do we actually keep? The `samples` data frame has that information.
+
+For instance, if we want to see the samples that are in the `CEU` population, we could do the following:
+
+```{r}
+ceu_inds = samples$sample_id[which(samples$population == "CEU")]
+col_ids = col_ids = which(colnames(GT) %in% ceu_inds)
+CEU_GT = GT[,col_ids]
+```
+
+Now, given that format, try to write a function that does this for any specified GT, population and sample table:
+
+```{r}
+subpop_GT = function(GT,samples,population){
+  ## get the individuals belonging to your population in the `samples` table
+  ## find the columns in GT that match those individuals.
+  sub_GT = GT[,col_ids]
+  return(sub_GT)
+}
+```
+
+If you wrote that function correctly, the below should return three well formatted GT matrices for each population
+
+```{r}
+CEU_GT = subpop_GT(GT,samples,"CEU")
+MXL_GT = subpop_GT(GT,samples,"MXL")
+CHB_GT = subpop_GT(GT,samples,"CHB")
+```
+
+## Calculating $d_{XY}$
+
+Now, let's write a function to calculate $d_{XY}$ between each population. Remember that for a biallic locus, $d_{XY}$ is defined as:
+
+$$
+d_{XY} = p_1(1-p_2)+p_2(1-p_1)
+$$
+
+Where $p_i$ is the frequency of the allele in the $i^th$ population.
+
+So, let's write a function to calculate it at a single site:
+
+```{r}
+dxy_site = function(p1,p2){
+  dxy = p1*(1-p2)+p2*(1-p1)
+  return(dxy)
+}
+```
+
+Now, we just need to get out these allele frequencies. How do we do that?
+
+::: callout-tip
+## Hint
+
+You don't need to write any new functions to do this - just *apply* the ones you already have
+:::
+
+Now, let's do this in a more efficient way, so that we can easily calculate $d_{XY}$.
+
+## Populating a data table:
+
+If you look at your `R` environment, it's getting pretty cluttered in there. Instead of a clear structure, you're starting to have all sorts of variables, some of which you may keep, others you will toss. Let's consolidate: I'll recommend we start to build a new data-frame to keep results, and work from there. This will save you a lot of memory as well, since we won't be making separate copies of the GT matrix for each population, for instance.
+
+```{r}
+#The GT row names include the chromosome, the position and the alleles. We can use these to start building a data frame.
+ids = gsub(":[A,T,C,G]*:[A,T,C,G]*","",rownames(GT))
+chr = gsub(":.*","",ids)
+pos = as.numeric(gsub(".*:","",ids))
+summary_df = data.frame(chr=chr,pos=pos)
+summary_df$tot_het = apply(GT,1,sample_het)
+#This identifies the columns for which the samples match. Rather than store a new genotype matrix for each, we can just subset on the go.
+ceu_ids= which(colnames(GT) %in% samples$sample_id[which(samples$population == "CEU")])
+mxl_ids= which(colnames(GT) %in% samples$sample_id[which(samples$population == "MXL")])
+chb_ids= which(colnames(GT) %in% samples$sample_id[which(samples$population == "CHB")])
+
+#Heterozygosities
+summary_df$CEU_het = apply(GT[,ceu_ids],1,sample_het)
+summary_df$MXL_het = apply(GT[,mxl_ids],1,sample_het)
+summary_df$CHB_het = apply(GT[,chb_ids],1,sample_het)
+
+#Allele frequencies
+summary_df$CEU_p = apply(GT[,ceu_ids],1,freq_GT)
+summary_df$MXL_p = apply(GT[,mxl_ids],1,freq_GT)
+summary_df$CHB_p = apply(GT[,chb_ids],1,freq_GT)
+
+#And now d_xy, we'll use the precalculated p values
+summary_df$CEU_MXL_dxy = dxy_site(summary_df$CEU_p,summary_df$MXL_p)
+
+summary_df$CEU_CHB_dxy = ???
+
+summary_df$CHB_MXL_dxy = ???
+```
+
+## Plot the $d_{XY}$ values!
+
+Part of the reason in formatting the data more nicely is it's easier to go back and plot. Let's plot the different $d_{XY}$ values. The below code demonstrates how you can layer lots of different elements using ggplot:
+
+```{r}
+dxy_plot = ggplot(summary_df,aes(x=pos))+
+    geom_point(aes(y=CEU_CHB_dxy),col="coral",alpha=0.4)+
+    geom_smooth(aes(y=CEU_CHB_dxy),col="coral")+
+    geom_point(aes(y=CHB_MXL_dxy),col="cyan",alpha=0.4)+
+    geom_smooth(aes(y=CHB_MXL_dxy),col="cyan")+
+    geom_point(aes(y=CEU_MXL_dxy),col="chartreuse",alpha=0.4)+
+    geom_smooth(aes(y=CEU_MXL_dxy),col="chartreuse")+
+    labs(x="Position(bp)",y="d_xy")
+
+```
+
+That plot probably looks quite awful - recall you are plotting *every* SNP here. A better idea, often, is to use *windowed* statistics. That will be the bonus task - think of how to calculate/summarize these statistics across a moving window of the genome. It's not as straightforward as you may think!
+
+## $F_{ST}$
+
+Now, let's calculate $F_{ST}$. Remember that the Slatkin estimator can be calculated as:
+
+$$
+F_{ST} = 1- \frac{f_1p_1q_1+f_2p_2q_2}{(f_1p_1+f_2p_2)(f_1q_1+f_2q_2)}
+$$
+
+Where $f_i$, $p_i$ are the proportion of samples and allele frequency in pop $i$. We already have everything we need to calculate this in the dataframe, minus the relative frequency of samples:
+
+```{r}
+n_ceu = length(ceu_ids)
+n_mxl = length(mxl_ids)
+n_chb = length(chb_ids)
+summary_df$CEU_MXL_fst = sapply(1:dim(summary_df)[1],function(i){
+    f1 = n_ceu/(n_ceu+n_mxl)
+    f2 = 1-f1
+    p1 = summary_df$CEU_p[i]
+    p2 = summary_df$MXL_p[i]
+    num = f1*p1*(1-p1)+f2*p2*(1-p2)
+    denom = (f1*p1+f2*p2)*(f1*(1-p1)+f2*(1-p2)) 
+    fst = 1-num/denom
+    return(fst)
+})
+```
+
+The above works, but it's a lot of code to copy paste for each set of populations, and if there's an error that's found later, you'll have to go back and edit it. Write a function that calculates f_ST for any pair of populations.
+
+```{r}
+fst_site = function(p1,p2,n1,n2){
+    f1 = ???
+    f2 = ???
+    num = f1*p1*(1-p1)+f2*p2*(1-p2)
+    denom = (f1*p1+f2*p2)*(f1*(1-p1)+f2*(1-p2)) 
+    fst = 1-num/denom
+    return(fst)
+}
+```
+
+In fact, let's write a function that takes a genotype matrix and a sample metadata file, and returns all of these statistics in one go. The below is a *massive* function, but you've built up all of the elements throughout this lab:
+
+```{r}
+
+process_GT = function(GT,samples){
+    ids = gsub(":[A,T,C,G]*:[A,T,C,G]*","",rownames(GT))
+    chr = gsub(":.*","",ids)
+    pos = as.numeric(gsub(".*:","",ids))
+    summary_df = data.frame(chr=chr,pos=pos)
+    summary_df$tot_het = apply(GT,1,sample_het)
+    
+    pops = unique(samples$population)
+    #Get indices for each population
+    idx_pops = lapply(pops,function(x) {
+        which(colnames(GT) %in% samples$sample_id[which(samples$population == x)])
+        })
+    #Name them to make retrieval easier.
+    names(idx_pops) = pops
+    #Check for NAs per site per pop
+    obs_alleles = lapply(1:length(pops),function(x){
+        apply(GT[,idx_pops[[x]]],1,function(x) length(!is.na(x)))
+    })
+    names(obs_alleles) = pops
+    summary_df$obs = obs_alleles
+    # Now, let's get allele frequencies         
+    ps = lapply(1:length(pops),function(x) {
+        apply(GT[,idx_pops[[x]]],1,freq_GT)
+    })
+    names(ps) = pops
+    summary_df$p = ps
+    # Heterozygosities
+    hets = lapply(1:length(pops),function(x) {
+        apply(GT[,idx_pops[[x]]],1,sample_het)
+    })
+    names(hets) = pops
+    summary_df$het = hets
+    #All possible pairs of populations:
+    pop_pairs = combn(pops,2)
+    #Calculate fst for each
+    fst =lapply(1:dim(pop_pairs)[2],function(x) {
+            pop1 = pop_pairs[1,x]
+            pop2 = pop_pairs[2,x]
+            n1 = obs_alleles[[pop1]]
+            n2 = obs_alleles[[pop2]]
+            p1 = ps[[pop1]]
+            p2 = ps[[pop2]]
+            return(fst_site(p1,p2,n1,n2))
+    })
+    #Add names to make comparisons clear
+    names(fst) = sapply(1:dim(pop_pairs)[2],function(x) paste(pop_pairs[,x],collapse="-"))
+    #And dxy
+    dxy =lapply(1:dim(pop_pairs)[2],function(x){
+        p1 = ps[[pop_pairs[1,x]]]
+        p2 = ps[[pop_pairs[2,x]]]
+        return(dxy_site(p1,p2))
+    })
+    #Adding names to dxy as well
+    names(dxy) = sapply(1:dim(pop_pairs)[2],function(x) paste(pop_pairs[,x],collapse="-"))
+    #Don't forget to add these to the dataframe
+    summary_df$fst = fst
+    summary_df$dxy = dxy
+    return(summary_df)
+}
+```
+
+It's a handful to look at the above, but take a look at any of the blocks of calculations. They use `lapply` to loop over the populations (which conveniently returns lists, which can have varying dimensions and so each "column" of the dataframe becomes a list of statistics for each population/pair of populations. Within each lapply, functions are called either as `apply` functions over the original `GT`, or get values from previously computed lists. This means that all of your results live in one big dataframe, which includes labels for the different statistics. Analysis becomes fairly straightforward:
+
+```{r}
+#Plot F_ST versus d_XY for a CEU vs MXL
+summary_df = process_GT(GT,samples)
+ggplot(summary_df)+
+    geom_point(aes(x=fst[["CEU-MXL"]],y=dxy[["CEU-MXL"]]))+
+labs(x="F_st",y="d_xy")
+```
