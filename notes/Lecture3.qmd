@@ -566,8 +566,8 @@ $$
 \begin{cases}
 d_S = 2L_S\mu t \\
 d_N = 2L_N\mu t \frac{f}{1-\alpha} \\
-P_N = L_SN_E\mu k \\
-P_S = L_NN_E\mu f
+P_S = L_SN_E\mu k \\
+P_N = L_NN_E\mu k f
 \end{cases}
 $$
 
