@@ -2,6 +2,7 @@
 _site/
 _site/*.html
 .vscode*
+<<<<<<< Updated upstream
 
 *.Rproj*
 .Rproj.user
@@ -9,3 +10,6 @@ _site/*.html
 
 .DS_Store
 
+=======
+.Rproj.user
+>>>>>>> Stashed changes
