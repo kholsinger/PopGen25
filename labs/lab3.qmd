@@ -1,5 +1,5 @@
 ---
-title: Lab 2
+title: Lab 3
 theme: cosmo
 bibliography: references.bib
 execute:
@@ -473,7 +473,7 @@ pal2nal.pl protein_aligned.faa CDS.fna -output fasta -nogap
 
 Ok, we are almost there! Now go back to [2 Make a tree!] and follow from there using the output fasta you obtained here.
 
-You might be thinking - hold on, I thought this was hareder than the vcf route, and I barely had to run `awk` or `grep` or anything, really. Well, if you're lucky - this *will* be easy and quick. In all likelihood, each piece of software will have *some* issue and you will have to sort out why it's not working. The previous pipeline has the benefit or relying really only on a single piece of software outside of standard unix tools: `bcftools`. Here, we've used NCBIs data servers, `mafft` and `pal2nal` before we got to a file we can build a tree from. Common issues:
+You might be thinking - hold on, I thought this was harder than the vcf route, and I barely had to run `awk` or `grep` or anything, really. Well, if you're lucky - this *will* be easy and quick. In all likelihood, each piece of software will have *some* issue and you will have to sort out why it's not working. The previous pipeline has the benefit or relying really only on a single piece of software outside of standard unix tools: `bcftools`. Here, we've used NCBIs data servers, `mafft` and `pal2nal` before we got to a file we can build a tree from. Common issues:
 
 -   mafft renamed your protein samples which included a forbidden character like "-", but the nucleotide fasta still contains it. Now sequences don't match. (This is an easy enough fix with another standard tool `sed`).
 
