@@ -195,6 +195,21 @@ window.Quarto = {
   <li><a href="#plot-the-d_xy-values" id="toc-plot-the-d_xy-values" class="nav-link" data-scroll-target="#plot-the-d_xy-values">Plot the <span class="math inline">\(d_{XY}\)</span> values!</a></li>
   <li><a href="#f_st" id="toc-f_st" class="nav-link" data-scroll-target="#f_st"><span class="math inline">\(F_{ST}\)</span></a></li>
   </ul></li>
+  <li><a href="#part-2-using-paml" id="toc-part-2-using-paml" class="nav-link" data-scroll-target="#part-2-using-paml">Part 2: Using <code>PaML</code></a>
+  <ul class="collapse">
+  <li><a href="#case-i-all-relevant-samples-in-one-vcf" id="toc-case-i-all-relevant-samples-in-one-vcf" class="nav-link" data-scroll-target="#case-i-all-relevant-samples-in-one-vcf">Case I: All relevant samples in one VCF</a>
+  <ul class="collapse">
+  <li><a href="#step-1-generate-fasta-files-from-vcf." id="toc-step-1-generate-fasta-files-from-vcf." class="nav-link" data-scroll-target="#step-1-generate-fasta-files-from-vcf.">Step 1: Generate <code>fasta</code> files from VCF.</a></li>
+  <li><a href="#step-2-make-a-tree" id="toc-step-2-make-a-tree" class="nav-link" data-scroll-target="#step-2-make-a-tree">Step 2 Make a tree!</a></li>
+  <li><a href="#step-3-run-paml" id="toc-step-3-run-paml" class="nav-link" data-scroll-target="#step-3-run-paml">Step 3 Run PaML</a></li>
+  </ul></li>
+  <li><a href="#case-ii-different-species-no-common-vcf" id="toc-case-ii-different-species-no-common-vcf" class="nav-link" data-scroll-target="#case-ii-different-species-no-common-vcf">Case II: different species, no common VCF</a>
+  <ul class="collapse">
+  <li><a href="#why-bother-with-more-than-one-species-to-compare-to" id="toc-why-bother-with-more-than-one-species-to-compare-to" class="nav-link" data-scroll-target="#why-bother-with-more-than-one-species-to-compare-to">Why bother with more than one species to compare to?</a></li>
+  </ul></li>
+  <li><a href="#aligning-proteins" id="toc-aligning-proteins" class="nav-link" data-scroll-target="#aligning-proteins">Aligning proteins</a></li>
+  </ul></li>
+  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways">Takeaways</a></li>
   </ul>
 </nav>
     </div>
@@ -514,9 +529,139 @@ F_{ST} = 1- \frac{f_1p_1q_1+f_2p_2q_2}{(f_1p_1+f_2p_2)(f_1q_1+f_2q_2)}
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>fst[[<span class="st">"CEU-MXL"</span>]],<span class="at">y=</span>dxy[[<span class="st">"CEU-MXL"</span>]]))<span class="sc">+</span></span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">labs</span>(<span class="at">x=</span><span class="st">"F_st"</span>,<span class="at">y=</span><span class="st">"d_xy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-
-
 </section>
+</section>
+<section id="part-2-using-paml" class="level1">
+<h1>Part 2: Using <code>PaML</code></h1>
+<p>Frankly, you likely won’t get this far in the lab, and that’s ok! I figured refocusing on more VCF manipulation and calculation of pop-gen stats made more sense. But, for completeness of the material we’ve talked about, I will still guide you through how you would, in principle, calculate dN/dS.</p>
+<section id="case-i-all-relevant-samples-in-one-vcf" class="level2">
+<h2 class="anchored" data-anchor-id="case-i-all-relevant-samples-in-one-vcf">Case I: All relevant samples in one VCF</h2>
+<p>Life is simplest if you have a single <code>VCF</code> file with all of the samples you’d like to calculate <span class="math inline">\(d_N/d_S\)</span> between. That can be the case if some of your species don’t have a good reference genome, so you’ve mapped a bunch of short reads from different groups to a single annotated reference genome. Annotation is important: we’ll need to know where the coding sequence is, and what the open reading frames are.</p>
+<section id="step-1-generate-fasta-files-from-vcf." class="level3">
+<h3 class="anchored" data-anchor-id="step-1-generate-fasta-files-from-vcf.">Step 1: Generate <code>fasta</code> files from VCF.</h3>
+<p>This is the simplest case, and as you’ll see there’s still many steps/tools to learn. For any gene of your interest, we’ll need to find the location of its coding sequence in the annotation file (usually a <code>.gff</code> file). You can find these files wherever you find a reference genome, most frequently NCBI or RefSeq. GFF files are tab separated files with the format:</p>
+<div class="cell">
+<pre class="gff cell-code"><code>X   Ensembl Repeat  2419108 2419128 42  .   .   hid=trf; hstart=1; hend=21
+X   Ensembl Repeat  2419108 2419410 2502    -   .   hid=AluSx; hstart=1; hend=303
+X   Ensembl Repeat  2419108 2419128 0   .   .   hid=dust; hstart=2419108; hend=2419128
+X   Ensembl Pred.trans. 2416676 2418760 450.19  -   2   genscan=GENSCAN00000019335
+X   Ensembl Gene    2413425 2413425 .   +   .   
+X   Ensembl CDS 2413805 2413805 .   +   .</code></pre>
+</div>
+<p>The first column is the chromosome, the second is the source of the annotation. The third is the feature: here, we’ll look for a coding sequence (CDS). Then, columns 4 and five give start and stop, respectively. Then a score, a strand, a phase, and finally the important part for searching - the attributes. We need to find our gene of interest, but include all of the regions including its coding sequence. For that, the best tool is a combination of command line utilities, here <code>awk</code> and <code>grep</code></p>
+<section id="grep-the-.gff-awk-the-grep-bcftools-the-awk" class="level4">
+<h4 class="anchored" data-anchor-id="grep-the-.gff-awk-the-grep-bcftools-the-awk">1.1 Grep the .gff, awk the grep, bcftools the awk</h4>
+<p><code>grep</code> is a utility that finds a pattern in a file. It has a surprisingly <a href="https://www.youtube.com/watch?v=iQZ81MbjKpU">fun history</a>.</p>
+<p>It is run as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">"pattern"</span> file.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Where <code>pattern</code> is whatever string you are looking for. <code>grep</code> actually uses regular expressions, but there’s no way we’ll have time to talk about those today. Suffice to say - you’ll need to learn about them at some point, so <a href="https://librarycarpentry.github.io/lc-data-intro/01-regular-expressions.html">study up</a>. For today, we won’t need to go quite that far.</p>
+<p>Let’s say we are looking for MUC19 in the human reference genome .gff provided in the data folder (human.gff).</p>
+<p>We can simply run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">"MUC19"</span> chr12.gff <span class="op">&gt;</span> muc19_hits.gff</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will make a new file which only has locations of sequences that included “MUC19” somewhere. Now, we can concatenate all of the CDS locations with <code>awk</code>, which is a great tool to extract data from tab separated files. The below command, for instance, checks if something is a coding sequence, and if so outputs the location in a format that will let us extract data from the vcf.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="st">'$3=="CDS"{print $4 "-" $5}'</span> muc19_hits.gff <span class="op">&gt;</span> sequences_to_extract.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally, we can subset our vcf to <em>only</em> include the CDS regions:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">bcftools</span> view <span class="at">-R</span> sequences_to_extract.txt muc19_samples.vcf.gz <span class="at">-Oz</span> <span class="at">-o</span> muc19_cds_only.vcf.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we have the necessary bits to make a <code>.fasta</code> file that includes sequences for all of the samples in your vcf. There are a few ways to do this, but the one you already have all the tools for if you are working with <code>vcf</code> files is probably <code>bcftools consensus</code>. This command makes <code>bcftools</code> emit a fasta with the consensus for the sample named &lt;sample&gt;. You can make this programattic and loop over all samples, or just run for those you are using for <span class="math inline">\(dN/dS\)</span> calculations.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">bcftools</span> consensus <span class="at">-s</span> <span class="op">&lt;</span>sample<span class="op">&gt;</span> -f reference.fasta muc19_cds_only.vcf.gz <span class="op">&gt;</span> sample.fasta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can then just concatenate all of your samples into a single fasta for analysis:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> sample1.fasta sample2.fasta sample3.fasta <span class="op">&gt;</span> all_samples.fasta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="step-2-make-a-tree" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-make-a-tree">Step 2 Make a tree!</h3>
+<p>We next need to make a tree using the data to guide PaML analysis. <a href="https://iqtree.github.io/">iqtree2</a> is very fast for this.</p>
+<p>The command to make a tree is also very easy once you have it installed:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">iqtree2</span> <span class="at">-s</span> all_samples.fasta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>That’s it! It will run, and you should have a file called <code>all_samples.fasta.treefile</code> containing the maximum likelihood phylogeny for your samples.</p>
+</section>
+<section id="step-3-run-paml" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-run-paml">Step 3 Run PaML</h3>
+<p>We’ll actually run <code>CodeML</code>, a subpackage of <code>PaML</code> that deals with coding sequence evolution. To get it running, we need the sequences (check), a tree (check) and a control file. Control files for <code>CodeML</code> are annoying to generate, and require specifying lots of little details <a href="https://academic.oup.com/mbe/article/40/4/msad041/7140562">see here for a guide</a>. For our purposes, what you’d need is a control file (call it something like <code>codeml.ctl</code> that looks like:</p>
+<div class="cell">
+<pre class="codeml cell-code"><code>seqfile = all_samples.fasta
+treefile = all_samples.fasta.treefile
+outfile = codeml_1.txt
+
+noisy = 0
+verbose = 0
+
+seqtype = 1
+ndata = 1
+icode = 0
+cleandata = 0
+
+model = 0
+NSsites = 0
+CodonFreq = 0
+estFreq = 0
+clock = 0
+fix_omega = 0
+omega = 0.5
+</code></pre>
+</div>
+<p>I think by this point you are hopefully starting to understand why I’m having you write your own code - every piece of software has its own format requirements, its own assumptions about the data, etc. So, it’s better to learn <em>how</em> the method runs in general rather than learning a particular software package. You could spend years becoming a <code>PaML</code> wizard, but once a new method comes around and all of your old control files no longer work and you don’t actually know why.</p>
+<p>Now that you have a control file, install <code>PaML</code> (<a href="https://github.com/abacus-gene/paml">from here</a>) and now just run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">codeml</span> codeml.ctl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Once it’s done, you should have a data table that contains dN/dS for your sequence of interest.</p>
+</section>
+</section>
+<section id="case-ii-different-species-no-common-vcf" class="level2">
+<h2 class="anchored" data-anchor-id="case-ii-different-species-no-common-vcf">Case II: different species, no common VCF</h2>
+<p>More commonly, you might find a cool gene in your organism (for thematic sake, let’s say it’s MUC19), and so you’ll want to calculate <span class="math inline">\(d_N/d_S\)</span> by comparing to some related species (let’s say Chimpanzee vs human in this case). How do we actually do this? First, we need to get both the amino acid and nucleotide sequences for the gene for both species. This has become vastly simpler than it used to be. Head on over to <code>NCBI</code>, search for your gene and you’ll find its page:</p>
+<p><img src="images/paste-3.png" class="img-fluid"></p>
+<p>Now: hit “Orthologs”, enter the species you’d like to include in your final dataset (let’s say narrow to Hominidae first), select species of interest, and then hit the “Download” button:</p>
+<p><img src="images/paste-4.png" class="img-fluid"></p>
+<p>Download a Package, and make sure it includes only the Protein sequence, and the CDS. Now, I’d recommend including more than one species (maybe all of the primates instead of just a few hominids), but it will make dealing with the data a little harder.</p>
+<section id="why-bother-with-more-than-one-species-to-compare-to" class="level3">
+<h3 class="anchored" data-anchor-id="why-bother-with-more-than-one-species-to-compare-to">Why bother with more than one species to compare to?</h3>
+<p>The power of PaML comes from using the phylogeny to try and fit a model of evolution for your gene. You can just use a pair of species (<code>yn00</code> in <code>PaML</code> does just that), but you’ll have to do most of the same steps to get there, so taking the extra time to add more species. Whatever you choose to do: unpack the resulting zip, and find the cds.dna and the protein.faa files.</p>
+</section>
+</section>
+<section id="aligning-proteins" class="level2">
+<h2 class="anchored" data-anchor-id="aligning-proteins">Aligning proteins</h2>
+<p>We now need to align the protein sequences - we don’t know what the homologous positions are. This is easiest with something like <code>Mafft</code>, although there are many proponents of <code>muscle</code>. Note, <code>muscle5</code> won’t run on <code>muc19</code> data without ~200Gb of RAM, so definitely a task for the cluster. <code>Mafft</code> will run just fine, but it may generate a non-sense alignment for some diverged sequences.</p>
+<p>Aligning is simple:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mafft</span> protein.faa <span class="op">&gt;</span> protein_aligned.faa</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>But now we need to align the nucleotide data based on the protein data. Again, a new tool with new syntax: <code>pal2nal</code> <a href="https://www.bork.embl.de/pal2nal/">found here</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pal2nal.pl</span> protein_aligned.faa CDS.fna <span class="at">-output</span> fasta <span class="at">-nogap</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ok, we are almost there! Now go back to [2 Make a tree!] and follow from there using the output fasta you obtained here.</p>
+<p>You might be thinking - hold on, I thought this was hareder than the vcf route, and I barely had to run <code>awk</code> or <code>grep</code> or anything, really. Well, if you’re lucky - this <em>will</em> be easy and quick. In all likelihood, each piece of software will have <em>some</em> issue and you will have to sort out why it’s not working. The previous pipeline has the benefit or relying really only on a single piece of software outside of standard unix tools: <code>bcftools</code>. Here, we’ve used NCBIs data servers, <code>mafft</code> and <code>pal2nal</code> before we got to a file we can build a tree from. Common issues:</p>
+<ul>
+<li><p>mafft renamed your protein samples which included a forbidden character like “-”, but the nucleotide fasta still contains it. Now sequences don’t match. (This is an easy enough fix with another standard tool <code>sed</code>).</p></li>
+<li><p>PaML does not like your sequence files because they are not a multiple of 3. This shouldn’t happen, but it does, and I can’t give you a great recommendation of how to fix it. Your downloaded CDS sequences are probably wrong in some way, or your alignment was <em>really</em> bad. Try a more stringent alignment approach.</p></li>
+<li><p>pal2nal.pl thinks your amino acids and sequences have different lengths. Sometimes they do, and it’s the same issue as above. Other times, your sequence name has a character <em>it</em> doesn’t like, even though mafft was fine with it (but pal2nal does not say what these are - just keep your sample names simple is all I can say).</p></li>
+<li><p>The gremlins in your computer are tired and won’t let the code work. This is common in today’s productivity driven environment, and the gremlins get tired all the time. Restart your machine and hope for the best, or try again on the cluster/different computer/different day.</p>
+<p>If all of this sounds like today’s lab was going to be a bit of an exercise in frustration - correct! I think we often tend to gloss over just how much work can go into running one simple analysis like <span class="math inline">\(d_N/d_S\)</span>, and the familiarity with coding will always make that process infinitely faster than it will be for beginner bioinformaticians. BUT - it’s all doable, even if it takes more elbow grease than you would think is worth. More importantly, once you’ve run it once (and ideally kept good notes), you can probably re-run the analysis for a new set of data relatively quickly - just change the name of a gene in your pipeline and you should be able to re-run it for a different set of species quickly.</p></li>
+</ul>
+</section>
+</section>
+<section id="takeaways" class="level1">
+<h1>Takeaways</h1>
+<p>There are fairly simple ways to calculate divergence when you have a <code>VCF</code> file and labels for your populations, even not relying on existing libraries and packages. Understanding how to manipulate genetic data will, in the long run, be much more important for you than knowing how to use, say <code>PopGenome</code>. More importantly, make sure you try to write code in a way you can use one statistic calculation (say, allele frequency) in multiple places across the code, rather than re-writing the same calculation over and over. This will not only save you run time, but it will make giant messy pieces of code much easier to deal with.</p>
+<p>There <em>are</em> great amazing packages to run all sorts of analyses. Each will want a different set of input files, which often means adding 4-5 more pieces of software to go from the format you have to the one you want. Your arsenal of bioinformatic tools will grow, but keep in mind that understanding base UNIX tools (like <code>grep</code>, <code>awk</code>, <code>sed</code>) is going to help you more in the long run than understanding exactly how a <code>CodeML</code> control file is structured and what every line means.</p>
+
+
 </section>
 
 </main> <!-- /main -->
