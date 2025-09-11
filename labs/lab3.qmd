@@ -322,3 +322,171 @@ ggplot(summary_df)+
     geom_point(aes(x=fst[["CEU-MXL"]],y=dxy[["CEU-MXL"]]))+
 labs(x="F_st",y="d_xy")
 ```
+
+# Part 2: Using `PaML`
+
+Frankly, you likely won't get this far in the lab, and that's ok! I figured refocusing on more VCF manipulation and calculation of pop-gen stats made more sense. But, for completeness of the material we've talked about, I will still guide you through how you would, in principle, calculate dN/dS.
+
+## Case I: All relevant samples in one VCF
+
+Life is simplest if you have a single `VCF` file with all of the samples you'd like to calculate $d_N/d_S$ between. That can be the case if some of your species don't have a good reference genome, so you've mapped a bunch of short reads from different groups to a single annotated reference genome. Annotation is important: we'll need to know where the coding sequence is, and what the open reading frames are.
+
+### Step 1: Generate `fasta` files from VCF.
+
+This is the simplest case, and as you'll see there's still many steps/tools to learn. For any gene of your interest, we'll need to find the location of its coding sequence in the annotation file (usually a `.gff` file). You can find these files wherever you find a reference genome, most frequently NCBI or RefSeq. GFF files are tab separated files with the format:
+
+```{gff}
+X	Ensembl	Repeat	2419108	2419128	42	.	.	hid=trf; hstart=1; hend=21
+X	Ensembl	Repeat	2419108	2419410	2502	-	.	hid=AluSx; hstart=1; hend=303
+X	Ensembl	Repeat	2419108	2419128	0	.	.	hid=dust; hstart=2419108; hend=2419128
+X	Ensembl	Pred.trans.	2416676	2418760	450.19	-	2	genscan=GENSCAN00000019335
+X	Ensembl	Gene	2413425	2413425	.	+	.	
+X	Ensembl	CDS	2413805	2413805	.	+	.
+```
+
+The first column is the chromosome, the second is the source of the annotation. The third is the feature: here, we'll look for a coding sequence (CDS). Then, columns 4 and five give start and stop, respectively. Then a score, a strand, a phase, and finally the important part for searching - the attributes. We need to find our gene of interest, but include all of the regions including its coding sequence. For that, the best tool is a combination of command line utilities, here `awk` and `grep`
+
+#### 1.1 Grep the .gff, awk the grep, bcftools the awk
+
+`grep` is a utility that finds a pattern in a file. It has a surprisingly [fun history](https://www.youtube.com/watch?v=iQZ81MbjKpU).
+
+It is run as follows:
+
+```{bash}
+grep "pattern" file.txt
+```
+
+Where `pattern` is whatever string you are looking for. `grep` actually uses regular expressions, but there's no way we'll have time to talk about those today. Suffice to say - you'll need to learn about them at some point, so [study up](https://librarycarpentry.github.io/lc-data-intro/01-regular-expressions.html). For today, we won't need to go quite that far.
+
+Let's say we are looking for MUC19 in the human reference genome .gff provided in the data folder (human.gff).
+
+We can simply run:
+
+```{bash}
+grep "MUC19" chr12.gff > muc19_hits.gff
+```
+
+This will make a new file which only has locations of sequences that included "MUC19" somewhere. Now, we can concatenate all of the CDS locations with `awk`, which is a great tool to extract data from tab separated files. The below command, for instance, checks if something is a coding sequence, and if so outputs the location in a format that will let us extract data from the vcf.
+
+```{bash}
+awk '$3=="CDS"{print $4 "-" $5}' muc19_hits.gff > sequences_to_extract.txt
+```
+
+Finally, we can subset our vcf to *only* include the CDS regions:
+
+```{bash}
+bcftools view -R sequences_to_extract.txt muc19_samples.vcf.gz -Oz -o muc19_cds_only.vcf.gz
+```
+
+Now we have the necessary bits to make a `.fasta` file that includes sequences for all of the samples in your vcf. There are a few ways to do this, but the one you already have all the tools for if you are working with `vcf` files is probably `bcftools consensus`. This command makes `bcftools` emit a fasta with the consensus for the sample named \<sample\>. You can make this programattic and loop over all samples, or just run for those you are using for $dN/dS$ calculations.
+
+```{bash}
+bcftools consensus -s <sample> -f reference.fasta muc19_cds_only.vcf.gz > sample.fasta
+```
+
+You can then just concatenate all of your samples into a single fasta for analysis:
+
+```{bash}
+cat sample1.fasta sample2.fasta sample3.fasta > all_samples.fasta
+```
+
+### Step 2 Make a tree!
+
+We next need to make a tree using the data to guide PaML analysis. [iqtree2](https://iqtree.github.io/) is very fast for this.
+
+The command to make a tree is also very easy once you have it installed:
+
+```{bash}
+iqtree2 -s all_samples.fasta
+```
+
+That's it! It will run, and you should have a file called `all_samples.fasta.treefile` containing the maximum likelihood phylogeny for your samples.
+
+### Step 3 Run PaML
+
+We'll actually run `CodeML`, a subpackage of `PaML` that deals with coding sequence evolution. To get it running, we need the sequences (check), a tree (check) and a control file. Control files for `CodeML` are annoying to generate, and require specifying lots of little details [see here for a guide](https://academic.oup.com/mbe/article/40/4/msad041/7140562). For our purposes, what you'd need is a control file (call it something like `codeml.ctl` that looks like:
+
+```{codeml}
+seqfile = all_samples.fasta
+treefile = all_samples.fasta.treefile
+outfile = codeml_1.txt
+
+noisy = 0
+verbose = 0
+
+seqtype = 1
+ndata = 1
+icode = 0
+cleandata = 0
+
+model = 0
+NSsites = 0
+CodonFreq = 0
+estFreq = 0
+clock = 0
+fix_omega = 0
+omega = 0.5
+
+```
+
+I think by this point you are hopefully starting to understand why I'm having you write your own code - every piece of software has its own format requirements, its own assumptions about the data, etc. So, it's better to learn *how* the method runs in general rather than learning a particular software package. You could spend years becoming a `PaML` wizard, but once a new method comes around and all of your old control files no longer work and you don't actually know why.
+
+Now that you have a control file, install `PaML` ([from here](https://github.com/abacus-gene/paml)) and now just run:
+
+```{bash}
+codeml codeml.ctl
+```
+
+Once it's done, you should have a data table that contains dN/dS for your sequence of interest.
+
+## Case II: different species, no common VCF
+
+More commonly, you might find a cool gene in your organism (for thematic sake, let's say it's MUC19), and so you'll want to calculate $d_N/d_S$ by comparing to some related species (let's say Chimpanzee vs human in this case). How do we actually do this? First, we need to get both the amino acid and nucleotide sequences for the gene for both species. This has become vastly simpler than it used to be. Head on over to `NCBI`, search for your gene and you'll find its page:
+
+![](images/paste-3.png)
+
+Now: hit "Orthologs", enter the species you'd like to include in your final dataset (let's say narrow to Hominidae first), select species of interest, and then hit the "Download" button:
+
+![](images/paste-4.png)
+
+Download a Package, and make sure it includes only the Protein sequence, and the CDS. Now, I'd recommend including more than one species (maybe all of the primates instead of just a few hominids), but it will make dealing with the data a little harder.
+
+### Why bother with more than one species to compare to?
+
+The power of PaML comes from using the phylogeny to try and fit a model of evolution for your gene. You can just use a pair of species (`yn00` in `PaML` does just that), but you'll have to do most of the same steps to get there, so taking the extra time to add more species. Whatever you choose to do: unpack the resulting zip, and find the cds.dna and the protein.faa files.
+
+## Aligning proteins
+
+We now need to align the protein sequences - we don't know what the homologous positions are. This is easiest with something like `Mafft`, although there are many proponents of `muscle`. Note, `muscle5` won't run on `muc19` data without \~200Gb of RAM, so definitely a task for the cluster. `Mafft` will run just fine, but it may generate a non-sense alignment for some diverged sequences.
+
+Aligning is simple:
+
+```{bash}
+mafft protein.faa > protein_aligned.faa
+```
+
+But now we need to align the nucleotide data based on the protein data. Again, a new tool with new syntax: `pal2nal` [found here](https://www.bork.embl.de/pal2nal/).
+
+```{bash}
+pal2nal.pl protein_aligned.faa CDS.fna -output fasta -nogap
+```
+
+Ok, we are almost there! Now go back to [2 Make a tree!] and follow from there using the output fasta you obtained here.
+
+You might be thinking - hold on, I thought this was hareder than the vcf route, and I barely had to run `awk` or `grep` or anything, really. Well, if you're lucky - this *will* be easy and quick. In all likelihood, each piece of software will have *some* issue and you will have to sort out why it's not working. The previous pipeline has the benefit or relying really only on a single piece of software outside of standard unix tools: `bcftools`. Here, we've used NCBIs data servers, `mafft` and `pal2nal` before we got to a file we can build a tree from. Common issues:
+
+-   mafft renamed your protein samples which included a forbidden character like "-", but the nucleotide fasta still contains it. Now sequences don't match. (This is an easy enough fix with another standard tool `sed`).
+
+-   PaML does not like your sequence files because they are not a multiple of 3. This shouldn't happen, but it does, and I can't give you a great recommendation of how to fix it. Your downloaded CDS sequences are probably wrong in some way, or your alignment was *really* bad. Try a more stringent alignment approach.
+
+-   pal2nal.pl thinks your amino acids and sequences have different lengths. Sometimes they do, and it's the same issue as above. Other times, your sequence name has a character *it* doesn't like, even though mafft was fine with it (but pal2nal does not say what these are - just keep your sample names simple is all I can say).
+
+-   The gremlins in your computer are tired and won't let the code work. This is common in today's productivity driven environment, and the gremlins get tired all the time. Restart your machine and hope for the best, or try again on the cluster/different computer/different day.
+
+    If all of this sounds like today's lab was going to be a bit of an exercise in frustration - correct! I think we often tend to gloss over just how much work can go into running one simple analysis like $d_N/d_S$, and the familiarity with coding will always make that process infinitely faster than it will be for beginner bioinformaticians. BUT - it's all doable, even if it takes more elbow grease than you would think is worth. More importantly, once you've run it once (and ideally kept good notes), you can probably re-run the analysis for a new set of data relatively quickly - just change the name of a gene in your pipeline and you should be able to re-run it for a different set of species quickly.
+
+# Takeaways
+
+There are fairly simple ways to calculate divergence when you have a `VCF` file and labels for your populations, even not relying on existing libraries and packages. Understanding how to manipulate genetic data will, in the long run, be much more important for you than knowing how to use, say `PopGenome`. More importantly, make sure you try to write code in a way you can use one statistic calculation (say, allele frequency) in multiple places across the code, rather than re-writing the same calculation over and over. This will not only save you run time, but it will make giant messy pieces of code much easier to deal with.
+
+There *are* great amazing packages to run all sorts of analyses. Each will want a different set of input files, which often means adding 4-5 more pieces of software to go from the format you have to the one you want. Your arsenal of bioinformatic tools will grow, but keep in mind that understanding base UNIX tools (like `grep`, `awk`, `sed`) is going to help you more in the long run than understanding exactly how a `CodeML` control file is structured and what every line means.
