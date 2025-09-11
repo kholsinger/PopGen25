@@ -1,0 +1,46 @@
+---
+title: "Discussion 3: Divergence and introgression"
+execute:
+  freeze: auto  # re-render only when source changes
+format: 
+    revealjs:
+        theme: clean
+        incremental: true
+        preview-links: auto
+        chalkboard: true
+engine: julia
+julia:
+  exeflags: ["--project=../PopGen25"]
+---
+
+# What is introgression?
+
+Gene flow between diverged populations can result in introgression - alleles from one population becoming common/fixed in another.
+
+. . .
+
+Normally, a variety of ways to infer introgresion based on site sharing patterns - we'll cover these later.
+
+. . .
+
+A consequence of introgression is that different parts of the genome show different degrees of divergence with donor species/population.
+
+## MUC19
+
+_MUC19_ is a mucin gene, present across vertebrates. 
+
+. . .
+
+Not a super exciting target for selection - could be related to immunity (mucous), but very hard to study - 8-12k amino acids long.
+
+. . .
+
+Previous studies pointed out it is selected and probably introgressed, but how can we reconstruct its evolutionary history?
+
+## Discussion questions
+
+1) Wht evidence do the authors use to narrow in specifically on MUC19 versus other genes in region?
+
+2) Why do they think the region first introgressed into Neanderthals from Denisovans?
+
+3) We have discussed how mutation is the ultimate origin of genetic variation. Why does introgression happen if mutations could introduce new variants instead?

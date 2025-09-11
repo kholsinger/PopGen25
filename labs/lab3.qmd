@@ -176,19 +176,19 @@ chb_ids= which(colnames(GT) %in% samples$sample_id[which(samples$population == "
 #Heterozygosities
 summary_df$CEU_het = apply(GT[,ceu_ids],1,sample_het)
 summary_df$MXL_het = apply(GT[,mxl_ids],1,sample_het)
-summary_df$CHB_het = apply(GT[,chb_ids],1,sample_het)
+summary_df$YRI_het = apply(GT[,chb_ids],1,sample_het)
 
 #Allele frequencies
 summary_df$CEU_p = apply(GT[,ceu_ids],1,freq_GT)
 summary_df$MXL_p = apply(GT[,mxl_ids],1,freq_GT)
-summary_df$CHB_p = apply(GT[,chb_ids],1,freq_GT)
+summary_df$YRI_p = apply(GT[,chb_ids],1,freq_GT)
 
 #And now d_xy, we'll use the precalculated p values
 summary_df$CEU_MXL_dxy = dxy_site(summary_df$CEU_p,summary_df$MXL_p)
 
-summary_df$CEU_CHB_dxy = ???
+summary_df$CEU_YRI_dxy = ???
 
-summary_df$CHB_MXL_dxy = ???
+summary_df$YRI_MXL_dxy = ???
 ```
 
 ## Plot the $d_{XY}$ values!
@@ -197,10 +197,10 @@ Part of the reason in formatting the data more nicely is it's easier to go back 
 
 ```{r}
 dxy_plot = ggplot(summary_df,aes(x=pos))+
-    geom_point(aes(y=CEU_CHB_dxy),col="coral",alpha=0.4)+
-    geom_smooth(aes(y=CEU_CHB_dxy),col="coral")+
-    geom_point(aes(y=CHB_MXL_dxy),col="cyan",alpha=0.4)+
-    geom_smooth(aes(y=CHB_MXL_dxy),col="cyan")+
+    geom_point(aes(y=CEU_YRI_dxy),col="coral",alpha=0.4)+
+    geom_smooth(aes(y=CEU_YRI_dxy),col="coral")+
+    geom_point(aes(y=YRI_MXL_dxy),col="cyan",alpha=0.4)+
+    geom_smooth(aes(y=YRI_MXL_dxy),col="cyan")+
     geom_point(aes(y=CEU_MXL_dxy),col="chartreuse",alpha=0.4)+
     geom_smooth(aes(y=CEU_MXL_dxy),col="chartreuse")+
     labs(x="Position(bp)",y="d_xy")
@@ -222,7 +222,7 @@ Where $f_i$, $p_i$ are the proportion of samples and allele frequency in pop $i$
 ```{r}
 n_ceu = length(ceu_ids)
 n_mxl = length(mxl_ids)
-n_chb = length(chb_ids)
+n_yri = length(yri_ids)
 summary_df$CEU_MXL_fst = sapply(1:dim(summary_df)[1],function(i){
     f1 = n_ceu/(n_ceu+n_mxl)
     f2 = 1-f1
@@ -233,6 +233,7 @@ summary_df$CEU_MXL_fst = sapply(1:dim(summary_df)[1],function(i){
     fst = 1-num/denom
     return(fst)
 })
+
 ```
 
 The above works, but it's a lot of code to copy paste for each set of populations, and if there's an error that's found later, you'll have to go back and edit it. Write a function that calculates f_ST for any pair of populations.
@@ -471,7 +472,7 @@ But now we need to align the nucleotide data based on the protein data. Again, a
 pal2nal.pl protein_aligned.faa CDS.fna -output fasta -nogap
 ```
 
-Ok, we are almost there! Now go back to [2 Make a tree!] and follow from there using the output fasta you obtained here.
+Ok, we are almost there! Now go back to \[2 Make a tree!\] and follow from there using the output fasta you obtained here.
 
 You might be thinking - hold on, I thought this was harder than the vcf route, and I barely had to run `awk` or `grep` or anything, really. Well, if you're lucky - this *will* be easy and quick. In all likelihood, each piece of software will have *some* issue and you will have to sort out why it's not working. The previous pipeline has the benefit or relying really only on a single piece of software outside of standard unix tools: `bcftools`. Here, we've used NCBIs data servers, `mafft` and `pal2nal` before we got to a file we can build a tree from. Common issues:
 

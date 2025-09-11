@@ -23,3 +23,5 @@ Lab 1 can be accessed with Pluto, and will be found in the `labs/lab1.jl` file.
 
 Lab 2 is [here](labs/lab2.qmd)
 
+Lab 3 is [here](labs/lab3.qmd)
+
