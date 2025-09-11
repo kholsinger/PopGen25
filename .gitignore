@@ -2,3 +2,10 @@
 _site/
 _site/*.html
 .vscode*
+
+*.Rproj*
+.Rproj.user
+.Rhistory
+
+.DS_Store
+
