@@ -396,19 +396,19 @@ Hint
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Heterozygosities</span></span>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>CEU_het <span class="ot">=</span> <span class="fu">apply</span>(GT[,ceu_ids],<span class="dv">1</span>,sample_het)</span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>MXL_het <span class="ot">=</span> <span class="fu">apply</span>(GT[,mxl_ids],<span class="dv">1</span>,sample_het)</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>CHB_het <span class="ot">=</span> <span class="fu">apply</span>(GT[,chb_ids],<span class="dv">1</span>,sample_het)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>YRI_het <span class="ot">=</span> <span class="fu">apply</span>(GT[,chb_ids],<span class="dv">1</span>,sample_het)</span>
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co">#Allele frequencies</span></span>
 <span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>CEU_p <span class="ot">=</span> <span class="fu">apply</span>(GT[,ceu_ids],<span class="dv">1</span>,freq_GT)</span>
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>MXL_p <span class="ot">=</span> <span class="fu">apply</span>(GT[,mxl_ids],<span class="dv">1</span>,freq_GT)</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>CHB_p <span class="ot">=</span> <span class="fu">apply</span>(GT[,chb_ids],<span class="dv">1</span>,freq_GT)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>YRI_p <span class="ot">=</span> <span class="fu">apply</span>(GT[,chb_ids],<span class="dv">1</span>,freq_GT)</span>
 <span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="co">#And now d_xy, we'll use the precalculated p values</span></span>
 <span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>CEU_MXL_dxy <span class="ot">=</span> <span class="fu">dxy_site</span>(summary_df<span class="sc">$</span>CEU_p,summary_df<span class="sc">$</span>MXL_p)</span>
 <span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>CEU_CHB_dxy <span class="ot">=</span> ???</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>CEU_YRI_dxy <span class="ot">=</span> ???</span>
 <span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>CHB_MXL_dxy <span class="ot">=</span> ???</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>YRI_MXL_dxy <span class="ot">=</span> ???</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="plot-the-d_xy-values" class="level2">
@@ -416,10 +416,10 @@ Hint
 <p>Part of the reason in formatting the data more nicely is it’s easier to go back and plot. Let’s plot the different <span class="math inline">\(d_{XY}\)</span> values. The below code demonstrates how you can layer lots of different elements using ggplot:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dxy_plot <span class="ot">=</span> <span class="fu">ggplot</span>(summary_df,<span class="fu">aes</span>(<span class="at">x=</span>pos))<span class="sc">+</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y=</span>CEU_CHB_dxy),<span class="at">col=</span><span class="st">"coral"</span>,<span class="at">alpha=</span><span class="fl">0.4</span>)<span class="sc">+</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">y=</span>CEU_CHB_dxy),<span class="at">col=</span><span class="st">"coral"</span>)<span class="sc">+</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y=</span>CHB_MXL_dxy),<span class="at">col=</span><span class="st">"cyan"</span>,<span class="at">alpha=</span><span class="fl">0.4</span>)<span class="sc">+</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">y=</span>CHB_MXL_dxy),<span class="at">col=</span><span class="st">"cyan"</span>)<span class="sc">+</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y=</span>CEU_YRI_dxy),<span class="at">col=</span><span class="st">"coral"</span>,<span class="at">alpha=</span><span class="fl">0.4</span>)<span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">y=</span>CEU_YRI_dxy),<span class="at">col=</span><span class="st">"coral"</span>)<span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y=</span>YRI_MXL_dxy),<span class="at">col=</span><span class="st">"cyan"</span>,<span class="at">alpha=</span><span class="fl">0.4</span>)<span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">y=</span>YRI_MXL_dxy),<span class="at">col=</span><span class="st">"cyan"</span>)<span class="sc">+</span></span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y=</span>CEU_MXL_dxy),<span class="at">col=</span><span class="st">"chartreuse"</span>,<span class="at">alpha=</span><span class="fl">0.4</span>)<span class="sc">+</span></span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">y=</span>CEU_MXL_dxy),<span class="at">col=</span><span class="st">"chartreuse"</span>)<span class="sc">+</span></span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Position(bp)"</span>,<span class="at">y=</span><span class="st">"d_xy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -436,7 +436,7 @@ F_{ST} = 1- \frac{f_1p_1q_1+f_2p_2q_2}{(f_1p_1+f_2p_2)(f_1q_1+f_2q_2)}
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>n_ceu <span class="ot">=</span> <span class="fu">length</span>(ceu_ids)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>n_mxl <span class="ot">=</span> <span class="fu">length</span>(mxl_ids)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>n_chb <span class="ot">=</span> <span class="fu">length</span>(chb_ids)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>n_yri <span class="ot">=</span> <span class="fu">length</span>(yri_ids)</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>CEU_MXL_fst <span class="ot">=</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(summary_df)[<span class="dv">1</span>],<span class="cf">function</span>(i){</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    f1 <span class="ot">=</span> n_ceu<span class="sc">/</span>(n_ceu<span class="sc">+</span>n_mxl)</span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    f2 <span class="ot">=</span> <span class="dv">1</span><span class="sc">-</span>f1</span>
