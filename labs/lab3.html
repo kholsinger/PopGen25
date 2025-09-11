@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Lab 2 – EEB5348-Fall25</title>
+<title>Lab 3 – EEB5348-Fall25</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -218,7 +218,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Lab 2</h1>
+<h1 class="title">Lab 3</h1>
 </div>
 
 
@@ -646,7 +646,7 @@ omega = 0.5
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pal2nal.pl</span> protein_aligned.faa CDS.fna <span class="at">-output</span> fasta <span class="at">-nogap</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Ok, we are almost there! Now go back to [2 Make a tree!] and follow from there using the output fasta you obtained here.</p>
-<p>You might be thinking - hold on, I thought this was hareder than the vcf route, and I barely had to run <code>awk</code> or <code>grep</code> or anything, really. Well, if you’re lucky - this <em>will</em> be easy and quick. In all likelihood, each piece of software will have <em>some</em> issue and you will have to sort out why it’s not working. The previous pipeline has the benefit or relying really only on a single piece of software outside of standard unix tools: <code>bcftools</code>. Here, we’ve used NCBIs data servers, <code>mafft</code> and <code>pal2nal</code> before we got to a file we can build a tree from. Common issues:</p>
+<p>You might be thinking - hold on, I thought this was harder than the vcf route, and I barely had to run <code>awk</code> or <code>grep</code> or anything, really. Well, if you’re lucky - this <em>will</em> be easy and quick. In all likelihood, each piece of software will have <em>some</em> issue and you will have to sort out why it’s not working. The previous pipeline has the benefit or relying really only on a single piece of software outside of standard unix tools: <code>bcftools</code>. Here, we’ve used NCBIs data servers, <code>mafft</code> and <code>pal2nal</code> before we got to a file we can build a tree from. Common issues:</p>
 <ul>
 <li><p>mafft renamed your protein samples which included a forbidden character like “-”, but the nucleotide fasta still contains it. Now sequences don’t match. (This is an easy enough fix with another standard tool <code>sed</code>).</p></li>
 <li><p>PaML does not like your sequence files because they are not a multiple of 3. This shouldn’t happen, but it does, and I can’t give you a great recommendation of how to fix it. Your downloaded CDS sequences are probably wrong in some way, or your alignment was <em>really</em> bad. Try a more stringent alignment approach.</p></li>
