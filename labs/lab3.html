@@ -345,7 +345,7 @@ p = \frac{n_{AA}+1/2n_{Aa}}{n_{AA}+n_{Aa}+n_{aa}}
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>CEU_GT <span class="ot">=</span> <span class="fu">subpop_GT</span>(GT,samples,<span class="st">"CEU"</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>MXL_GT <span class="ot">=</span> <span class="fu">subpop_GT</span>(GT,samples,<span class="st">"MXL"</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>CHB_GT <span class="ot">=</span> <span class="fu">subpop_GT</span>(GT,samples,<span class="st">"CHB"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>YRI_GT <span class="ot">=</span> <span class="fu">subpop_GT</span>(GT,samples,<span class="st">"YRI"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="calculating-d_xy" class="level2">
@@ -391,12 +391,12 @@ Hint
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#This identifies the columns for which the samples match. Rather than store a new genotype matrix for each, we can just subset on the go.</span></span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>ceu_ids<span class="ot">=</span> <span class="fu">which</span>(<span class="fu">colnames</span>(GT) <span class="sc">%in%</span> samples<span class="sc">$</span>sample_id[<span class="fu">which</span>(samples<span class="sc">$</span>population <span class="sc">==</span> <span class="st">"CEU"</span>)])</span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>mxl_ids<span class="ot">=</span> <span class="fu">which</span>(<span class="fu">colnames</span>(GT) <span class="sc">%in%</span> samples<span class="sc">$</span>sample_id[<span class="fu">which</span>(samples<span class="sc">$</span>population <span class="sc">==</span> <span class="st">"MXL"</span>)])</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>chb_ids<span class="ot">=</span> <span class="fu">which</span>(<span class="fu">colnames</span>(GT) <span class="sc">%in%</span> samples<span class="sc">$</span>sample_id[<span class="fu">which</span>(samples<span class="sc">$</span>population <span class="sc">==</span> <span class="st">"CHB"</span>)])</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>yri_ids<span class="ot">=</span> <span class="fu">which</span>(<span class="fu">colnames</span>(GT) <span class="sc">%in%</span> samples<span class="sc">$</span>sample_id[<span class="fu">which</span>(samples<span class="sc">$</span>population <span class="sc">==</span> <span class="st">"YRI"</span>)])</span>
 <span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Heterozygosities</span></span>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>CEU_het <span class="ot">=</span> <span class="fu">apply</span>(GT[,ceu_ids],<span class="dv">1</span>,sample_het)</span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>MXL_het <span class="ot">=</span> <span class="fu">apply</span>(GT[,mxl_ids],<span class="dv">1</span>,sample_het)</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>YRI_het <span class="ot">=</span> <span class="fu">apply</span>(GT[,chb_ids],<span class="dv">1</span>,sample_het)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>YRI_het <span class="ot">=</span> <span class="fu">apply</span>(GT[,yri_ids],<span class="dv">1</span>,sample_het)</span>
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co">#Allele frequencies</span></span>
 <span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>summary_df<span class="sc">$</span>CEU_p <span class="ot">=</span> <span class="fu">apply</span>(GT[,ceu_ids],<span class="dv">1</span>,freq_GT)</span>
