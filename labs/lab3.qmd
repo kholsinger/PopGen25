@@ -125,7 +125,7 @@ If you wrote that function correctly, the below should return three well formatt
 ```{r}
 CEU_GT = subpop_GT(GT,samples,"CEU")
 MXL_GT = subpop_GT(GT,samples,"MXL")
-CHB_GT = subpop_GT(GT,samples,"CHB")
+YRI_GT = subpop_GT(GT,samples,"YRI")
 ```
 
 ## Calculating $d_{XY}$
@@ -171,12 +171,12 @@ summary_df$tot_het = apply(GT,1,sample_het)
 #This identifies the columns for which the samples match. Rather than store a new genotype matrix for each, we can just subset on the go.
 ceu_ids= which(colnames(GT) %in% samples$sample_id[which(samples$population == "CEU")])
 mxl_ids= which(colnames(GT) %in% samples$sample_id[which(samples$population == "MXL")])
-chb_ids= which(colnames(GT) %in% samples$sample_id[which(samples$population == "CHB")])
+yri_ids= which(colnames(GT) %in% samples$sample_id[which(samples$population == "YRI")])
 
 #Heterozygosities
 summary_df$CEU_het = apply(GT[,ceu_ids],1,sample_het)
 summary_df$MXL_het = apply(GT[,mxl_ids],1,sample_het)
-summary_df$YRI_het = apply(GT[,chb_ids],1,sample_het)
+summary_df$YRI_het = apply(GT[,yri_ids],1,sample_het)
 
 #Allele frequencies
 summary_df$CEU_p = apply(GT[,ceu_ids],1,freq_GT)
