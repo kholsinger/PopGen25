@@ -1,0 +1,284 @@
+---
+title: "Lecture 4"
+execute:
+  freeze: auto  # re-render only when source changes
+format: 
+    revealjs:
+        theme: moon
+        incremental: true
+        preview-links: auto
+        chalkboard: true
+engine: julia
+julia:
+  exeflags: ["--project=../PopGen25"]
+bibliography: references.bib
+---
+
+# Recombination
+
+Last week we considered how, as populations evolve, divergence builds up at individual sequences.
+
+. . .
+
+So far, the evolutionary processes we have talked about have been summable up in simple ways, in particular because we have assumed each locus' trajectory is independent of others.
+
+. . .
+
+Today, we'll start to consider when we can make that assumption, and when we cannot, and how recombination shapes evolution writ large.
+
+## Sexual reproduction is rare
+
+Only a small sliver of the total tree of life has to sexually reproduce.
+
+. . .
+
+Prokaryotes and Archae do not sexually reproduce, many fungi and protists only do so when needed.
+
+. . .
+
+So, it makes sense to first consider a world with no sexual reproduction.
+
+## Asexaul reproduction
+
+Our earlier schematic of a WF life-cycle had a diploid adult producing infinite gametes.
+
+. . .
+
+Now consider a haploid generation, which produces the next haploid generation by random sampling - some individuals bud, others die out.
+
+. . .
+
+Each individual lineage is well approximated by a branching process - a mathematical structure describing budding dynamics of a population.
+
+## Some true facts about branching processes
+
+Unless a lineage on average produces more than 1 offspring per generation, it is guaranteed to go extinct at some point.
+
+. . .
+
+What is the expected number of offspring in a WF formulation?
+
+. . .
+
+For each offspring, the chance they descend from you is $\frac{1}{N}$. There are $N$ offspring.
+
+. . .
+
+So: each individual lineage is guaranteed to go extinct in the long run.
+
+. . .
+
+Caveat: this does not mean the species is guaranteed to go extinct - in fact, we've made sure it doesn't since population size is held constant at $N$.
+
+## Consequences for genetic diversity
+
+Any time a mutation arises, it starts a new lineage.
+
+. . .
+
+This lineage can become fixed with probability $1/N$.
+
+. . .
+
+All other mutations carried by that lineage become fixed as well, since they are tied to it.
+
+. . .
+
+Similarly - all other mutations not present in that lineage become lost as it becomes fixed.
+
+## What is the genetic diversity of an asexual population?
+
+In a neutral population, dynamics remain surprisingly similar, as any sweeps take long (same logic as Neutral Theory: $\frac{1}{N}$ is the rate of fixation)
+
+. . .
+
+If there are selective sweeps (some lineages better than others) - populations almost fully clonal except during sweep [@Desai2013].
+
+. . .
+
+This is called *clonal interference*: clones are competing with each other, but only one (and its subset mutations) can win.
+
+. . .
+
+Because selection is probably happening all of the time, you may expect asexual lineages to show very low/no genetic diversity.
+
+## Genetic diversity in asexual lineages
+
+By definition, bacterial species are labeled as "different" if $d>0.05$. That means $\pi$ in any population rarely goes above 0.05 as well.
+
+. . .
+
+But also - $d$ is calculated for *shared* genes, often called core genes.
+
+. . .
+
+Many genes in bacteria are *accessory*, they can have a copy or not.
+
+. . .
+
+In this sense - lots of genetic diversity within species, but not in the subset of genes that are core.
+
+## Why are there so many accessory genes?
+
+Sexual reproduction is rare, but its main effect: recombination, is not.
+
+. . .
+
+Viral lineages recombine in three distinct ways [@Simon-Loriere2011]
+
+![](images/paste-10.png){width="596"}
+
+## Asexual recombination cntd
+
+Bacterial lineages recombine via transformation, transduction and conjugation.
+
+. . .
+
+The frequency of recombination in prokaryotic lineages is debated, but likely quite universal [@Conrad2024]
+
+![](images/paste-11.png)
+
+## So: recombination probably universal, but what does it do?
+
+When population geneticists talk about recombination, it is mostly, but not always, referring to meiotic recombination.
+
+. . .
+
+More generally, we refer to it as the process that breaks down linkage.
+
+. . .
+
+*Linkage* is how correlated the inheritance of two loci is.
+
+. . .
+
+Imagine our asexual population, no recombination. An individual with mutations `AB` will always have offspring who carry `AB`, excluding mutation.
+
+. . .
+
+Now, imagine a sexual individual with genotype `AB` - how frequently will their offspring be `AB`?
+
+. . .
+
+Because they are sexually reproducing, they first need to form a diploid, so depends on allele frequencies!
+
+## Linkage equilibrium and linkage disequilibrium
+
+These are horrible terms, because they are false.
+
+. . .
+
+Linkage equilibrium refers to the expected frequency of co-inheriting two alleles when they are unlinked.
+
+. . .
+
+Recall your high-school Punnet squares: if `A` in $p_A$ frequency, and `B` in $p_B$, then $p_{AB}$ = ??
+
+. . .
+
+Linkage Disequilibrium (LD) is a measure of how far off this expectation the inheritance of two alleles is:
+
+$$
+D_{ij} = p_{ij}-p_ip_j
+$$
+
+## D in practice
+
+The frequency of the four possible genotypes will be:
+
+$$
+\begin{cases}
+p_{AB} = p_Ap_B+D \\
+p_{Ab} = p_Aq_B-D \\
+p_{aB} = q_Ap_B-D \\
+p_{ab} = q_aq_B+D
+\end{cases}
+$$
+
+Because these values depend on allele frequencies, they don't scale nicely linearly.
+
+```{julia}
+using Plots, LaTeXStrings, Measures
+function max_D(p1,p2)
+    min(p1*(1-p2),p2*(1-p1))
+end
+x=y=range(0,1,length=100)
+p = plot(x,y,max_D,st=[:surface],leg=false,zlabel="Maximum |D|",xlabel=L"p_A",ylabel=L"p_B",margins=5mm)
+```
+
+## Alternatives to $D$
+
+There are more intuitive ways of measuring LD as a result, but we'll come back to $D$ time and again.
+
+. . .
+
+One is to scale it by its maximum possible value for any allele frequency:
+
+$$
+\begin{cases}
+D_{ij}' = \frac{D_{ij}}{max(-p_iq_j,-p_jq_i)}, for D<0 \\
+D_{ij}' = \frac{D_{ij}}{min(p_iq_j,q_ip_j)}, for D>0 \\
+\end{cases}
+$$
+
+Now it ranges neatly between -1 and +1.
+
+## LD as a correlation
+
+Alternatively, we can think of LD as the correlation of genotypes in individuals for any pair of loci:
+
+$$
+r_{ij}^2 = \frac{D_{ij}^2}{p_ip_jq_iq_j}
+$$
+
+. . .
+
+So, let's say you have this genotype matrix:
+
+| A   | B   |
+|-----|-----|
+| 1   | 1   |
+| 1   | 1   |
+| 1   | 1   |
+| 1   | 1   |
+| 1   | 1   |
+| 0   | 0   |
+| 0   | 0   |
+| 0   | 0   |
+| 0   | 0   |
+| 0   | 0   |
+
+Knowing what allele is at A perfectly predicts what allele is at B.
+
+## What does recombination do?
+
+Recombination, whether meiotic or otherwise, breaks up these correlations.
+
+. . .
+
+The effect of recombination is to reduce LD between pairs of alleles:
+
+$$
+D_{ij}^` =r_{ij}D_{ij}
+$$
+
+Where $r_{ij}$ is the rate of recombination between loci $i$ and $j$.
+
+. . .
+
+```{julia}
+function d_prime(D,r)
+    return(D*r)
+end
+first = collect(range(0,0.25,length=50))
+r = collect(range(0,0.5,length=50))
+ds = zeros(50,50,100)
+ds[:,:,1] = repeat(first,50)
+for i in 2:100
+    ds[:,:,i] = [d_prime.(ds[x,y,i-1],r[x]) for x in 1:50,y=1:50]
+end
+anim = @animate for i ∈ 1:10
+    plot(first,r,ds[:,:,i],st=:surface,leg=false,zlabel="D",ylabel="r",xlabel="Starting D",zlims=(0,0.25))
+end
+gif(anim,fps=2)
+```
