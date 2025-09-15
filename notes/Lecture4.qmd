@@ -8,6 +8,8 @@ format:
         incremental: true
         preview-links: auto
         chalkboard: true
+        margin: 0
+        width: 1080
 engine: julia
 julia:
   exeflags: ["--project=../PopGen25"]
@@ -128,7 +130,7 @@ Viral lineages recombine in three distinct ways [@Simon-Loriere2011]
 
 ![](images/paste-10.png){width="596"}
 
-## Asexual recombination cntd {.smaller}
+## Asexual recombination cntd {.scrollable}
 
 Bacterial lineages recombine via transformation, transduction and conjugation.
 
@@ -136,9 +138,9 @@ Bacterial lineages recombine via transformation, transduction and conjugation.
 
 The frequency of recombination in prokaryotic lineages is debated, but likely quite universal [@Conrad2024]
 
-![](images/paste-11.png)
+![](images/paste-11.png){width="594"}
 
-## So: recombination probably universal, but what does it do? {smaller=""}
+## So: recombination probably universal, but what does it do? {.smaller}
 
 When population geneticists talk about recombination, it is mostly, but not always, referring to meiotic recombination.
 
@@ -201,6 +203,8 @@ Because these values depend on allele frequencies, they don't scale nicely linea
 
 ```{julia}
 using Plots, LaTeXStrings, Measures
+theme(:rose_pine)
+default(xlabelfontsize=16,ylabelfontsize=16,markerstrokewidth=0,markersize=1)
 function max_D(p1,p2)
     min(p1*(1-p2),p2*(1-p1))
 end
@@ -272,7 +276,7 @@ r = collect(range(0,0.5,length=100))
 cols = colormap("RdBu",100)
 ds = [d_prime(0.25,x,i) for x in r, i in 0:100]
 anim = @animate for i ∈ 2:101
-    plot(1:i,transpose(ds[:,1:i]),leg=false,xlabel="Generation",ylabel="D",xlims=(0,100),palette=cols,ylims=(0,0.25),margins=4mm)
+    plot(1:i,transpose(ds[:,1:i]),label="",xlabel="Generation",ylabel=L"D",xlims=(0,100),palette=cols,ylims=(0,0.25),margins=4mm,size=(1000,600))
 end
 gif(anim,fps=10)
 ```
@@ -294,6 +298,10 @@ Even when loci are closely linked ($r \ll 0.5$ ), decay is fairly quick.
 What keeps loci in LD then?
 
 ## Forces that generate LD
+
+Anything that creates *joint* identity-by-descent
+
+. . .
 
 Population structure/migration.
 
@@ -337,9 +345,9 @@ Think of loci $i$ and $j$ - they are some $r$ distance apart. How well can you p
 
 If you think of the probability that they are both passed on together (joint identity-by-descent), that will become the long term correlation at the pair of loci. [@Sved1971a]
 
-## Long term LD cntd  {.smaller}
+## Long term LD cntd {.smaller}
 
-More formally, let $Q_n$ be the probability that two alleles are identical by descent after $n$ generations
+More formally, let $Q_n$ be the probability that two alleles at different loci are jointly identical by descent after $n$ generations
 
 $$
 Q_n = \frac{1}{2N}(1-r)^2+\left(1-\frac{1}{2N}\right)Q_{n-1}(1-r)^2
@@ -365,18 +373,18 @@ end
 N = range(2,8,length=100)
 r = range(-8,-5,length=100)
 
-contourf(10 .^N,10 .^r,[rho_bar(x,y) for x in 10.0 .^N, y in 10.0 .^r],xaxis=:log10,yaxis=:log10,xlabel="N",ylabel="r",margins=4mm)
+contourf(10 .^N,10 .^r,[rho_bar(x,y) for x in 10.0 .^N, y in 10.0 .^r],xaxis=:log10,yaxis=:log10,xlabel=L"N",ylabel=L"r",margins=4mm,size=(1000,600),cbar_title=L"r^2")
 ```
 
-## Things you will hear/read/think that are subtly wrong:
+## Things you will read/think that are subtly wrong:
 
 -   These loci are only in LD because of proximity
 
-    -   How did that LD build up to begin with?
+    -   What's the population size? How did that LD build up to begin with?
 
 -   Long-range LD is great evidence for selection
 
-    -   Or population structure!
+    -   Or population structure, or structural variation.
 
 -   There's no LD expected between these loci since they are on different chromosomes.
 
@@ -384,9 +392,7 @@ contourf(10 .^N,10 .^r,[rho_bar(x,y) for x in 10.0 .^N, y in 10.0 .^r],xaxis=:lo
 
 -   I can just LD prune my data and get the same results.
 
-    -   We'll chat more about this one.
-
-## LD and pop gen analyses
+## LD and pop gen analyses {.smaller}
 
 It's easier to think about $r^2$ as a measure of LD here.
 
@@ -397,6 +403,10 @@ If two loci are in perfect LD ($r^2 = 1$), then knowing one gives you *all* of t
 . . .
 
 In practice, this means that the loci are replicates of the same information.
+
+. . .
+
+This will lead to bad statistical inference, and you'll have to deal with more samples than you strictly need.
 
 . . .
 
@@ -422,20 +432,20 @@ LD-clumping tries to avoid this by picking the most important SNPs in any region
 
 Often good practice to run this on your data initially, and if possible, repeat data without pruning/clumping and see if results are robust.
 
-## Other ways of dealing with LD: LD-decay
+## Other ways of dealing with LD: LD-decay {.smaller}
 
 As you saw, LD decays fairly quickly with increasing recombination distance.
 
 . . .
 
-So, we can instead examine individual windows, spaced apart by roughly how far $r^2$ drops to 1/2.
+Windows spaced apart by distance where $r^2$ is negligible.
 
 ```{julia}
 using CSV, DataFrames
 include("../src/Stats_utilities.jl")
 muc_data = CSV.read("data/muc19_data.ld",DataFrame)
 dist = abs.(muc_data.BP_A .- muc_data.BP_B)
-p1 = scatter(dist,muc_data.R2,leg=false,xlabel="Distance between SNPs",ylabel=L"r^2",margins=5mm,size=(800,600);markersize=1,markerstrokewidth=0)
+p1 = scatter(dist,muc_data.R2,leg=false,xlabel="Distance between SNPs",ylabel=L"r^2",margins=5mm,size=(1000,500),c=:white;markersize=1,markerstrokewidth=0)
 ```
 
 ## Another way of thinking of LD
@@ -447,10 +457,10 @@ subdata = muc_data[findall(muc_data.R2 .> 0.2),:]
 p2 = scatter(subdata.BP_A,
     subdata.BP_B-subdata.BP_A,
     markerz=subdata.R2,
-    label="",size=(800,600),
+    label="",size=(1000,600),
     xlabel="SNP 1 position",
-    ylabel="SNP 2 position",
-    clabel=L"r^2",margins=4mm;markerstrokewidth=0,markersize=1,clims=(0.0,1.0))
+    ylabel="SNP 2 distance",
+    cbar_title=L"r^2",margins=4mm;markerstrokewidth=0,markersize=2,markershape=:diamond,clims=(0.0,1.0))
 ```
 
 ## What can this tell you?
@@ -475,7 +485,7 @@ $$
 
 So - every higher degree $D$ has to account for all of the LD in all possible subsets. Any positive/negative values are therefore deviations *beyond* what's happening due to LD between pairs.
 
-## iHS, EHH, ROH  {.smaller}
+## iHS, EHH, ROH {.smaller}
 
 There are multiple statistics that work off of the fact that recombination breaks apart certain patterns in the genome, thus, we can look for "runs" of patterns as evidence of *recent* evolutionary events, or selection acting along the whole region.
 
