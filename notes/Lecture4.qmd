@@ -38,7 +38,7 @@ Prokaryotes and Archae do not sexually reproduce, many fungi and protists only d
 
 So, it makes sense to first consider a world with no sexual reproduction.
 
-## Asexaul reproduction
+## Asexual reproduction
 
 Our earlier schematic of a WF life-cycle had a diploid adult producing infinite gametes.
 
@@ -128,7 +128,7 @@ Viral lineages recombine in three distinct ways [@Simon-Loriere2011]
 
 ![](images/paste-10.png){width="596"}
 
-## Asexual recombination cntd
+## Asexual recombination cntd {.smaller}
 
 Bacterial lineages recombine via transformation, transduction and conjugation.
 
@@ -138,7 +138,7 @@ The frequency of recombination in prokaryotic lineages is debated, but likely qu
 
 ![](images/paste-11.png)
 
-## So: recombination probably universal, but what does it do?
+## So: recombination probably universal, but what does it do? {smaller=""}
 
 When population geneticists talk about recombination, it is mostly, but not always, referring to meiotic recombination.
 
@@ -197,13 +197,15 @@ $$
 
 Because these values depend on allele frequencies, they don't scale nicely linearly.
 
+## When is $D$ maximized?
+
 ```{julia}
 using Plots, LaTeXStrings, Measures
 function max_D(p1,p2)
     min(p1*(1-p2),p2*(1-p1))
 end
 x=y=range(0,1,length=100)
-p = plot(x,y,max_D,st=[:surface],leg=false,zlabel="Maximum |D|",xlabel=L"p_A",ylabel=L"p_B",margins=5mm)
+p = plot(x,y,max_D,st=[:surface],leg=false,zlabel="Maximum |D|",xlabel=L"p_A",ylabel=L"p_B",margins=5mm,size=(1000,600))
 ```
 
 ## Alternatives to $D$
@@ -223,7 +225,7 @@ $$
 
 Now it ranges neatly between -1 and +1.
 
-## LD as a correlation
+## LD as a correlation {.smaller}
 
 Alternatively, we can think of LD as the correlation of genotypes in individuals for any pair of loci:
 
@@ -239,12 +241,6 @@ So, let's say you have this genotype matrix:
 |-----|-----|
 | 1   | 1   |
 | 1   | 1   |
-| 1   | 1   |
-| 1   | 1   |
-| 1   | 1   |
-| 0   | 0   |
-| 0   | 0   |
-| 0   | 0   |
 | 0   | 0   |
 | 0   | 0   |
 
@@ -259,26 +255,240 @@ Recombination, whether meiotic or otherwise, breaks up these correlations.
 The effect of recombination is to reduce LD between pairs of alleles:
 
 $$
-D_{ij}^` =r_{ij}D_{ij}
+D_{ij}^` =\left(1-r_{ij}\right)D_{ij}
 $$
 
 Where $r_{ij}$ is the rate of recombination between loci $i$ and $j$.
 
 . . .
 
+## How quick is the decay?
+
 ```{julia}
-function d_prime(D,r)
-    return(D*r)
+function d_prime(D,r,n)
+    return(D*(1-r)^n)
 end
-first = collect(range(0,0.25,length=50))
-r = collect(range(0,0.5,length=50))
-ds = zeros(50,50,100)
-ds[:,:,1] = repeat(first,50)
-for i in 2:100
-    ds[:,:,i] = [d_prime.(ds[x,y,i-1],r[x]) for x in 1:50,y=1:50]
+r = collect(range(0,0.5,length=100))
+cols = colormap("RdBu",100)
+ds = [d_prime(0.25,x,i) for x in r, i in 0:100]
+anim = @animate for i ∈ 2:101
+    plot(1:i,transpose(ds[:,1:i]),leg=false,xlabel="Generation",ylabel="D",xlims=(0,100),palette=cols,ylims=(0,0.25),margins=4mm)
 end
-anim = @animate for i ∈ 1:10
-    plot(first,r,ds[:,:,i],st=:surface,leg=false,zlabel="D",ylabel="r",xlabel="Starting D",zlims=(0,0.25))
-end
-gif(anim,fps=2)
+gif(anim,fps=10)
 ```
+
+## Key take-aways
+
+When loci are unlinked (r=0.5), LD rapidly decays to 0.
+
+. . .
+
+Unlike HW - single generation not enough to go to 0!
+
+. . .
+
+Even when loci are closely linked ($r \ll 0.5$ ), decay is fairly quick.
+
+. . .
+
+What keeps loci in LD then?
+
+## Forces that generate LD
+
+Population structure/migration.
+
+. . .
+
+Mating preference [@Kirkpatrick1982].
+
+. . .
+
+Direct selection (but only weakly).
+
+. . .
+
+Epistatic selection (selection on combination of alleles).
+
+## LD and population size
+
+In the long run, how much LD there is between sites also depends on population size.
+
+. . .
+
+Small populations - fewer recombination events. Expectations we showed before are true for infinite populations.
+
+. . .
+
+Population effect captured in $\rho$ - the population recombination rate.
+
+$$
+\rho = 4 N_E r
+$$
+
+## $\rho$ in the long run
+
+In the long run, there are some fairly intuitive expectations for how correlated any pair of alleles will be given $\rho$.
+
+. . .
+
+Think of loci $i$ and $j$ - they are some $r$ distance apart. How well can you predict their eventual correlation?
+
+. . .
+
+If you think of the probability that they are both passed on together (joint identity-by-descent), that will become the long term correlation at the pair of loci. [@Sved1971a]
+
+## Long term LD cntd  {.smaller}
+
+More formally, let $Q_n$ be the probability that two alleles are identical by descent after $n$ generations
+
+$$
+Q_n = \frac{1}{2N}(1-r)^2+\left(1-\frac{1}{2N}\right)Q_{n-1}(1-r)^2
+$$
+
+That is - either they are identical by descent just now, or they were the previous generation.
+
+. . .
+
+Some wailing and gnashing of teeth later, you can get:
+
+$$
+E[Q_\infty] = \frac{1}{1+4Nr} = \frac{1}{1+\rho}
+$$
+
+## So:
+
+```{julia}
+function rho_bar(N,r) 
+    1/(1+4*N*r)
+end
+
+N = range(2,8,length=100)
+r = range(-8,-5,length=100)
+
+contourf(10 .^N,10 .^r,[rho_bar(x,y) for x in 10.0 .^N, y in 10.0 .^r],xaxis=:log10,yaxis=:log10,xlabel="N",ylabel="r",margins=4mm)
+```
+
+## Things you will hear/read/think that are subtly wrong:
+
+-   These loci are only in LD because of proximity
+
+    -   How did that LD build up to begin with?
+
+-   Long-range LD is great evidence for selection
+
+    -   Or population structure!
+
+-   There's no LD expected between these loci since they are on different chromosomes.
+
+    -   LD can build up *within* a generations. Selection/assortative mating can maintain it between chromosomes.
+
+-   I can just LD prune my data and get the same results.
+
+    -   We'll chat more about this one.
+
+## LD and pop gen analyses
+
+It's easier to think about $r^2$ as a measure of LD here.
+
+. . .
+
+If two loci are in perfect LD ($r^2 = 1$), then knowing one gives you *all* of the information about the second.
+
+. . .
+
+In practice, this means that the loci are replicates of the same information.
+
+. . .
+
+LD-pruning refers to the practice of keeping only the first or most common allele when multiple alleles are in high LD.
+
+. . .
+
+Reduces the amount of data to keep track of, accounts (in some sense) for non-independence of different data points.
+
+## LD -pruning vs LD -clumping
+
+The problem with pruning is the most common/first allele may not be the interesting one.
+
+. . .
+
+Most pipelines don't have a step to go back and check what was in LD with the identified locus, so may miss important factors.
+
+. . .
+
+LD-clumping tries to avoid this by picking the most important SNPs in any region. First designate interesting/important loci, then remove other that are in LD with those.
+
+. . .
+
+Often good practice to run this on your data initially, and if possible, repeat data without pruning/clumping and see if results are robust.
+
+## Other ways of dealing with LD: LD-decay
+
+As you saw, LD decays fairly quickly with increasing recombination distance.
+
+. . .
+
+So, we can instead examine individual windows, spaced apart by roughly how far $r^2$ drops to 1/2.
+
+```{julia}
+using CSV, DataFrames
+include("../src/Stats_utilities.jl")
+muc_data = CSV.read("data/muc19_data.ld",DataFrame)
+dist = abs.(muc_data.BP_A .- muc_data.BP_B)
+p1 = scatter(dist,muc_data.R2,leg=false,xlabel="Distance between SNPs",ylabel=L"r^2",margins=5mm,size=(800,600);markersize=1,markerstrokewidth=0)
+```
+
+## Another way of thinking of LD
+
+We can also think of LD as occurring on different regions within a genome:
+
+```{julia}
+subdata = muc_data[findall(muc_data.R2 .> 0.2),:]
+p2 = scatter(subdata.BP_A,
+    subdata.BP_B-subdata.BP_A,
+    markerz=subdata.R2,
+    label="",size=(800,600),
+    xlabel="SNP 1 position",
+    ylabel="SNP 2 position",
+    clabel=L"r^2",margins=4mm;markerstrokewidth=0,markersize=1,clims=(0.0,1.0))
+```
+
+## What can this tell you?
+
+Evolved SVs (here an inversion in Europeans (a) not found in Africans (b)). [@Stefansson2005]
+
+![](images/paste-3.webp)
+
+## Worth knowing: $D_{ijk}$ and above
+
+You can also calculate the LD between triplets/quadruplets... of alleles.
+
+. . .
+
+The number of such comparisons grows very rapidly, but they can often be useful when thinking about a set of loci that are, as a group, more correlated than expected.
+
+$$
+D_{\Bbb{A}} = P_{\Bbb{A}}-\sum_{a \in \Bbb{A}}D_aP_a
+$$
+
+. . .
+
+So - every higher degree $D$ has to account for all of the LD in all possible subsets. Any positive/negative values are therefore deviations *beyond* what's happening due to LD between pairs.
+
+## iHS, EHH, ROH  {.smaller}
+
+There are multiple statistics that work off of the fact that recombination breaks apart certain patterns in the genome, thus, we can look for "runs" of patterns as evidence of *recent* evolutionary events, or selection acting along the whole region.
+
+-   ROH - Runs of Homozygosity. We mentioned these previously. They can be indicators of inbreeding, since:
+
+    -   Homozygosity is caused by more Identity-by-descent than expected from HW/WF
+
+    -   The length of such regions can tell you how far from the inbreeding event this chunk descended from (since only recombination will break up the ROH).
+
+-   iHS, - integradted Homozygosity Score, EHH - Extended Haplotype: searching for selection. [@Klassmann2022]
+
+    -   Selection at a locus will force nearby regions to hitchhike. This generates long range LD, and, if selection is strong, long range homozygosity.
+
+        ![](images/paste-7.jpeg){width="632"}
+
+## References

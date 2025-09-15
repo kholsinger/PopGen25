@@ -1,3 +1,7 @@
+using MultivariateStats
+using Loess
+using StatsBase
+using Statistics
 
 function scaled_loadings(PCA)
     scaled_loadings = loadings(PCA).*transpose(principalvars(PCA).^0.5)
@@ -25,8 +29,14 @@ function scree(pca;broken_stick=false,margins=5mm)
     return(ret_plot)
 end
 
-function pca_plot(data_frame)
-    pca_model = fit(PCA,data_frame)
-    
+"""
+    loess!(plot,x,y)
+    adds a loess curve to a plot
+"""
 
+function loess!(p,x,y)
+    model = loess(x,y)
+    us = range(extrema(x)...;step=(extrema(x)[2]-extrema(x)[1])/100)
+    vs = predict(model,us)
+    plot!(p,us,vs,legend=false)
 end
