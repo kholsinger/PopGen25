@@ -88,7 +88,7 @@ All other mutations carried by that lineage become fixed as well, since they are
 
 Similarly - all other mutations not present in that lineage become lost as it becomes fixed.
 
-## What is the genetic diversity of an asexual population?
+## What is the genetic diversity of an asexual population?  {.smaller}
 
 In a neutral population, dynamics remain surprisingly similar, as any sweeps take long (same logic as Neutral Theory: $\frac{1}{N}$ is the rate of fixation)
 
@@ -120,7 +120,7 @@ Many genes in bacteria are *accessory*, they can have a copy or not.
 
 In this sense - lots of genetic diversity within species, but not in the subset of genes that are core.
 
-## Why are there so many accessory genes?
+## Why are there so many accessory genes?  {.smaller}
 
 Sexual reproduction is rare, but its main effect: recombination, is not.
 
