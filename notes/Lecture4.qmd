@@ -501,4 +501,64 @@ There are multiple statistics that work off of the fact that recombination break
 
         ![](images/paste-7.jpeg){width="632"}
 
+## Getting rid of LD - practically
+
+A common occurence in evolutionary studies is two populations that are different by some interesting trait.
+
+. . .
+
+You might try to first look at divergence across the genome to detect _what_ is causing this interesting trait to appear.
+
+. . .
+
+If divergence has ocurred genome-wide - might be very hard to do.
+
+. . . 
+
+If populations can still interbreed: QTL analysis
+
+## Quantitative Trait Loci
+
+So far we have been agnostic about _what_ our genes do, because we haven't needed to worry about it.
+
+. . .
+
+Let's consider an allele that impacts some measurable trait, say height.
+
+. . .
+
+How can we detect this allele?
+
+## Appraoch 1: Genome-wide association study
+
+If variance within your population is high enough, you can get away with GWAS.
+
+. . .
+
+We'll talk more about how GWAS is performed later in the semester, but at it's core: fit a linear model of $trait ~ genotype$ at each locus.
+
+. . .
+
+More likely for some traits - the whole population has the trait of interest, and no real variation.
+
+. . .
+
+In other words - the trait is _correlated_ to the population's ancestry as a whole - there's LD here.
+
+## How to break apart LD
+
+If you cross this population with a closely related one, which does not have the trait, you can run a QTL analysis.
+
+. . .
+
+Each generation past F1, the LD between Pop 1 ancestry and the causal allele decreases by $r$ between that allele and everywhere else in the genome.
+
+. . . 
+
+Easy to narrow to causal allele (if single locus) within two generations. Why?
+
+## Many more generations
+
+
+
 ## References

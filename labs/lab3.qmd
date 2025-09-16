@@ -260,7 +260,7 @@ process_GT = function(GT,samples){
     summary_df = data.frame(chr=chr,pos=pos)
     summary_df$tot_het = apply(GT,1,sample_het)
     
-    pops = unique(samples$population)
+    pops = sort(unique(samples$population))
     #Get indices for each population
     idx_pops = lapply(pops,function(x) {
         which(colnames(GT) %in% samples$sample_id[which(samples$population == x)])
