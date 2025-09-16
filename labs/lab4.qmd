@@ -13,7 +13,7 @@ execute:
 
 Today the lab will focus on getting you more acquinted with LD statistics, from calculating and plotting them to LD-pruning. Before that, however, we are now at the point where your code should be getting complex enough that you are probably ready to appreciate a good structure to your codebase. So we'll start with setting up something I recommended a while ago: a file to hold all of your custom functions.
 
-## Part 1: Setting up reusable code re-usably
+# Part 1: Setting up reusable code re-usably
 
 Let's start by making a file in the popgen github project. Go into the `src` folder and create a file called `<your_last_name>.R` this will be a file that I won't ever overwrite when you download code, but will be a clear space for yourself to store different useful functions as you write them. It's a good idea to generally organize your code even more granularly (for instance, a different file for functions that are reading in/dealing with VCFs than one that works on phylogenetic trees), but for now I'll enforce only a single file. You _will_ be turning these files in, so make sure you actually create it.
 
@@ -48,7 +48,7 @@ source("src/<your_last_name.R")
 
 And suddenly you'll be able to get all of the stats out of any vcf file that you have population annotations for. For the next bit of the class, we'll work on adding more functionality to this code, this week dealing with LD.
 
-## Calculating LD statistics
+# Part 2: Calculating LD statistics
 
 We talked in class about a broad set of LD statistics that are often used in different contexts. Some of them will be extremely easy to calculate, while others less so. We'll start with `D` - the absolute measure of linkage disequilbrium. You have most of the bits necessary to write this function already, but we'll need to learn to deal with one more to actually get it:
 
@@ -72,7 +72,7 @@ But, you are often going to deal with diploid data. In that case, when both indi
 
 Here, you need to make sure your data is _phased_ - each allele is essentially labeled whether it came from mom or dad (altough in practice you don't know which is which in many phasing approaches). In your VCF file, phased data looks like `1|0` instead of `1/0`, with the `|` indicating known phase, and `/` indicating it is not known. The 1k genome data you'll work on today happens to be phased, and I'll show you how you can extract that information in a second. But first, let's consider what to do if your data is not phased, but you _really_ need it to be:
 
-### Phasing 101
+## Phasing 101
 
 The most correct approach to phasing is to have data from a trio of both parents and an offspring. This lets you infer phase directly: if an individual is `0/1` and the mother is `0/0`, while the father is `1/1`, you _know_ the father's allele had to be the `1`. Even here, there'll be ambiguous cases (all three heterozygous, for example), but you should be able to phase most of the genome. This is especially useful when you need accurate phasing but some of the assumptions of statistical phasing might not work (e.g. you are interested in sex chromosomes)
 
@@ -80,7 +80,7 @@ If you (reasonably) can't triple your sequencing costs for unclear benefits, but
 
 The short version of the approaches - the data is generally clustered in a way that best represents multiple populations in Hardy-Weinberg. Then each allele gets assigned a phase based on which of two parental populations (different for each individual, potentially) that individual's alleles seem to come from. These approaches have gotten quite fast and efficient, but even so expect to budget a good month of effort for your project in getting the data phased to a satisfactory outcome.
 
-### Back to calculating LD
+## Back to calculating LD
 
 So, what about our phased data once it's in `R`? Notice that in the past I have simply quickly converted the `VCF` to a genotype matrix. But you could instead convert it to a haplotype matrix, with the `vcfR` function `extract.haps`. This function takes the vcf as an argument, and will spit out a nice matrix where each column is one haplotype. By default, it will convert any unphased sites to `NA`s. That's probably the right call in 99% of the cases, but make sure your functions actually work with NAs when dealing with haplotypes.
 
@@ -92,7 +92,15 @@ So, now the function I showed above for haploids should work for your diploid da
 |   j  |   0  |   1  |   0  |  NA  |   0  |   1  |
 |   k  |   NA |  NA  |   1  |  NA  |   1  |   1  |
 
-If what you do is just `na.omit` each site, you will end up with the wrong LD values for i vs j comparisons, and site 3 is liable to break completely. So, you'll have to think of how to do this comparison differently than when we calculated allele frequencies.
+If what you do is just `na.omit` each site, you will end up with the wrong LD values for i vs j comparisons, and site 3 is liable to break completely. Each vector would end up looking like:
+
+| Site |    1 |    2 |    3 |    4 |    5 |    6 |
+|------|------|------|------|------|------|------|
+|   i  |   0  |   1  |   0  |  1   |   1  |      |
+|   j  |   0  |   1  |   0  |  0   |   1  |      |
+|   k  |   1  |   1  |   1  |      |      |      |
+
+ So, you'll have to think of how to do this comparison differently than when we calculated allele frequencies. Think about the way to only count places where the sites match, and then similarly account for the number of individuals that have non-missing data. 
 
 ```{r}
 freq_ij = function(site_i,site_j){
@@ -136,7 +144,7 @@ d_ij = function(site_i,site_j){
 }
 ```
 
-### The combinatorial nightmare of LD
+# Part 3: The combinatorial nightmare of LD
 
 So far we've discussed LD as a fun and useful statistic you can calculate for your data. The problem is that it is a pairwise statistic, so the number of comparisons we need to make grows quadratically with the number of sites. It's useful to at least know about [big O notation ](https://en.wikipedia.org/wiki/Big_O_notation), but the very short version is: if you have a 1000 sites and you calculate $\pi$ for each, that's roughly 1000 calculations, and for a 1,000,000 it's a 1,000,000. But there are $\binom{1000}{2} = 499500$ calculations for LD with a 1000 sites, and a whopping $\binom{1000000}{2} \approxeq 5e11$ for 1 million sites. Modern computers are fast, but when you ask them to do on the order of trillions of calculations - your code will be very slow. You'll also need to _store_ all of the results of those calculations. At 64 bits per LD value, you'll be looking at about 4 Tb of data to store all the LD values between 1 million sites. So - how do we avoid this?
 
@@ -163,6 +171,10 @@ plink --vcf  muc19_subsample.vcf.gz \
 --ld-window-r2 0 \ #Drop any sites with r2 less than 0 (so, keep all r2)
 --out your_prefix # What to call the output files
 ```
-lab 4
+
 This should run quite quickly on the muc19 data, even though there are quite many sites in there. Indeed, you could easily swap some parameters (say, the thin parameter) and still see decently small outputs. But, notice that the file size is nearly the same as that of the vcf even at the settings I provide above. Calculating all possible r2 values will both take the entire lab and likely fill up your hard drive.
+
+In general, as you start working on bigger data-sets you will end up seeing exponentially longer run times. It's worth it to go back and re-think when something is actually needed, versus when you can simplify your data somewhat. In cases where you are running lots of SNP-wise stats, LD-pruning can be a very prudent approach.
+
+# Part 4: LD-pruning
 
