@@ -147,7 +147,7 @@ We need to make sure it works for any ploidy, so we might as well write a better
 ```{r}
 freq_GT = function(site,ploidy=2){
   clean_site = na.omit(site)
-  p = sum(clean_site)/(ploidy*length(clean_site))
+  p = sum(clean_site)/(???) #How will ploidy go in here?
   return(p)
 }
 ```
@@ -195,6 +195,8 @@ thin_GT = GT[random_rows,]
 cor_mat = cor(t(thin_GT))
 ```
 
+Now, write a function that will take a GT matrix and thin it to whatever proportion the user desires.
+
 ::: {.callout-note}
 What are some issues with thinning data this way?
 :::
@@ -212,7 +214,7 @@ plink --vcf  muc19_subsample.vcf.gz \
 --mind 0.5 \ #Any individual with more than 50% missing data is tossed as well
 --chr 12 \ #Which chromosome should it analyze
 --thin 0.1 \ #Randomly sample 10% of loci, and use these for the analysis
--r2 gz \ #Output the r2 statistic, and gzip it so it's not as giant.
+-r2 gz \ #Output the r2 statistic, and gzip it so it is not as giant.
 --ld-window 100 \ #Minimum distance between sites to analyze
 --ld-window-kb 1000 \ #Maximum distance (in kb this time) of sites to analyze
 --ld-window-r2 0 \ #Drop any sites with r2 less than 0 (so, keep all r2)
@@ -231,7 +233,7 @@ In general, as you start working on bigger data-sets you will end up seeing expo
 #Function to LD-prune a VCF. Makes calls to subfunctions for each chromosome, and each of those runs sub-functions on each window.
 #For a variety of reasons, we drop _all_ alleles with no variation (e.g. allele frequency ==0 or 1).
 
-ld_prune = function(vcf,window_size,cutoff=0.5){
+ld_prune = function(vcf,window_size,cutoff=0.1){
   GT = extract.haps(vcf,as.numeric=TRUE)
   freqs = apply(GT,1,function(x) freq_GT(x,ploidy=1))
   GT = GT[which(freqs*(1-freqs)>0),]
@@ -242,7 +244,7 @@ ld_prune = function(vcf,window_size,cutoff=0.5){
 }
 
 #Within each chromosome, generate windows and find only the sites to be dropped.
-ld_prune_chr = function(GT,window_size,cutoff=0.5){
+ld_prune_chr = function(GT,window_size,cutoff=0.1){
   pos = as.numeric(gsub(".*:([0-9]*):.*","\\1",rownames(GT)))
   breaks = unique(c(seq(from=min(pos)-1,to=max(pos),by=window_size),max(pos)))
   bins = cut(pos,breaks,right=TRUE)
@@ -255,7 +257,7 @@ ld_prune_chr = function(GT,window_size,cutoff=0.5){
 }
 
 #Within each window, calculate correlations, keep only the first allele with high correlations
-ld_prune_window = function(GT,cutoff=0.5){
+ld_prune_window = function(GT,cutoff=0.1){
   cor_mat = cor(t(GT))
   to_check = 1:dim(cor_mat)[1]
   drop = c()
