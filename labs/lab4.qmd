@@ -82,7 +82,27 @@ The short version of the approaches - the data is generally clustered in a way t
 
 ## Back to calculating LD
 
-So, what about our phased data once it's in `R`? Notice that in the past I have simply quickly converted the `VCF` to a genotype matrix. But you could instead convert it to a haplotype matrix, with the `vcfR` function `extract.haps`. This function takes the vcf as an argument, and will spit out a nice matrix where each column is one haplotype. By default, it will convert any unphased sites to `NA`s. That's probably the right call in 99% of the cases, but make sure your functions actually work with NAs when dealing with haplotypes.
+So, what about our phased data once it's in `R`? Notice that in the past I have simply quickly converted the `VCF` to a genotype matrix. But you could instead convert it to a haplotype matrix, with the `vcfR` function `extract.haps`. This function takes the vcf as an argument, and will spit out a nice matrix where each column is one haplotype. By default, it will convert any unphased sites to `NA`s. That's probably the right call in 99% of the cases, but make sure your functions actually work with NAs when dealing with haplotypes. Problematically for us - it returns the actual alleles at each site, rather than the numeric data you have been working with. So, we need to write a wrapper around it that returns a numeric matrix, like our GT matrices so far:
+
+```{r}
+#Function to run on each row
+allele_2_num = function(site,name){
+  div_allele = gsub(".*:.*:([A,T,C,G]+):","",name)
+  GT_row = as.numeric(site==div_allele)
+  return(GT_row)
+}
+
+#Structure for whole vcf
+extract_haps = function(vcf){
+  haps = extract.haps(vcf)
+  names = rownames(haps)
+  num_mat = t(sapply(1:dim(haps)[1],function(x) allele_2_num(haps[x,],names[x])))
+  rownames(num_mat) = names
+  colnames(num_mat) = colnames(haps)
+  return(num_mat)
+}
+
+```
 
 So, now the function I showed above for haploids should work for your diploid data, but let's make sure it also works for cases where there are NAs. This isn't immediately clear, but it's easy to trip up here. Imagine you have the genotypes:
 
@@ -144,6 +164,21 @@ d_ij = function(site_i,site_j){
 }
 ```
 
+
+::: {.callout-note}
+What is the average $D_ij$ in the muc19 data?
+:::
+
+### $r^2$
+
+In some ways, $r^2$ is much easier to calculate than other statistics, since it is just a correlation between haplotypes. You won't need to write a fancy new function here, in fact, you can get the whole matrix of all possible correlations with a single function call (assuming you have a haploid GT):
+
+```{r}
+cor_mat = cor(t(GT))
+```
+
+This will take a while, however, and potentially crash `R` for you. That's because it's doing _a lot_ of comparisons under the hood.
+
 # Part 3: The combinatorial nightmare of LD
 
 So far we've discussed LD as a fun and useful statistic you can calculate for your data. The problem is that it is a pairwise statistic, so the number of comparisons we need to make grows quadratically with the number of sites. It's useful to at least know about [big O notation ](https://en.wikipedia.org/wiki/Big_O_notation), but the very short version is: if you have a 1000 sites and you calculate $\pi$ for each, that's roughly 1000 calculations, and for a 1,000,000 it's a 1,000,000. But there are $\binom{1000}{2} = 499500$ calculations for LD with a 1000 sites, and a whopping $\binom{1000000}{2} \approxeq 5e11$ for 1 million sites. Modern computers are fast, but when you ask them to do on the order of trillions of calculations - your code will be very slow. You'll also need to _store_ all of the results of those calculations. At 64 bits per LD value, you'll be looking at about 4 Tb of data to store all the LD values between 1 million sites. So - how do we avoid this?
@@ -151,6 +186,18 @@ So far we've discussed LD as a fun and useful statistic you can calculate for yo
 ###  Solution 1: Don't calculate all LD values.
 
 This is the simplest and (often) best solution. Don't bother calculating LD between every possible pair of loci - you generally don't need to. You can vastly simplify your calculations by averaging across regions, for instance (say, pairwise LD between different genes), or by only calculating values for common alleles (require the minor allele frequency at both sites to be greater than some threshold, often 0.1). Finally, we saw in class how long-range LD tends to decay to very small values, so it may not be worth looking for LD past a certain distance. Rather than calculate `d_ij` at all pairs of sites, calculate only the ones you are deeply interested in, and if you don't know what those are - just randomly subsample a smaller subset of sites to calculate LD. Even then, this is one place where `R`s relative slow speed compared to other programming languages can still come back to haunt you. It's good to know _how_ to calculate LD yourself, but I would often recommend you don't do it.
+
+Here is an example of how you can thin the data randomly (to, say 10% of the data):
+
+```{r}
+random_rows = sample(1:dim(GT)[1],size=round(0.1*dim(GT)[1]),replace=FALSE)
+thin_GT = GT[random_rows,]
+cor_mat = cor(t(thin_GT))
+```
+
+::: {.callout-note}
+What are some issues with thinning data this way?
+:::
 
 ### Solution 2: Use PLINK (or some other software)
 
@@ -178,3 +225,60 @@ In general, as you start working on bigger data-sets you will end up seeing expo
 
 # Part 4: LD-pruning
 
+`Plink` can also run LD pruning, so if you've enjoyed your time with it, feel free to do generally use `Plink` for this, as it's infinitely faster than `R`. But first, let's discuss _how_ LD pruning is done in practice. In general, when you LD prune you subdivide the genome into windows of equal size. For each window, you calculate all pairwise correlations. Then, you loop through each SNP, and toss out all later SNPs in high LD with it. Below is some code that shows you the structure of how this works:
+
+```{r}
+#Function to LD-prune a VCF. Makes calls to subfunctions for each chromosome, and each of those runs sub-functions on each window.
+#For a variety of reasons, we drop _all_ alleles with no variation (e.g. allele frequency ==0 or 1).
+
+ld_prune = function(vcf,window_size,cutoff=0.5){
+  GT = extract.haps(vcf,as.numeric=TRUE)
+  freqs = apply(GT,1,function(x) freq_GT(x,ploidy=1))
+  GT = GT[which(freqs*(1-freqs)>0),]
+  chr_id = gsub(":.*:.*:.*","",rownames(GT))
+  chrs = sort(unique(chr_id))
+  sub_GT = sapply(chrs,function(x) ld_prune_chr(GT[chr_id==x,],window_size=window_size,cutoff=cutoff)) 
+  return(sub_GT)
+}
+
+#Within each chromosome, generate windows and find only the sites to be dropped.
+ld_prune_chr = function(GT,window_size,cutoff=0.5){
+  pos = as.numeric(gsub(".*:([0-9]*):.*","\\1",rownames(GT)))
+  breaks = unique(c(seq(from=min(pos)-1,to=max(pos),by=window_size),max(pos)))
+  bins = cut(pos,breaks,right=TRUE)
+  #Drop bins with 1 or fewer entries
+  bad_bins = names(which(table(bins)<2))
+  bins = factor(bins,exclude=bad_bins)
+  drop = unlist(sapply(levels(bins),function(x) ld_prune_window(GT[which(bins==x),],cutoff=cutoff)))
+  sub_GT = GT[setdiff(rownames(GT),drop),]
+  return(sub_GT)
+}
+
+#Within each window, calculate correlations, keep only the first allele with high correlations
+ld_prune_window = function(GT,cutoff=0.5){
+  cor_mat = cor(t(GT))
+  to_check = 1:dim(cor_mat)[1]
+  drop = c()
+  while(length(to_check)>0){
+    high_cor = which(cor_mat[to_check[1],]>cutoff)
+    drop = c(drop,setdiff(high_cor,to_check[1]))
+    to_check = setdiff(to_check,high_cor)
+  }
+  if(length(drop)>0){
+    return(rownames(GT)[drop])
+  }
+}
+
+```
+
+::: {.callout-note}
+What is the total number of SNPs that remain after you LD prune the muc19 data using a 250bp window?
+
+What about a 500 bp window?
+:::
+
+The above code will work, but suffers from all of `R`s usual issues of scaling into really big data. But, by writing the different chunks as different modules, the task is infinitely parallelizable. If you don't know what that means - don't worry about it. Just realize that each window calculation can be done independently of others, so if you want to use some parallel package (like `doSnow` or `doParallel`), you can easily convert the above functions to be much, much faster.
+
+### Hasn't someone already written a faster version of this
+
+Yes! As with many stats, there are many packages that can do this in `R`, but each will want a different data type. For instance, `SNPRelate` will ask for a `gdsobj`, while the `STAARS` pipeline uses an `aGDS` file format, while `bigsnpr` will use an `FBM.code256` object to ld prune. At the end of the day, you will probably decide on _some_ package that works best for you, and incorporate most of its approaches in your pipelines. But, as hard as it is managing your own code, you'll find managing interactions with many other packages becomes quite tedious and issue-prone. What if one of the formats drops NAs, while another imputes genotypes? So, again, it is good to know how to run things yourself, even if you will largely use other tools.

@@ -529,7 +529,7 @@ Let's consider an allele that impacts some measurable trait, say height.
 
 How can we detect this allele?
 
-## Appraoch 1: Genome-wide association study
+## Approach 1: Genome-wide association study
 
 If variance within your population is high enough, you can get away with GWAS.
 
@@ -545,7 +545,7 @@ More likely for some traits - the whole population has the trait of interest, an
 
 In other words - the trait is _correlated_ to the population's ancestry as a whole - there's LD here.
 
-## How to break apart LD
+## Approach 2: Break apart LD
 
 If you cross this population with a closely related one, which does not have the trait, you can run a QTL analysis.
 
@@ -555,10 +555,30 @@ Each generation past F1, the LD between Pop 1 ancestry and the causal allele dec
 
 . . . 
 
-Easy to narrow to causal allele (if single locus) within two generations. Why?
+Easy to narrow to causal chromosome (if single locus) within two generations. Why?
 
-## Many more generations
+## Approach 3: Let nature do it
 
+To narrow down the trait inheritance, it's often useful/necessary to go many generations deeper.
 
+. . .
+
+One natural alternative - areas with active hybridization.
+
+. . .
+
+If your populations are, by chance, still hybridizing, there has been a natural QTL experiment happening at the tension zone.
+
+## Next week: population structure and migration
+
+Considering how alleles are exchanged between populations will be the focus next week.
+
+. . .
+
+We will also introduce the coalescent more formally, so be prepared for a fairly math heavy time.
+
+. . .
+
+Oc 7-9th: Initial project meetings. Keep an eye out for a sign up sheet on the slack, start thinking about a data set you'd like to analyze more thoroughly.
 
 ## References
