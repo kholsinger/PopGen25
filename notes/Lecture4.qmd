@@ -52,7 +52,7 @@ Now consider a haploid generation, which produces the next haploid generation by
 
 Each individual lineage is well approximated by a branching process - a mathematical structure describing budding dynamics of a population.
 
-## Some true facts about branching processes
+## Some true facts about branching processes {.smaller}
 
 Unless a lineage on average produces more than 1 offspring per generation, it is guaranteed to go extinct at some point.
 
@@ -164,7 +164,7 @@ Now, imagine a sexual individual with genotype `AB` - how frequently will their 
 
 Because they are sexually reproducing, they first need to form a diploid, so depends on allele frequencies!
 
-## Linkage equilibrium and linkage disequilibrium
+## Linkage equilibrium and linkage disequilibrium 
 
 These are horrible terms, because they are false.
 
@@ -283,7 +283,7 @@ gif(anim,fps=10)
 
 ## Key take-aways
 
-When loci are unlinked (r=0.5), LD rapidly decays to 0.
+When loci are unlinked ($r=0.5$), LD rapidly decays to 0.
 
 . . .
 
@@ -376,7 +376,7 @@ r = range(-8,-5,length=100)
 contourf(10 .^N,10 .^r,[rho_bar(x,y) for x in 10.0 .^N, y in 10.0 .^r],xaxis=:log10,yaxis=:log10,xlabel=L"N",ylabel=L"r",margins=4mm,size=(1000,600),cbar_title=L"r^2")
 ```
 
-## Things you will read/think that are subtly wrong:
+## Things you will read/think that are subtly wrong: {.smaller}
 
 -   These loci are only in LD because of proximity
 
@@ -390,7 +390,7 @@ contourf(10 .^N,10 .^r,[rho_bar(x,y) for x in 10.0 .^N, y in 10.0 .^r],xaxis=:lo
 
     -   LD can build up *within* a generations. Selection/assortative mating can maintain it between chromosomes.
 
--   I can just LD prune my data and get the same results.
+
 
 ## LD and pop gen analyses {.smaller}
 
@@ -494,6 +494,7 @@ There are multiple statistics that work off of the fact that recombination break
     -   Homozygosity is caused by more Identity-by-descent than expected from HW/WF
 
     -   The length of such regions can tell you how far from the inbreeding event this chunk descended from (since only recombination will break up the ROH).
+## cntd.
 
 -   iHS, - integradted Homozygosity Score, EHH - Extended Haplotype: searching for selection. [@Klassmann2022]
 
