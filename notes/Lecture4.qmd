@@ -202,12 +202,14 @@ Because these values depend on allele frequencies, they don't scale nicely linea
 ## When is $D$ maximized?
 
 ```{julia}
+#| echo: false
 using Plots, LaTeXStrings, Measures
 theme(:rose_pine)
 default(xlabelfontsize=16,ylabelfontsize=16,markerstrokewidth=0,markersize=1)
 function max_D(p1,p2)
     min(p1*(1-p2),p2*(1-p1))
 end
+
 x=y=range(0,1,length=100)
 p = plot(x,y,max_D,st=[:surface],leg=false,zlabel="Maximum |D|",xlabel=L"p_A",ylabel=L"p_B",margins=5mm,size=(1000,600))
 ```
@@ -269,6 +271,7 @@ Where $r_{ij}$ is the rate of recombination between loci $i$ and $j$.
 ## How quick is the decay?
 
 ```{julia}
+#echo:false
 function d_prime(D,r,n)
     return(D*(1-r)^n)
 end
@@ -439,6 +442,7 @@ As you saw, LD decays fairly quickly with increasing recombination distance.
 Windows spaced apart by distance where $r^2$ is negligible.
 
 ```{julia}
+#| echo: false
 using CSV, DataFrames
 include("../src/Stats_utilities.jl")
 muc_data = CSV.read("data/muc19_data.ld",DataFrame)
