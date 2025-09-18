@@ -88,7 +88,7 @@ All other mutations carried by that lineage become fixed as well, since they are
 
 Similarly - all other mutations not present in that lineage become lost as it becomes fixed.
 
-## What is the genetic diversity of an asexual population?  {.smaller}
+## What is the genetic diversity of an asexual population? {.smaller}
 
 In a neutral population, dynamics remain surprisingly similar, as any sweeps take long (same logic as Neutral Theory: $\frac{1}{N}$ is the rate of fixation)
 
@@ -120,7 +120,7 @@ Many genes in bacteria are *accessory*, they can have a copy or not.
 
 In this sense - lots of genetic diversity within species, but not in the subset of genes that are core.
 
-## Why are there so many accessory genes?  {.smaller}
+## Why are there so many accessory genes? {.smaller}
 
 Sexual reproduction is rare, but its main effect: recombination, is not.
 
@@ -164,7 +164,7 @@ Now, imagine a sexual individual with genotype `AB` - how frequently will their 
 
 Because they are sexually reproducing, they first need to form a diploid, so depends on allele frequencies!
 
-## Linkage equilibrium and linkage disequilibrium 
+## Linkage equilibrium and linkage disequilibrium
 
 These are horrible terms, because they are false.
 
@@ -299,11 +299,11 @@ What keeps loci in LD then?
 
 ## Forces that generate LD
 
-Anything that creates *joint* identity-by-descent
+Anything that creates *joint* identity-by-descent (some examples given).
 
 . . .
 
-Population structure/migration.
+Population structure/migration [@Price2008].
 
 . . .
 
@@ -311,11 +311,11 @@ Mating preference [@Kirkpatrick1982].
 
 . . .
 
-Direct selection (but only weakly).
+Direct selection (but only weakly) [@Liu2014].
 
 . . .
 
-Epistatic selection (selection on combination of alleles).
+Epistatic selection (selection on combination of alleles) [@Nagylaki1993].
 
 ## LD and population size
 
@@ -357,7 +357,7 @@ That is - either they are identical by descent just now, or they were the previo
 
 . . .
 
-Some wailing and gnashing of teeth later, you can get:
+Some wailing and gnashing of teeth later, if we assume $r \ll 0.5$, we can get:
 
 $$
 E[Q_\infty] = \frac{1}{1+4Nr} = \frac{1}{1+\rho}
@@ -389,8 +389,6 @@ contourf(10 .^N,10 .^r,[rho_bar(x,y) for x in 10.0 .^N, y in 10.0 .^r],xaxis=:lo
 -   There's no LD expected between these loci since they are on different chromosomes.
 
     -   LD can build up *within* a generations. Selection/assortative mating can maintain it between chromosomes.
-
-
 
 ## LD and pop gen analyses {.smaller}
 
@@ -493,8 +491,7 @@ There are multiple statistics that work off of the fact that recombination break
 
     -   Homozygosity is caused by more Identity-by-descent than expected from HW/WF
 
-    -   The length of such regions can tell you how far from the inbreeding event this chunk descended from (since only recombination will break up the ROH).
-## cntd.
+    -   The length of such regions can tell you how far from the inbreeding event this chunk descended from (since only recombination will break up the ROH). \## cntd.
 
 -   iHS, - integradted Homozygosity Score, EHH - Extended Haplotype: searching for selection. [@Klassmann2022]
 
@@ -508,19 +505,19 @@ A common occurence in evolutionary studies is two populations that are different
 
 . . .
 
-You might try to first look at divergence across the genome to detect _what_ is causing this interesting trait to appear.
+You might try to first look at divergence across the genome to detect *what* is causing this interesting trait to appear.
 
 . . .
 
 If divergence has ocurred genome-wide - might be very hard to do.
 
-. . . 
+. . .
 
 If populations can still interbreed: QTL analysis
 
 ## Quantitative Trait Loci
 
-So far we have been agnostic about _what_ our genes do, because we haven't needed to worry about it.
+So far we have been agnostic about *what* our genes do, because we haven't needed to worry about it.
 
 . . .
 
@@ -544,7 +541,7 @@ More likely for some traits - the whole population has the trait of interest, an
 
 . . .
 
-In other words - the trait is _correlated_ to the population's ancestry as a whole - there's LD here.
+In other words - the trait is *correlated* to the population's ancestry as a whole - there's LD here.
 
 ## Approach 2: Break apart LD
 
@@ -554,7 +551,7 @@ If you cross this population with a closely related one, which does not have the
 
 Each generation past F1, the LD between Pop 1 ancestry and the causal allele decreases by $r$ between that allele and everywhere else in the genome.
 
-. . . 
+. . .
 
 Easy to narrow to causal chromosome (if single locus) within two generations. Why?
 
