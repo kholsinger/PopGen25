@@ -208,6 +208,7 @@ default(xlabelfontsize=16,ylabelfontsize=16,markerstrokewidth=0,markersize=1)
 function max_D(p1,p2)
     min(p1*(1-p2),p2*(1-p1))
 end
+
 x=y=range(0,1,length=100)
 p = plot(x,y,max_D,st=[:surface],leg=false,zlabel="Maximum |D|",xlabel=L"p_A",ylabel=L"p_B",margins=5mm,size=(1000,600))
 ```
