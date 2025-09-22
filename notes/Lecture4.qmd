@@ -271,7 +271,7 @@ Where $r_{ij}$ is the rate of recombination between loci $i$ and $j$.
 ## How quick is the decay?
 
 ```{julia}
-#echo:false
+#| echo: false
 function d_prime(D,r,n)
     return(D*(1-r)^n)
 end

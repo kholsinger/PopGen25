@@ -40,3 +40,14 @@ function loess!(p,x,y)
     vs = predict(model,us)
     plot!(p,us,vs,legend=false)
 end
+
+function nonunique(x::AbstractArray{T}) where T
+    xs = sort(x)
+    duplicatedvector = T[]
+    for i=2:length(xs)
+        if (isequal(xs[i],xs[i-1]) && (length(duplicatedvector)==0 || !isequal(duplicatedvector[end], xs[i])))
+            push!(duplicatedvector,xs[i])
+        end
+    end
+    duplicatedvector
+end
