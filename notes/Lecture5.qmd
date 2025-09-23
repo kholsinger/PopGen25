@@ -95,7 +95,7 @@ If having multiple populations in your data increases deviations from HW, then o
 
 . . .
 
-The simplest approaches here (STRUCTURE [cite]), have the user specify a number of groups (denoted as $K$), and try large numbers of assignments for all individuals to find the one that minimizes the departure from HW in all of the groups.
+The simplest approaches here (STRUCTURE), have the user specify a number of groups (denoted as $K$), and try large numbers of assignments for all individuals to find the one that minimizes the departure from HW in all of the groups.
 
 . . .
 
@@ -103,7 +103,7 @@ This is a very important, and often missed, assumption - populations may not be 
 
 . . .
 
-Further, there is no perfect way of knowing $K$ - often we look at how the likelihood is changing based on $K$ and choose the peak.
+Further, there is no perfect way of knowing $K$.
 
 ## The other departure from expectation
 
