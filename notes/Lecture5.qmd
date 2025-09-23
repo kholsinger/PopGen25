@@ -199,7 +199,7 @@ include("../src/Coalescent.jl")
 
 pop=1:10
 N=10
-c_plot =scatter(1:N,fill(1,N),c=col_func_coal(4:6,[],10),leg=false,ylim=(0,10);markersize=10)
+c_plot =scatter(1:N,fill(1,N),c=col_func_coal(1:10,[],10),leg=false,ylim=(0,10);markersize=10)
 ```
 
 ## We go back a generation
@@ -207,7 +207,7 @@ c_plot =scatter(1:N,fill(1,N),c=col_func_coal(4:6,[],10),leg=false,ylim=(0,10);m
 Assume any individual is equally likely to be the ancestor of current individuals.
 
 ```{julia}
-coalescent = coal_sim(N,4:6)
+coalescent = coal_sim(N,1:10)
 coal_plot(coalescent,pop;t=2)
 ```
 
@@ -246,19 +246,21 @@ $$
 
 Where $i$ is the number of samples that are coalescing in the previous generation.
 
-## Most coalescent events happen early
+## I thought this was supposed to be simpler!
 
-The probability scales so that the earliest coalescent events happen earliest.
+The simplicity of the coalescent comes from a very simple assumption - the number of individuals you sample is far smaller than the total population.
 
 . . .
 
-The density of coalescent events can also be thought of via the geometric distribution:
+Let's start with the most extreme case - you only sampled two lineages.
 
-Any two lineages coalesce on the $n^th$ generation back with probability:
+Any two lineages have not coalesced by the $n^{th}$ generation back with probability
 
 $$
-P(Coal=t) = \frac{1}{2N}(1-\frac{1}{2N})^{n-1}
+P(T>n) = (1-\frac{1}{2N})^{n}
 $$
+
+This is just the geometric distribution! For big $N$, it's also well approximated by the Exponential distribution.
 
 ## What does that look like?
 
@@ -269,27 +271,26 @@ plot(Geometric(1/(2*100)),xlabel="Generation back",ylabel="Probability",label="N
 plot!(Geometric(1/(2*1000)),label="N=1000")
 ```
 
-Because each lineage coalesces independently, the _total_ coalescent time is actually just proportional to the average coalescent rate.
+We'll also assume lineages coalesce independently, so that 
+. . .
+
+Lots of variability, but we can make some very specific predictions - average time to coalescence (often called $T$) is just $2N$.
+
+## Slightly less assumptions
+
+Imagine that the number of samples we have, $n$ is much smaller than the total population.
 
 . . .
 
-Lots of variability, but we can make some very specific predictions.
-
-## Simplifying further
-
-Imagine that the number of samples we have is _much_ smaller than the total population, call it $n$
-
-. . .
-
-Then, the number of coalescent events in the previous generation significantly simplifies - completely unlikely that multiple coalescent events happen in one generation:
+Then, the number of coalescent events in the previous generation is still fairly simple - it is completely unlikely that multiple coalescent events happen in one generation:
 
 $$
-P( n \rightarrow n-1) = \frac{n(n-1)}{4N}
+P( n \rightarrow n-1) = \binom{n}{2}\frac{1}{2N} = \frac{n(n-1)}{4N}
 $$
 
-## If N large enough
+## If $N$ large enough
 
-We can then back out that the waiting time for the coalescent event when $n$ samples remain is $T_n =\frac{4N}{n(n-1)}$.
+We can then back out that the waiting time for the coalescent event when $n$ samples remain is $E[T_n] =\frac{4N}{n(n-1)}$.
 
 . . . 
 
@@ -298,7 +299,7 @@ If we want to find the time until the most recent common ancestor, we can sum up
 . . .
 
 $$
-\sum_{i=2}^{n}T_n = 4N\left(1-\frac{1}{n}\right)
+E[T_{MRCA}]=\sum_{i=2}^{n}T_n = 4N\left(1-\frac{1}{n}\right)
 $$
 
 If $n = 2$, then $T_{MRCA} = 2N$. As $n$ increases, $T_{MRCA} \leftarrow 4N$.

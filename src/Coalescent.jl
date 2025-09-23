@@ -61,8 +61,9 @@ function coal_plot(coalescent,pop;t=length(coalescent))
         samples = [x[2] for x in coalescent[i]]
         coals = nonunique(samples)
         scatter!(p,pop,fill(i,N),c=col_func_coal(samples,coals,N);markersize=200/max(N,length(coalescent)))
+        arrow = Plots.arrow(:closed,:head,0.25/max(N,t),0.25/max(N,t))
         for x in coalescent[i]
-            plot!(p,[x[1],x[2]],[i-1+0.25,i-0.25],arrow=(Plots.arrow(:closed,:head,0.5/max(N,length(coalescent)),0.5/max(N,length(coalescent)) )),c=:white)
+            plot!(p,[x[1],x[2]],[i-1+0.25,i-0.25],arrow=arrow,c=:white)
         end
     end
     return(p)
