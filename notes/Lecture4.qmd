@@ -1,0 +1,586 @@
+---
+title: "Lecture 4"
+execute:
+  freeze: auto  # re-render only when source changes
+format: 
+    revealjs:
+        theme: moon
+        incremental: true
+        preview-links: auto
+        chalkboard: true
+        margin: 0
+        width: 1080
+engine: julia
+julia:
+  exeflags: ["--project=../PopGen25"]
+bibliography: references.bib
+---
+
+# Recombination
+
+Last week we considered how, as populations evolve, divergence builds up at individual sequences.
+
+. . .
+
+So far, the evolutionary processes we have talked about have been summable up in simple ways, in particular because we have assumed each locus' trajectory is independent of others.
+
+. . .
+
+Today, we'll start to consider when we can make that assumption, and when we cannot, and how recombination shapes evolution writ large.
+
+## Sexual reproduction is rare
+
+Only a small sliver of the total tree of life has to sexually reproduce.
+
+. . .
+
+Prokaryotes and Archae do not sexually reproduce, many fungi and protists only do so when needed.
+
+. . .
+
+So, it makes sense to first consider a world with no sexual reproduction.
+
+## Asexual reproduction
+
+Our earlier schematic of a WF life-cycle had a diploid adult producing infinite gametes.
+
+. . .
+
+Now consider a haploid generation, which produces the next haploid generation by random sampling - some individuals bud, others die out.
+
+. . .
+
+Each individual lineage is well approximated by a branching process - a mathematical structure describing budding dynamics of a population.
+
+## Some true facts about branching processes {.smaller}
+
+Unless a lineage on average produces more than 1 offspring per generation, it is guaranteed to go extinct at some point.
+
+. . .
+
+What is the expected number of offspring in a WF formulation?
+
+. . .
+
+For each offspring, the chance they descend from you is $\frac{1}{N}$. There are $N$ offspring.
+
+. . .
+
+So: each individual lineage is guaranteed to go extinct in the long run.
+
+. . .
+
+Caveat: this does not mean the species is guaranteed to go extinct - in fact, we've made sure it doesn't since population size is held constant at $N$.
+
+## Consequences for genetic diversity
+
+Any time a mutation arises, it starts a new lineage.
+
+. . .
+
+This lineage can become fixed with probability $1/N$.
+
+. . .
+
+All other mutations carried by that lineage become fixed as well, since they are tied to it.
+
+. . .
+
+Similarly - all other mutations not present in that lineage become lost as it becomes fixed.
+
+## What is the genetic diversity of an asexual population? {.smaller}
+
+In a neutral population, dynamics remain surprisingly similar, as any sweeps take long (same logic as Neutral Theory: $\frac{1}{N}$ is the rate of fixation)
+
+. . .
+
+If there are selective sweeps (some lineages better than others) - populations almost fully clonal except during sweep [@Desai2013].
+
+. . .
+
+This is called *clonal interference*: clones are competing with each other, but only one (and its subset mutations) can win.
+
+. . .
+
+Because selection is probably happening all of the time, you may expect asexual lineages to show very low/no genetic diversity.
+
+## Genetic diversity in asexual lineages
+
+By definition, bacterial species are labeled as "different" if $d>0.05$. That means $\pi$ in any population rarely goes above 0.05 as well.
+
+. . .
+
+But also - $d$ is calculated for *shared* genes, often called core genes.
+
+. . .
+
+Many genes in bacteria are *accessory*, they can have a copy or not.
+
+. . .
+
+In this sense - lots of genetic diversity within species, but not in the subset of genes that are core.
+
+## Why are there so many accessory genes? {.smaller}
+
+Sexual reproduction is rare, but its main effect: recombination, is not.
+
+. . .
+
+Viral lineages recombine in three distinct ways [@Simon-Loriere2011]
+
+![](images/paste-10.png){width="596"}
+
+## Asexual recombination cntd {.scrollable}
+
+Bacterial lineages recombine via transformation, transduction and conjugation.
+
+. . .
+
+The frequency of recombination in prokaryotic lineages is debated, but likely quite universal [@Conrad2024]
+
+![](images/paste-11.png){width="594"}
+
+## So: recombination probably universal, but what does it do? {.smaller}
+
+When population geneticists talk about recombination, it is mostly, but not always, referring to meiotic recombination.
+
+. . .
+
+More generally, we refer to it as the process that breaks down linkage.
+
+. . .
+
+*Linkage* is how correlated the inheritance of two loci is.
+
+. . .
+
+Imagine our asexual population, no recombination. An individual with mutations `AB` will always have offspring who carry `AB`, excluding mutation.
+
+. . .
+
+Now, imagine a sexual individual with genotype `AB` - how frequently will their offspring be `AB`?
+
+. . .
+
+Because they are sexually reproducing, they first need to form a diploid, so depends on allele frequencies!
+
+## Linkage equilibrium and linkage disequilibrium
+
+These are horrible terms, because they are false.
+
+. . .
+
+Linkage equilibrium refers to the expected frequency of co-inheriting two alleles when they are unlinked.
+
+. . .
+
+Recall your high-school Punnet squares: if `A` in $p_A$ frequency, and `B` in $p_B$, then $p_{AB}$ = ??
+
+. . .
+
+Linkage Disequilibrium (LD) is a measure of how far off this expectation the inheritance of two alleles is:
+
+$$
+D_{ij} = p_{ij}-p_ip_j
+$$
+
+## D in practice
+
+The frequency of the four possible genotypes will be:
+
+$$
+\begin{cases}
+p_{AB} = p_Ap_B+D \\
+p_{Ab} = p_Aq_B-D \\
+p_{aB} = q_Ap_B-D \\
+p_{ab} = q_aq_B+D
+\end{cases}
+$$
+
+Because these values depend on allele frequencies, they don't scale nicely linearly.
+
+## When is $D$ maximized?
+
+```{julia}
+#| echo: false
+using Plots, LaTeXStrings, Measures
+theme(:rose_pine)
+default(xlabelfontsize=16,ylabelfontsize=16,markerstrokewidth=0,markersize=1)
+function max_D(p1,p2)
+    min(p1*(1-p2),p2*(1-p1))
+end
+
+x=y=range(0,1,length=100)
+p = plot(x,y,max_D,st=[:surface],leg=false,zlabel="Maximum |D|",xlabel=L"p_A",ylabel=L"p_B",margins=5mm,size=(1000,600))
+```
+
+## Alternatives to $D$
+
+There are more intuitive ways of measuring LD as a result, but we'll come back to $D$ time and again.
+
+. . .
+
+One is to scale it by its maximum possible value for any allele frequency:
+
+$$
+\begin{cases}
+D_{ij}' = \frac{D_{ij}}{max(-p_iq_j,-p_jq_i)}, for D<0 \\
+D_{ij}' = \frac{D_{ij}}{min(p_iq_j,q_ip_j)}, for D>0 \\
+\end{cases}
+$$
+
+Now it ranges neatly between -1 and +1.
+
+## LD as a correlation {.smaller}
+
+Alternatively, we can think of LD as the correlation of genotypes in individuals for any pair of loci:
+
+$$
+r_{ij}^2 = \frac{D_{ij}^2}{p_ip_jq_iq_j}
+$$
+
+. . .
+
+So, let's say you have this genotype matrix:
+
+| A   | B   |
+|-----|-----|
+| 1   | 1   |
+| 1   | 1   |
+| 0   | 0   |
+| 0   | 0   |
+
+Knowing what allele is at A perfectly predicts what allele is at B.
+
+## What does recombination do?
+
+Recombination, whether meiotic or otherwise, breaks up these correlations.
+
+. . .
+
+The effect of recombination is to reduce LD between pairs of alleles:
+
+$$
+D_{ij}^` =\left(1-r_{ij}\right)D_{ij}
+$$
+
+Where $r_{ij}$ is the rate of recombination between loci $i$ and $j$.
+
+. . .
+
+## How quick is the decay?
+
+```{julia}
+#| echo: false
+function d_prime(D,r,n)
+    return(D*(1-r)^n)
+end
+r = collect(range(0,0.5,length=100))
+cols = colormap("RdBu",100)
+ds = [d_prime(0.25,x,i) for x in r, i in 0:100]
+anim = @animate for i ∈ 2:101
+    plot(1:i,transpose(ds[:,1:i]),label="",xlabel="Generation",ylabel=L"D",xlims=(0,100),palette=cols,ylims=(0,0.25),margins=4mm,size=(1000,600))
+end
+gif(anim,fps=10)
+```
+
+## Key take-aways
+
+When loci are unlinked ($r=0.5$), LD rapidly decays to 0.
+
+. . .
+
+Unlike HW - single generation not enough to go to 0!
+
+. . .
+
+Even when loci are closely linked ($r \ll 0.5$ ), decay is fairly quick.
+
+. . .
+
+What keeps loci in LD then?
+
+## Forces that generate LD
+
+Anything that creates *joint* identity-by-descent (some examples given).
+
+. . .
+
+Population structure/migration [@Price2008].
+
+. . .
+
+Mating preference [@Kirkpatrick1982].
+
+. . .
+
+Direct selection (but only weakly) [@Liu2014].
+
+. . .
+
+Epistatic selection (selection on combination of alleles) [@Nagylaki1993].
+
+## LD and population size
+
+In the long run, how much LD there is between sites also depends on population size.
+
+. . .
+
+Small populations - fewer recombination events. Expectations we showed before are true for infinite populations.
+
+. . .
+
+Population effect captured in $\rho$ - the population recombination rate.
+
+$$
+\rho = 4 N_E r
+$$
+
+## $\rho$ in the long run
+
+In the long run, there are some fairly intuitive expectations for how correlated any pair of alleles will be given $\rho$.
+
+. . .
+
+Think of loci $i$ and $j$ - they are some $r$ distance apart. How well can you predict their eventual correlation?
+
+. . .
+
+If you think of the probability that they are both passed on together (joint identity-by-descent), that will become the long term correlation at the pair of loci. [@Sved1971a]
+
+## Long term LD cntd {.smaller}
+
+More formally, let $Q_n$ be the probability that two alleles at different loci are jointly identical by descent after $n$ generations
+
+$$
+Q_n = \frac{1}{2N}(1-r)^2+\left(1-\frac{1}{2N}\right)Q_{n-1}(1-r)^2
+$$
+
+That is - either they are identical by descent just now, or they were the previous generation.
+
+. . .
+
+Some wailing and gnashing of teeth later, if we assume $r \ll 0.5$, we can get:
+
+$$
+E[Q_\infty] = \frac{1}{1+4Nr} = \frac{1}{1+\rho}
+$$
+
+## So:
+
+```{julia}
+function rho_bar(N,r) 
+    1/(1+4*N*r)
+end
+
+N = range(2,8,length=100)
+r = range(-8,-5,length=100)
+
+contourf(10 .^N,10 .^r,[rho_bar(x,y) for x in 10.0 .^N, y in 10.0 .^r],xaxis=:log10,yaxis=:log10,xlabel=L"N",ylabel=L"r",margins=4mm,size=(1000,600),cbar_title=L"r^2")
+```
+
+## Things you will read/think that are subtly wrong: {.smaller}
+
+-   These loci are only in LD because of proximity
+
+    -   What's the population size? How did that LD build up to begin with?
+
+-   Long-range LD is great evidence for selection
+
+    -   Or population structure, or structural variation.
+
+-   There's no LD expected between these loci since they are on different chromosomes.
+
+    -   LD can build up *within* a generations. Selection/assortative mating can maintain it between chromosomes.
+
+## LD and pop gen analyses {.smaller}
+
+It's easier to think about $r^2$ as a measure of LD here.
+
+. . .
+
+If two loci are in perfect LD ($r^2 = 1$), then knowing one gives you *all* of the information about the second.
+
+. . .
+
+In practice, this means that the loci are replicates of the same information.
+
+. . .
+
+This will lead to bad statistical inference, and you'll have to deal with more samples than you strictly need.
+
+. . .
+
+LD-pruning refers to the practice of keeping only the first or most common allele when multiple alleles are in high LD.
+
+. . .
+
+Reduces the amount of data to keep track of, accounts (in some sense) for non-independence of different data points.
+
+## LD -pruning vs LD -clumping
+
+The problem with pruning is the most common/first allele may not be the interesting one.
+
+. . .
+
+Most pipelines don't have a step to go back and check what was in LD with the identified locus, so may miss important factors.
+
+. . .
+
+LD-clumping tries to avoid this by picking the most important SNPs in any region. First designate interesting/important loci, then remove other that are in LD with those.
+
+. . .
+
+Often good practice to run this on your data initially, and if possible, repeat data without pruning/clumping and see if results are robust.
+
+## Other ways of dealing with LD: LD-decay {.smaller}
+
+As you saw, LD decays fairly quickly with increasing recombination distance.
+
+. . .
+
+Windows spaced apart by distance where $r^2$ is negligible.
+
+```{julia}
+#| echo: false
+using CSV, DataFrames
+include("../src/Stats_utilities.jl")
+muc_data = CSV.read("data/muc19_data.ld",DataFrame)
+dist = abs.(muc_data.BP_A .- muc_data.BP_B)
+p1 = scatter(dist,muc_data.R2,leg=false,xlabel="Distance between SNPs",ylabel=L"r^2",margins=5mm,size=(1000,500),c=:white;markersize=1,markerstrokewidth=0)
+```
+
+## Another way of thinking of LD
+
+We can also think of LD as occurring on different regions within a genome:
+
+```{julia}
+subdata = muc_data[findall(muc_data.R2 .> 0.2),:]
+p2 = scatter(subdata.BP_A,
+    subdata.BP_B-subdata.BP_A,
+    markerz=subdata.R2,
+    label="",size=(1000,600),
+    xlabel="SNP 1 position",
+    ylabel="SNP 2 distance",
+    cbar_title=L"r^2",margins=4mm;markerstrokewidth=0,markersize=2,markershape=:diamond,clims=(0.0,1.0))
+```
+
+## What can this tell you?
+
+Evolved SVs (here an inversion in Europeans (a) not found in Africans (b)). [@Stefansson2005]
+
+![](images/paste-3.webp)
+
+## Worth knowing: $D_{ijk}$ and above
+
+You can also calculate the LD between triplets/quadruplets... of alleles.
+
+. . .
+
+The number of such comparisons grows very rapidly, but they can often be useful when thinking about a set of loci that are, as a group, more correlated than expected.
+
+$$
+D_{\Bbb{A}} = P_{\Bbb{A}}-\sum_{a \in \Bbb{A}}D_aP_a
+$$
+
+. . .
+
+So - every higher degree $D$ has to account for all of the LD in all possible subsets. Any positive/negative values are therefore deviations *beyond* what's happening due to LD between pairs.
+
+## iHS, EHH, ROH {.smaller}
+
+There are multiple statistics that work off of the fact that recombination breaks apart certain patterns in the genome, thus, we can look for "runs" of patterns as evidence of *recent* evolutionary events, or selection acting along the whole region.
+
+-   ROH - Runs of Homozygosity. We mentioned these previously. They can be indicators of inbreeding, since:
+
+    -   Homozygosity is caused by more Identity-by-descent than expected from HW/WF
+
+    -   The length of such regions can tell you how far from the inbreeding event this chunk descended from (since only recombination will break up the ROH). \## cntd.
+
+-   iHS, - integradted Homozygosity Score, EHH - Extended Haplotype: searching for selection. [@Klassmann2022]
+
+    -   Selection at a locus will force nearby regions to hitchhike. This generates long range LD, and, if selection is strong, long range homozygosity.
+
+        ![](images/paste-7.jpeg){width="632"}
+
+## Getting rid of LD - practically
+
+A common occurence in evolutionary studies is two populations that are different by some interesting trait.
+
+. . .
+
+You might try to first look at divergence across the genome to detect *what* is causing this interesting trait to appear.
+
+. . .
+
+If divergence has ocurred genome-wide - might be very hard to do.
+
+. . .
+
+If populations can still interbreed: QTL analysis
+
+## Quantitative Trait Loci
+
+So far we have been agnostic about *what* our genes do, because we haven't needed to worry about it.
+
+. . .
+
+Let's consider an allele that impacts some measurable trait, say height.
+
+. . .
+
+How can we detect this allele?
+
+## Approach 1: Genome-wide association study
+
+If variance within your population is high enough, you can get away with GWAS.
+
+. . .
+
+We'll talk more about how GWAS is performed later in the semester, but at it's core: fit a linear model of $trait ~ genotype$ at each locus.
+
+. . .
+
+More likely for some traits - the whole population has the trait of interest, and no real variation.
+
+. . .
+
+In other words - the trait is *correlated* to the population's ancestry as a whole - there's LD here.
+
+## Approach 2: Break apart LD
+
+If you cross this population with a closely related one, which does not have the trait, you can run a QTL analysis.
+
+. . .
+
+Each generation past F1, the LD between Pop 1 ancestry and the causal allele decreases by $r$ between that allele and everywhere else in the genome.
+
+. . .
+
+Easy to narrow to causal chromosome (if single locus) within two generations. Why?
+
+## Approach 3: Let nature do it
+
+To narrow down the trait inheritance, it's often useful/necessary to go many generations deeper.
+
+. . .
+
+One natural alternative - areas with active hybridization.
+
+. . .
+
+If your populations are, by chance, still hybridizing, there has been a natural QTL experiment happening at the tension zone.
+
+## Next week: population structure and migration
+
+Considering how alleles are exchanged between populations will be the focus next week.
+
+. . .
+
+We will also introduce the coalescent more formally, so be prepared for a fairly math heavy time.
+
+. . .
+
+Oc 7-9th: Initial project meetings. Keep an eye out for a sign up sheet on the slack, start thinking about a data set you'd like to analyze more thoroughly.
+
+## References

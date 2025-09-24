@@ -25,3 +25,4 @@ Lab 2 is [here](labs/lab2.qmd)
 
 Lab 3 is [here](labs/lab3.qmd)
 
+Lab 4 is [here](labs/lab4.qmd)

@@ -38,7 +38,7 @@ Go back to last week's [notes](lab2.qmd) to look at how one can use the `vcfR` p
 require("vcfR")
 require("readr")
 samples = read_table("labs/data/muc_samples.txt")
-vcf = read.vcfR("labs/data/muc19_samples.vcf.gz")
+vcf = read.vcfR("labs/data/muc19_subsample.vcf.gz")
 GT = extract.gt(vcf,element="GT",as.numeric=TRUE)
 ```
 
@@ -74,7 +74,7 @@ Now, how do we get out sample heterozygosity? The below code, again, works for d
 
 ```{r}
 sample_het = function(site){
-  n = ???
+  n = length(which(!is.na(site)))*2
   p = freq_GT(site)
   h = n/(n-1)*2*p*(1-p)
   return(h)
@@ -105,7 +105,7 @@ For instance, if we want to see the samples that are in the `CEU` population, we
 
 ```{r}
 ceu_inds = samples$sample_id[which(samples$population == "CEU")]
-col_ids = col_ids = which(colnames(GT) %in% ceu_inds)
+col_ids = which(colnames(GT) %in% ceu_inds)
 CEU_GT = GT[,col_ids]
 ```
 
@@ -240,8 +240,8 @@ The above works, but it's a lot of code to copy paste for each set of population
 
 ```{r}
 fst_site = function(p1,p2,n1,n2){
-    f1 = ???
-    f2 = ???
+    f1 = n1/(n1+n2)
+    f2 = 1-f1
     num = f1*p1*(1-p1)+f2*p2*(1-p2)
     denom = (f1*p1+f2*p2)*(f1*(1-p1)+f2*(1-p2)) 
     fst = 1-num/denom
@@ -260,7 +260,7 @@ process_GT = function(GT,samples){
     summary_df = data.frame(chr=chr,pos=pos)
     summary_df$tot_het = apply(GT,1,sample_het)
     
-    pops = unique(samples$population)
+    pops = sort(unique(samples$population))
     #Get indices for each population
     idx_pops = lapply(pops,function(x) {
         which(colnames(GT) %in% samples$sample_id[which(samples$population == x)])

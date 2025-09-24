@@ -1,0 +1,436 @@
+---
+title: "Lecture 5"
+execute:
+  freeze: auto  # re-render only when source changes
+format: 
+    revealjs:
+        theme: moon
+        incremental: true
+        preview-links: auto
+        chalkboard: true
+        margin: 0
+        width: 1080
+engine: julia
+julia:
+  exeflags: ["--project=../PopGen25"]
+bibliography: references.bib
+---
+
+# Today's plan
+
+Today, we'll talk about populations in earnest.
+
+. . .
+
+We'll start by asking what a population even is, and how we can detect them.
+
+. . .
+
+We'll then introduce the coalescent in earnest, and thinkg about how population structure/migration can affect coalescence.
+
+. . .
+
+We'll end with discussing dynamics of some basic multi-population models (continent-island, two population, island-chain)
+
+## What _is_ a population? {.smaller}
+
+An ecological definition of a population would consider all of the organisms of a particular species living in a particular area, and ideally interacting with each other.
+
+. . .
+
+An evolutionary definition is clearly distinct - for one, we don't care about _all_ of the organisms ($N_E$ vs $N$), and when we refer to interactions, we mostly refer to mating between individuals.
+
+. . .
+
+A Wright-Fisher population has _random_ mating: there is no spatial clustering, and all individuals are equally likely to mate with others.
+
+. . .
+
+This is not true in real populations - some individuals are closer to others, and more likely to interact/mate purely by proximity.
+
+## Gene pools as populations
+
+One common way to approach this is the same as $N_E$ - we want to know not the actual real populations, but find what groups of individuals evolve _as_ if they were WF populations.
+
+. . .
+
+A WF population should be more or less in Hardy Weinberg equilibrium.
+
+. . .
+
+We can therefore ask whether a group of individuals deviates from HW to measuer whether it's a good "population".
+
+. . .
+
+There are other reasons populations deviate from HW, but testing for departures is a good start.
+
+## The Wahlund effect {.smaller}
+
+When there is population structure (multiple populations in a single sample of individuals), the deciation from HW is always the same - fewer heterozygotes than expected by chance.
+. . .
+
+This deficit is known as the Wahlund effect, and has fairly simple expectations.
+. . .
+
+Say you have n populations in your data. Let $\sigma$ be the standard deviation of allele frequencies among populations. Then:
+
+$$
+\begin{cases}
+E[p_{AA}]=\bar{p}^2+\sigma^2 \\
+E[p_{Aa}]=2\bar{p}\bar{q} - 2\sigma^2 \\
+E[p_{aa}]=\bar{q}^2+\sigma^2
+\end{cases}
+$$
+
+
+Larger deviations in allele frequencies between the populations result in smaller and smaller numbers of heterozygotes compared to expectation.
+
+. . .
+
+One way we can measure this kind of deviation is through $F_{ST}$.
+
+## STRUCTURE/ADMIXTURE
+
+If having multiple populations in your data increases deviations from HW, then one way we can try to identify populations is to group individuals in such a way that _each_ group is in HW.
+
+. . .
+
+The simplest approaches here (STRUCTURE), have the user specify a number of groups (denoted as $K$), and try large numbers of assignments for all individuals to find the one that minimizes the departure from HW in all of the groups.
+
+. . .
+
+This is a very important, and often missed, assumption - populations may not be in HW for many reasons.
+
+. . .
+
+Further, there is no perfect way of knowing $K$.
+
+## The other departure from expectation
+
+Last week, we talked about LD, and how one of the reasons it can be higher than expected is population structure.
+
+. . .
+
+The other form of disequlibrium that can be minimized when looking for optimal "populations" is therefore LD: with each assignment of groups, you make sure that within group LD is as small as possible.
+
+. . .
+
+Think of a population with _perfect_ LD at all sites - it is probably better to think of it as two independently evolving gene pools.
+
+. . .
+
+The benefit of using LD is you don't need large differences in allele frequencies (the basis of the Wahlund effect) to see LD in subpopulations.
+
+. . .
+
+But now you are optimizing many different axes - HW, LD, and $K$.
+
+## The core idea in STRUCTURE/ADMIXTURE
+
+At the end of the day, each approach tries some way of estimating the genome wide covariance matrix between all samples, and then split into $K$ groups such that covariance within the matrix is maximized.
+
+. . . 
+
+Samples that co-vary in genetic variation are probably in the same population.
+
+. . .
+
+Samples that show co-variance between multiple groups show genetic structure consistent with _admixture_ - they are a mix of gene pools.
+
+
+## PCA based approaches (PCAngsd) {.smaller}
+
+There are numerous statistical approaches to find clusters in data based on shared variability (for example, k-means-clustering)
+
+. . . 
+
+That same logic can be applied to genetic samples, although it's worth understanding that the clustering done here will not result in populations as close to HW as possible, but, rather, in clusters which minimize w/in cluster distance in PC space.
+
+![](https://www.popgen.dk/software/images/9/94/Pcangsd_admix3.gif)
+
+. . .
+
+But, not the actual Cov matrix!
+
+## Why do PCA then?
+
+One amazing result, however, is that the number of significant components in a data-set is equal to $K-1$ - so by running PCA first you can actually skip trying to determine significance of different $K$ values.
+
+. . .
+
+But, recall, that the number of significant PCs is often tested in relatively arbitrary ways!
+
+## Takeaways
+
+"Populations" can often be represented as multiple constitutive gene pools, each evolving roughly under HW.
+
+. . .
+
+This will create within population genetic partitioning, decreasing the expected number of heterozygotes.
+
+. . .
+
+We can therefore find such populations by looking for groups of individuals that evolve _as if_ they were in HW. But keep in mind these "ancestries"/"gene pools" don't necessarily represent physically distinct populations.
+
+# The coalescent
+
+Before we look at how gene flow impacts evolution in populations (and tie back to population structure), let's actually talk about the coalescent.
+
+. . . 
+
+Coalescent theory deals with tracing the geneology of alleles in a population.
+
+. . .
+
+By tracing individual lineages, we are actually able to make deep insights into evolutionary processes without explicitly having to keep track of things like allele frequencies.
+
+## A simple example
+
+We start with some samples in a population in the current day:
+
+```{julia}
+using Plots, LaTeXStrings, Measures
+theme(:solarized)
+default(xlabelfontsize=16,ylabelfontsize=16,size=(1000,600),margins=4mm)
+
+include("../src/Stats_utilities.jl")
+include("../src/Coalescent.jl")
+
+
+pop=1:10
+N=10
+c_plot =scatter(1:N,fill(1,N),c=col_func_coal(1:10,[],10),leg=false,ylim=(0,10);markersize=10)
+```
+
+## We go back a generation
+
+Assume any individual is equally likely to be the ancestor of current individuals.
+
+```{julia}
+coalescent = coal_sim(N,1:10)
+coal_plot(coalescent,pop;t=2)
+```
+
+## And we keep doing this until only one lineage remains
+
+```{julia}
+anim = @animate for i in 3:length(coalescent)
+    coal_plot(coalescent,pop;t=i)
+end
+gif(anim,fps=2)
+```
+
+## The same samples could have many different coalescent histories
+
+```{julia}
+
+c1 = coal_plot(coal_sim(10,4:6),pop)
+c2 = coal_plot(coal_sim(10,4:6),pop)
+c3 = coal_plot(coal_sim(10,4:6),pop)
+c4 = coal_plot(coal_sim(10,4:6),pop)
+
+plot(c1,c2,c3,c4,size=(1200,800))
+```
+
+## Properties of the coalescent
+
+We can start to understand some general properties of the coalescent. Start by imagining we samples _all_ of the individuals in the population.
+
+. . .
+
+The number of coalescence events in the previous generation will be equal to:
+
+$$
+ \sum_{i=1}^{N}{i\left(\binom{N}{i}\frac{1}{N}^i(1-\frac{1}{N})^{N-i}\right)}
+$$
+
+Where $i$ is the number of samples that are coalescing in the previous generation.
+
+## I thought this was supposed to be simpler!
+
+The simplicity of the coalescent comes from a very simple assumption - the number of individuals you sample is far smaller than the total population.
+
+. . .
+
+Let's start with the most extreme case - you only sampled two lineages.
+
+Any two lineages have not coalesced by the $n^{th}$ generation back with probability
+
+$$
+P(T>n) = (1-\frac{1}{2N})^{n}
+$$
+
+This is just the geometric distribution! For big $N$, it's also well approximated by the Exponential distribution.
+
+## What does that look like?
+
+```{julia}
+using Distributions, StatsPlots
+
+plot(Geometric(1/(2*100)),xlabel="Generation back",ylabel="Probability",label="N=100")
+plot!(Geometric(1/(2*1000)),label="N=1000")
+```
+
+We'll also assume lineages coalesce independently, so that 
+. . .
+
+Lots of variability, but we can make some very specific predictions - average time to coalescence (often called $T$) is just $2N$.
+
+## Slightly less assumptions
+
+Imagine that the number of samples we have, $n$ is much smaller than the total population.
+
+. . .
+
+Then, the number of coalescent events in the previous generation is still fairly simple - it is completely unlikely that multiple coalescent events happen in one generation:
+
+$$
+P( n \rightarrow n-1) = \binom{n}{2}\frac{1}{2N} = \frac{n(n-1)}{4N}
+$$
+
+## If $N$ large enough
+
+We can then back out that the waiting time for the coalescent event when $n$ samples remain is $E[T_n] =\frac{4N}{n(n-1)}$.
+
+. . . 
+
+If we want to find the time until the most recent common ancestor, we can sum up the values of $T_n$ from $n$ to $2$, giving:
+
+. . .
+
+$$
+E[T_{MRCA}]=\sum_{i=2}^{n}T_n = 4N\left(1-\frac{1}{n}\right)
+$$
+
+If $n = 2$, then $T_{MRCA} = 2N$. As $n$ increases, $T_{MRCA} \leftarrow 4N$.
+
+. . . 
+
+HALF the time is spent waiting for the last two copies
+
+## Total tree length
+
+The length of all of the branches in the resulting tree can also be described:
+
+$$
+E(T_{total}) = 4N \sum_{i=1}^{n-1}{\frac{1}{i}}
+$$
+
+. . . 
+
+Again, for 2 samples: $4N$ generations between their coalescene.
+
+. . .
+
+If we then want to count how many mutations have happened, we can simply provide the per-generation mutation rate.
+
+. . .
+
+Expected differences between two randomly chosen samples in a population is: $4N \mu = \theta$.
+
+. . .
+
+This is the simpler way to derive $\theta$, but it does not capture the fact that, often, the sequence diversity is capped for a variety of reasons.
+
+## Coalescent and population size changes
+
+How many coalescent events do we expect at different times?
+
+. . .
+
+What if the population increases?
+
+. . .
+
+What if it decreases?
+
+## Instantaneous inverse coalescence rate
+
+The IICR is a way to measure the rate of coalescence given an empirical distribution of coalescent rates.
+
+. . . 
+
+When populations are constant, it is constant over time.
+
+. . .
+
+Further - it will change predictably (and linearly) with changes in N_E.
+
+## IICR in the wild
+
+Many methods to estimate demographic history capitalize on this expected rate of coalescence.
+
+. . .
+
+When it deviates from a flat rate of coalescence events - either population increase or decrease.
+
+. . .
+
+PSMC, MSMC, SCM++, SMC` -> We'll talk more about these, but all estimate the _sequential Markovian_ coalescent across the genome.
+
+. . .
+
+That lets them estimate population change, migration rates between populations, etc.
+
+## Migration rates and the coalescent {.smaller}
+
+How does having multiple populations affect coalescence rates?
+
+. . .
+
+Imagine two populations, with a low ongoing rate of migration $m$.
+
+. . .
+
+Again, assume we have a small number of individuals from each population, so that each generation at most one event happens:
+
+1) Coalescence in population 1, rate $\binom{n_1}{2}/2N_1$
+
+2) Coalescence in population 2, , rate $\binom{n_2}{2}/2N_2$
+
+3) Migration from 1 to 2, rate $n_1m$
+
+4) Migration from 2 to 1, rate $n_2m$
+
+. . .
+
+Can simulate efficiently by summing rates of all events, picking time to event based on rate, and then picking event based on relative probability.
+
+## Core results from migration models
+
+The coalescent time for 2 samples in the same population is $4N$ instead of $2N$.
+
+. . . 
+
+Either coalescence happens ($2N$) or with very low probability one sample migrates, and then you have to wait a _very_ long time ($1/m$ and then another $2N$) to get coalescence. The average turns out to be $4N$ (or, for $d$ populations, $2Nd$)
+
+. . .
+
+The coalescence time for 2 samples from _different_ populations is $4N(1+\frac{d-1}{4Nmd})$
+
+## Expected $F_{ST}$ between populations
+
+Another way of finding $F_{ST}$ stems from coalescent thinking.
+
+. . . 
+
+$$
+F_{ST} = \frac{T_w-T_b}{T_b}
+$$
+
+where $T_w = 2Nd$ and $T_b = 4N(1+\frac{d-1}{4Nmd})$
+
+. . .
+
+For "infinite islands":
+When $d \gg 1$, $F_{ST} = \frac{1}{1+4Nm}$
+
+## Discussion Thursday
+
+More complicated coalescent models can be fit to data using the IICR approach. In particular, we'll look at a case where there _was_ population structure, but it disappeared.
+
+. . .
+
+Focus on understanding biological story (Figures 4,5,6), we'll talk about technical details Thursday.
+
+

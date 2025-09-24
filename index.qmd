@@ -20,8 +20,8 @@ Each week, we will start with a lecture on Tuesday, followed by a paper discussi
 | Aug 26-28 | Intro, Wright-Fisher | [Leu et al](notes/papers/Leu2020.pdf) | [Lecture 1](notes/Lecture1.qmd) |
 | Sep 2-4 | Genetic diversity measurements | [Buffalo](notes/papers/Buffalo2021.pdf) | [Lecture 2](notes/Lecture2.qmd) |
 | Sep 9-11 | Divergence at a site, mutation, molecular models of evolution | [Peede et al](notes/papers/Peede2025.pdf) | [Lecture 3](notes/Lecture3.qmd) |
-| Sep 16-18 | Sexual reproduction, Recombination, LD | [Hahn and Mishra](notes/papers/HahnMishra2025.pdf) |  |
-| Sep 23-25 | Population structure, migration, the coalescent | [Cousins et al](notes/papers/Cousins2025.pdf)  |  |
+| Sep 16-18 | Sexual reproduction, Recombination, LD | [Hahn and Mishra](notes/papers/HahnMishra2025.pdf) |[Lecture 4](notes/Lecture4.qmd) |
+| Sep 23-25 | Population structure, migration, the coalescent | [Cousins et al](notes/papers/Cousins2025.pdf)  | [Lecture 5](notes/Lecture5.qmd) |
 | Sep 30-Oct 2 | Selection at a single locus, types of selection |  |  |
 | Oct 7-9 | Project Meetings, no regular class | NA |  |
 | Oct 14-16 | Quantitative trait evolution |  |  |
