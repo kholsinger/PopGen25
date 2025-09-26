@@ -4,9 +4,21 @@ theme: cosmo
 bibliography: references.bib
 execute:
   freeze: auto  # re-render only when source changes
-  eval: false
+  eval: true
   echo: true
 ---
+
+```{r setup, include=FALSE}
+# Register custom engines
+knitr::knit_engines$set(
+  gff = function(options) {
+    knitr::engine_output(options, options$code, options$code)
+  },
+  codeml = function(options) {
+    knitr::engine_output(options, options$code, options$code)
+  }
+)
+```
 
 # Lab 3: Genetic divergence estimates
 
@@ -37,8 +49,8 @@ Go back to last week's [notes](lab2.qmd) to look at how one can use the `vcfR` p
 ```{r}
 require("vcfR")
 require("readr")
-samples = read_table("labs/data/muc_samples.txt")
-vcf = read.vcfR("labs/data/muc19_subsample.vcf.gz")
+samples = read_table("data/muc_samples.txt")
+vcf = read.vcfR("data/muc19_subsample.vcf.gz")
 GT = extract.gt(vcf,element="GT",as.numeric=TRUE)
 ```
 
@@ -181,14 +193,14 @@ summary_df$YRI_het = apply(GT[,yri_ids],1,sample_het)
 #Allele frequencies
 summary_df$CEU_p = apply(GT[,ceu_ids],1,freq_GT)
 summary_df$MXL_p = apply(GT[,mxl_ids],1,freq_GT)
-summary_df$YRI_p = apply(GT[,chb_ids],1,freq_GT)
+summary_df$YRI_p = apply(GT[,yri_ids],1,freq_GT)
 
 #And now d_xy, we'll use the precalculated p values
 summary_df$CEU_MXL_dxy = dxy_site(summary_df$CEU_p,summary_df$MXL_p)
 
-summary_df$CEU_YRI_dxy = ???
+summary_df$CEU_YRI_dxy = dxy_site(summary_df$CEU_p,summary_df$YRI_p)
 
-summary_df$YRI_MXL_dxy = ???
+summary_df$YRI_MXL_dxy = dxy_site(summary_df$YRI_p,summary_df$MXL_p)
 ```
 
 ## Plot the $d_{XY}$ values!
@@ -353,7 +365,7 @@ The first column is the chromosome, the second is the source of the annotation. 
 
 It is run as follows:
 
-```{bash}
+```{bash, eval = FALSE}
 grep "pattern" file.txt
 ```
 
@@ -363,7 +375,7 @@ Let's say we are looking for MUC19 in the human reference genome .gff provided i
 
 We can simply run:
 
-```{bash}
+```{bash, eval = FALSE}
 grep "MUC19" chr12.gff > muc19_hits.gff
 ```
 
@@ -375,19 +387,19 @@ awk '$3=="CDS"{print $4 "-" $5}' muc19_hits.gff > sequences_to_extract.txt
 
 Finally, we can subset our vcf to *only* include the CDS regions:
 
-```{bash}
+```{bash, eval = FALSE}
 bcftools view -R sequences_to_extract.txt muc19_samples.vcf.gz -Oz -o muc19_cds_only.vcf.gz
 ```
 
 Now we have the necessary bits to make a `.fasta` file that includes sequences for all of the samples in your vcf. There are a few ways to do this, but the one you already have all the tools for if you are working with `vcf` files is probably `bcftools consensus`. This command makes `bcftools` emit a fasta with the consensus for the sample named \<sample\>. You can make this programattic and loop over all samples, or just run for those you are using for $dN/dS$ calculations.
 
-```{bash}
+```{bash, eval = FALSE}
 bcftools consensus -s <sample> -f reference.fasta muc19_cds_only.vcf.gz > sample.fasta
 ```
 
 You can then just concatenate all of your samples into a single fasta for analysis:
 
-```{bash}
+```{bash, eval = FALSE}
 cat sample1.fasta sample2.fasta sample3.fasta > all_samples.fasta
 ```
 
@@ -397,7 +409,7 @@ We next need to make a tree using the data to guide PaML analysis. [iqtree2](htt
 
 The command to make a tree is also very easy once you have it installed:
 
-```{bash}
+```{bash, eval = FALSE}
 iqtree2 -s all_samples.fasta
 ```
 
@@ -434,7 +446,7 @@ I think by this point you are hopefully starting to understand why I'm having yo
 
 Now that you have a control file, install `PaML` ([from here](https://github.com/abacus-gene/paml)) and now just run:
 
-```{bash}
+```{bash, eval = FALSE}
 codeml codeml.ctl
 ```
 
@@ -462,13 +474,13 @@ We now need to align the protein sequences - we don't know what the homologous p
 
 Aligning is simple:
 
-```{bash}
+```{bash eval = FALSE}
 mafft protein.faa > protein_aligned.faa
 ```
 
 But now we need to align the nucleotide data based on the protein data. Again, a new tool with new syntax: `pal2nal` [found here](https://www.bork.embl.de/pal2nal/).
 
-```{bash}
+```{bash eval = FALSE}
 pal2nal.pl protein_aligned.faa CDS.fna -output fasta -nogap
 ```
 
