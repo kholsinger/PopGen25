@@ -252,10 +252,6 @@ bar(["aa","aA","AA"],Ws,leg=false,xlabel="Genotype",ylabel="Number of Seeds",siz
 
 ## Convert to relative fitness
 
-We often use the ancestral allele (or the major allele, e.g. the most common) as the reference point.
-
-. . .
-
 ```{julia}
 ws = [1,1.5,2.0]
 bar(["aa","aA","AA"],ws,leg=false,xlabel="Genotype",ylabel="Relative Fitness",size=(1000,600))
@@ -289,12 +285,10 @@ bar(["aa","aA","AA"],Ns2,leg=false,xlabel="Genotype",ylabel="Frequency in next g
 Let's spell it out fully:
 
 -   `aa` individuals will leave behind $W_{aa} N_{aa}$ offspring
-
-<!-- -->
-
 -   `Aa` will leave behind $W_{Aa} N_{Aa}$
-
 -   `AA` will have $W_{AA} N_{AA}$ offspring.
+
+. . .
 
 So, there will be $200N_{AA}+\frac{150}{2}N_{Aa}$ `A` alleles in the next generation in our example, out of a total of $100N_{aa}+150N_{Aa}+200N_{AA}$ individuals.
 
@@ -333,6 +327,14 @@ The increase is proportional to the strength of selection ( $s$ vs $S$ ) and the
 . . .
 
 What about other forms of selection?
+
+. . .
+
+Almost universally, the change in allele frequency will consist of two major terms: Strenght of selection and the amount of genetic variability
+
+. . .
+
+This is why we have focused so much on what creates/destroys genetic variation - without it there is no selection and adaptation.
 
 ## Limits of selection 2: drift
 
@@ -658,7 +660,7 @@ As we'll discuss in the next few weeks, while each of the evolutionary forces is
 
 . . .
 
-That requires you to build a strong sense of intuition for what these different statistics mean. This week for reading: we'll look at how chromosomal inversions can impact many genome-wide statistics.
+That requires you to build a strong sense of intuition for what these different statistics mean. This week for reading: we'll look at adaptation in A. Aedes.
 
 . . .
 
