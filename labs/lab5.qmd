@@ -30,12 +30,12 @@ one_tenth = c(1,rep(0,9))
 one_half_fst1 = c(rep(0,5),rep(1,5))
 one_half_fst0 = c(0,1,1,1,0,0,1,1,1,0)
 fake_data = rbind(row_invariant,row_invariant2,one_tenth,one_half_fst1,one_half_fst0)
-names(fake_data) = c("A","B","C","D","E","a","b","c","d","e")
+colnames(fake_data) = c("A","B","C","D","E","a","b","c","d","e")
 #We also want the rows to have names that work with our code:
-row.names(fake_data) = paste("chr1:",1:5*100,":A:T",sep="")
+rownames(fake_data) = paste("chr1:",1:5*100,":A:T",sep="")
 write.table(fake_data,file="<your test_dir/test_data.txt>",quote=FALSE)
-pop_file = data_frame(samples=names(fake_data),population=c(rep(1,5),rep(2,5)))
-write.table(pop_file,row.names=FALSE,quote=FALSE)
+pop_file = data_frame(samples=colnames(fake_data),population=c(rep(1,5),rep(2,5)))
+write.table(pop_file,file="pop_data.txt",row.names=FALSE,quote=FALSE)
 ```
 
 ### Where should test data live?
@@ -46,7 +46,7 @@ The test data is something that, with care, you should only need to curate once.
 
 ```{r}
 #Load in your code
-include("your_src_file.R")
+source("your_src_file.R")
 
 #Load in test data
 
@@ -55,14 +55,14 @@ pops = read.table("your_test_pops")
 #These are tests
 #Assuming diploid
 allele_freqs = apply(test_data,1,freq_GT)
-if(allele_freqs == c(0,0.5,0.05,0.25,0.3)){
+if(all(allele_freqs == c(0,0.5,0.05,0.25,0.3))){
     print("Diploid freqs ok.")
 } else {
     print("Diploid freqs broken!")
 }
 #Assuming haploid
 allele_freqs_hap = apply(test_data,1,function(x) freq_GT(x,1))
-if(allele_freqs == c(0,1,0.1,0.5,0.6)){
+if(all(allele_freqs == c(0,1,0.1,0.5,0.6))){
     print("Diploid freqs ok.")
 } else {
     print("Diploid freqs broken!")
@@ -126,6 +126,11 @@ Let's now move on to new things. In the interest of not introducing a bunch of n
 
 If you are on a windows machine, we'll need to make sure you have access to a UNIX terminal. Two ways to go about this - if you already have access to the HPC, feel free to work from there. The recommended option is to install `WSL2`. This is a lightweight virtual machine that will give you full Linux capabilities from inside of Windows. It's very useful to test code/pipelines before running them on the cluster. Instructions depend partially on Windows version, but the currently recommended version seems to be: go to the Microsoft Store, type in Ubuntu, install Ubuntu. This *will* require a restart before you can actually run it.
 
+```{bash}
+sudo apt update
+sudo apt install build-essential
+```
+
 ### Step 2: Install conda/miniconda
 
 Managing software packages is easiest with virtual environments, and Conda is the way to go for most bioinformatics tools. I'll recommend Miniconda, as it's a bit more lightweight: (instructions here)\[https://www.anaconda.com/docs/getting-started/miniconda/install#macos-linux-installation\]. DO NOT install using the graphical installer - we'll need to work from the terminal today.
@@ -180,7 +185,7 @@ pcangsd -p <output_prefix_from_previous_step> -o <output_prefix_for_this_step> -
 Now it will run for a little while. Or a very long while for large datasets. What will be produced is the covariance matrix for your data, and estimates of admixture given the $K$ based on the PCA. You might notice this $K$ is *weird* given what you know about the data here, but let's take a look at the data in depth:
 
 ```{r}
-admix = read_table("<your_output_prefix>.admix.<K>.Q")
+admix = read_table("<your_output_prefix>.admix.<K>.Q",colnames=FALSE)
 head(admix)
 ```
 
