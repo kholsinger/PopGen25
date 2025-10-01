@@ -252,10 +252,6 @@ bar(["aa","aA","AA"],Ws,leg=false,xlabel="Genotype",ylabel="Number of Seeds",siz
 
 ## Convert to relative fitness
 
-We often use the ancestral allele (or the major allele, e.g. the most common) as the reference point.
-
-. . .
-
 ```{julia}
 ws = [1,1.5,2.0]
 bar(["aa","aA","AA"],ws,leg=false,xlabel="Genotype",ylabel="Relative Fitness",size=(1000,600))
@@ -282,11 +278,11 @@ Let's spell it out fully:
 
 -   `aa` individuals will leave behind $W_{aa} N_{aa}$ offspring
 
-<!-- -->
-
 -   `Aa` will leave behind $W_{Aa} N_{Aa}$
 
 -   `AA` will have $W_{AA} N_{AA}$ offspring.
+
+. . . 
 
 So, there will be $200N_{AA}+\frac{150}{2}N_{Aa}$ `A` alleles in the next generation in our example, out of a total of $100N_{aa}+150N_{Aa}+200N_{AA}$ individuals.
 
@@ -394,7 +390,7 @@ Similarly, a trait under positive selection can be controlled by overdominant al
 
 The form selection takes on a phenotype *is not necessarily the same* as the way alleles are selected.
 
-## What does selection *do*?
+## What does selection *do*? {.smaller}
 
 Let's recall how each of our forces operates:
 
