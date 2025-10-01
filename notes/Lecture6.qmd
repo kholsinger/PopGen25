@@ -257,7 +257,7 @@ ws = [1,1.5,2.0]
 bar(["aa","aA","AA"],ws,leg=false,xlabel="Genotype",ylabel="Relative Fitness",size=(1000,600))
 ```
 
-## Look at next generation:
+## Look at number of offspring
 
 ```{julia}
 ps = [0.25,0.5,0.25]
@@ -269,7 +269,15 @@ bar(["aa","aA","AA"],Ns,leg=false,xlabel="Genotype",ylabel="Offspring",size=(100
 
 ```{julia}
 ps2 = Ns/sum(Ns)
-bar(["aa","aA","AA"],ps,leg=false,xlabel="Genotype",ylabel="Frequency in next generation",size=(1000,600))
+bar(["aa","aA","AA"],ps,leg=false,xlabel="Genotype",ylabel="Frequency of offspring",size=(1000,600))
+```
+
+## And convert to HW expectation in next generation:
+
+```{julia}
+p2 = 0.5*ps2[2]+ps2[3]
+Ns2 = [(1-p2)^2,2*p2*(1-p2),p2^2]
+bar(["aa","aA","AA"],Ns2,leg=false,xlabel="Genotype",ylabel="Frequency in next generation",size=(1000,600))
 ```
 
 ## What will the allele frequency be in the next generation?
@@ -279,7 +287,6 @@ Let's spell it out fully:
 -   `aa` individuals will leave behind $W_{aa} N_{aa}$ offspring
 
 -   `Aa` will leave behind $W_{Aa} N_{Aa}$
-
 -   `AA` will have $W_{AA} N_{AA}$ offspring.
 
 . . . 
@@ -321,6 +328,14 @@ The increase is proportional to the strength of selection ( $s$ vs $S$ ) and the
 . . .
 
 What about other forms of selection?
+
+. . .
+
+Almost universally, the change in allele frequency will consist of two major terms: Strenght of selection and the amount of genetic variability
+
+. . .
+
+This is why we have focused so much on what creates/destroys genetic variation - without it there is no selection and adaptation.
 
 ## Limits of selection 2: drift
 
@@ -510,6 +525,30 @@ This signal will decay following the allele's fixation.
 
 . . .
 
+Barton showed that [@Barton2000]
+
+$$
+\frac{\pi}{\pi_0} = 1-(4Ns)^{2r/s}
+$$
+
+e.g. the reduction in genetic diversity is predictable.
+
+. . .
+
+## Theoretical reduction in diversity
+
+```{julia}
+function pi_red(x,N,s)
+    return(1-(4*N*s)^(-2*x/s))
+end
+dists = vcat(collect(range(0.01,0,length=50)),collect(range(0,0.01,length=50)))
+pis1 = [pi_red(x,10000,0.01) for x in dists]
+dists2 = vcat(collect(range(-0.01,0,length=50)),collect(range(0,0.01,length=50)))
+plot(dists2,pis1,size(1000,600),xlabel="Genetic Distance",ylabel=L"\frac{\pi}{\pi_0}",label=L"4Ns=100")
+pis2 = [pi_red(x,10000,0.1) for x in dists]
+plot!(dists2,pis2,label=L"4Ns=1000")
+```
+
 We can perform several different statistical tests to look for evidence of this kind of sweep.
 
 ## Tajima's $D$ {.smaller}
@@ -622,7 +661,7 @@ As we'll discuss in the next few weeks, while each of the evolutionary forces is
 
 . . .
 
-That requires you to build a strong sense of intuition for what these different statistics mean. This week for reading: we'll look at how chromosomal inversions can impact many genome-wide statistics.
+That requires you to build a strong sense of intuition for what these different statistics mean. This week for reading: we'll look at adaptation in A. Aedes.
 
 . . .
 
