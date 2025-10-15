@@ -1,0 +1,12 @@
+{
+  "hash": "265ba6256d04f6c6a24a505b1d3da8b8",
+  "result": {
+    "engine": "julia",
+    "markdown": "---\ntitle: \"Lecture 8\"\nexecute:\n  freeze: auto  # re-render only when source changes\nformat: \n    revealjs:\n        theme: serif\n        incremental: true\n        preview-links: auto\n        chalkboard: true\n        margin: 0\n        width: 1080\nengine: julia\njulia:\n  exeflags: [\"--project=../PopGen25\"]\nbibliography: references.bib\n---\n\n\n\n## Today's plan\n\nThe interplay of each different force on allelic frequencies.\n\n- Mutation-selection balance\n- Selection-drift balance\n- Migration-selection balance\n- Consequences of divergence on migration/selection\n- Detecting migration/introgression\n\n##\n\n",
+    "supporting": [
+      "Lecture8_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}
