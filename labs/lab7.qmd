@@ -102,3 +102,7 @@ And then we run PCAngsd as ...
 
 ``````
 
+# GWAS in R
+
+Once you are done setting up your directory, your task for the day is to get GWAS running in `R` using its example data. The guide is found [here](https://cran.r-project.org/web/packages/statgenGWAS/vignettes/GWAS.html). Follow along until you get to the Manhattan Plots, but use the "plant.height" trait rather than "grain.yield", and send me your result.
+
