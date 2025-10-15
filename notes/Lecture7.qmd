@@ -1,0 +1,593 @@
+---
+title: "Lecture 7"
+execute:
+  freeze: auto  # re-render only when source changes
+format: 
+    revealjs:
+        theme: serif
+        incremental: true
+        preview-links: auto
+        chalkboard: true
+        margin: 0
+        width: 1080
+engine: julia
+julia:
+  exeflags: ["--project=../PopGen25"]
+bibliography: references.bib
+---
+
+## Quantitative trait evolution
+
+Now that we have a better feeling for how all of the different processes impact the evolution in alleles, it's worth thinking about quantitative traits in general.
+
+. . .
+
+Today we'll talk about how genetic variation for traits is distributed, and what this tells us about their evolution.
+
+. . .
+
+We'll talk about how we can identify causal alleles for traits, and why sometimes that is either impossible, or extra complicated.
+
+. . .
+
+We'll end by considering the *ultimate* trait - fitness, and how fitness changes as populations evovle (and what that can teach us about evolution of reproductive isolation, hybridization, etc.)
+
+## Last time
+
+Last week we talked about the Breeder's equation.
+
+$$ 
+R = S h^2 = S \frac{V_A}{V_P}
+$$
+
+. . .
+
+This equation describes how a trait changes based on changes in the average among those who mated vs the whole population, and how much of that change is heritable.
+
+. . .
+
+We did not discuss how $V_A$ changes in response to selection.
+
+## Change in genetic variability due to selection {.smaller}
+
+Let's think through multiple cases:
+
+. . .
+
+Take directional selection, with all alleles being nice additive values for trait: decreases
+
+. . .
+
+Take directional selection, but all alleles are overdominant: decreases even faster.
+
+. . .
+
+Stabilizing selection, additive values: decreases as different alleles become fixed.
+
+. . .
+
+Stabilizing and overdominance: while no alleles are fixed, $V_A$ goes to 0.
+
+## Remember that we care about the *additive* genetic variation
+
+```{julia}
+using Plots, Measures, LaTeXStrings
+theme(:vibrant)
+default(xlabelfontsize=16,ylabelfontsize=16,margins=4mm,markerstrokewidth=0,linewidth=2,dpi=400)
+
+a = bar(["aa","aA","AA"],[1,1.2,1.4],leg=false,title="Additive",color=1,ylabel="trait Z")
+
+b = bar(["aa","aA","AA"],[1,1.4,1.2],leg=false,title="Overdominant",color=2,ylabel="trait Z")
+
+c = bar(["aa","aA","AA"],[1.2,1,1.4],leg=false,title="Underdominant",color=3,ylabel="trait Z")
+function f_add(p); (1-p)^2*1+2*p*(1-p)*1.2+p^2*1.4; end
+
+function f_over(p); (1-p)^2*1+2*p*(1-p)*1.4+p^2*1.2; end
+
+function f_under(p); (1-p)^2*1.2+2*p*(1-p)*1+p^2*1.4; end
+
+d = plot(range(0,1,length=50),f_add,label="Additive",xlabel=L"p",ylabel=L"\bar{Z}")
+plot!(d,range(0,1,length=50),f_over,label="Overdominant")
+plot!(d,range(0,1,length=50),f_under,label="Underdominant")
+
+plot(a,b,c,d;layout=@layout[[a;b;c] d{0.7w}],size=(1000,600))
+
+```
+
+## Renewing $V_A$
+
+Mutations re-introduce genetic variation for a trait.
+
+. . .
+
+Because they are *extremely* rare when they enter the population, most change in allele frequencies leads to additive effects.
+
+. . .
+
+So, most new mutations increase additive genetic variation for a trait.
+
+. . .
+
+Long-term - $V_A$ will settle on a value depending on both new mutations and strength of selection.
+
+## Some counter-factuals {.smaller}
+
+Just because genetic variation decreases due to selection, does not mean it disappears.
+
+```{julia}
+using StatsPlots, CSV, DataFrames
+
+corn_data = CSV.read("data/corn_data.txt",DataFrame,missingstring=["."])
+
+corn_plot= plot(corn_data.YR,corn_data.IHO_2,label="High Oil Selection",xlabel="Year",ylabel="Corn Oil %",dpi=400,margins=4mm)
+```
+
+## But it *can* have limits
+
+```{julia}
+plot!(corn_data.YR,corn_data.ILO_2,label="Low Oil Selection",xlabel="Year",ylabel="Corn Oil %")
+```
+
+## But it *is* reversible
+
+```{julia}
+plot!(corn_data.YR,corn_data.IRHO_2,label="Reverse to high")
+plot!(corn_data.YR,corn_data.IRLO_2,label="Reverse to low")
+
+```
+
+## Long term change re-measured
+
+It's worth considering that changing by 1% oil content may be much easier when oil content is high than when it is low.
+
+. . .
+
+We instead consider the $log(\frac{X_1}{X_2})$, where $X_1$ is the starting trait value, and $X_2$ is the ending one.
+
+. . .
+
+What's often noticed on this scale is that change is *not* linear: change might be faster initially, and slow down later.
+
+. . .
+
+Not the case in corn data!
+
+## In oil data
+
+```{julia}
+
+corn_plot2 = plot(corn_data.YR[2:105],[log(corn_data.IHO_2[i])-log(corn_data.IHO_2[i-1]) for i in 2:105],label="High Oil Selection",xlabel="Year",ylabel="Fold change in oil content")
+plot!(corn_plot2,corn_data.YR[2:105],[log(corn_data.ILO_2[i])-log(corn_data.ILO_2[i-1]) for i in 2:105],label="Low Oil Selection")
+
+```
+
+## LTEE of fitness
+
+It *is* the case for change in fitness in Lenski's long term *E. coli* evolution.
+
+![](https://www.science.org/cms/10.1126/science.1243357/asset/6f1f047b-9303-4c88-bc7c-ebd32d50508d/assets/graphic/342_1364_f2.jpeg){width="715"}
+
+. . .
+
+Why?
+
+## Fisher's Geometric Model
+
+```{julia}
+function circle_shape(x,y,r)
+  θ = LinRange(0,2*π,100)
+  x .+ r*sin.(θ), y .+ r*cos.(θ)
+end
+#Plot optimum at 0,0: population at x,y
+fg_plot = scatter((0,0),label="Optimum",xlabel="Trait x",ylabel="Trait y",xlim=(-1,1),ylim=(-1,1),size=(800,800))
+#Plot circle of radius sqrt(x^2+y^2) centered on 0,0
+scatter!(fg_plot,(sqrt(1/2),sqrt(1/2)),label="Starting pop")
+plot!(fg_plot,circle_shape(0,0,1),seriestype=:shape,fillalpha=0.2,label="")
+#Plot another circle from point x,y of radius \mu
+plot!(fg_plot,circle_shape(sqrt(1/2),sqrt(1/2),0.2),seriestype=:shape,fillalpha=0.2,label="")
+#Show overlap of the two areas?
+```
+
+## When closer to optimum
+
+```{julia}
+
+#Plot optimum at 0,0: population at x,y
+fg_plot2 = scatter((0,0),label="Optimum",xlabel="Trait x",ylabel="Trait y",xlim=(-1,1),ylim=(-1,1),size=(800,800))
+#Plot circle of radius sqrt(x^2+y^2) centered on 0,0
+scatter!(fg_plot2,(0.2,0.2),label="Starting pop")
+plot!(fg_plot2,circle_shape(0,0,sqrt(2*0.2^2)),seriestype=:shape,fillalpha=0.2,label="")
+#Plot another circle from point x,y of radius \mu
+plot!(fg_plot2,circle_shape(0.2,0.2,0.2),seriestype=:shape,fillalpha=0.2,label="")
+#Show overlap of the two areas?
+```
+
+## When *really* close to optimum
+
+```{julia}
+#Plot optimum at 0,0: population at x,y
+fg_plot3 = scatter((0,0),label="Optimum",xlabel="Trait x",ylabel="Trait y",xlim=(-1,1),ylim=(-1,1),size=(800,800))
+#Plot circle of radius sqrt(x^2+y^2) centered on 0,0
+scatter!(fg_plot3,(0.05,0.05),label="Starting pop")
+plot!(fg_plot3,circle_shape(0,0,sqrt(2*0.05^2)),seriestype=:shape,fillalpha=0.2,label="")
+#Plot another circle from point x,y of radius \mu
+plot!(fg_plot3,circle_shape(0.05,0.05,0.2),seriestype=:shape,fillalpha=0.2,label="")
+#Show overlap of the two areas?
+```
+
+## So, expectation when adapting to new optimum
+
+When populations adapt to a new optimum, the first fixed mutations are expected to have large effects.
+
+. . .
+
+Mutations fixed later in the process have increasingly smaller effects, as large effect mutations become increasingly likely to be deleterious.
+
+. . .
+
+Vanishingly unlikely that population ever fully adapts to optimum, and will instead reach a point where selection is about as strong as drift.
+
+## How do we detect phenotypic selection? {.smaller}
+
+Knowing if some traits are under directional or stabilizing selection might be important.
+
+. . .
+
+Could just compare many related species and see if your species of interest is "extreme" for a trait value.
+
+. . .
+
+The problem is that traits do no evolve independently - correlated change due to shared ancestry.
+
+. . .
+
+So, even if evolution is not directed, there may be differences along the phylogeny that look significant.
+
+. . .
+
+The whole field of phylogenetic comparative methods is there to help you.
+
+## Phylogenetic comparative methods {.smaller}
+
+Easiest to show the problem using multiple trait correlations.
+
+. . .
+
+```{julia}
+using Phylo
+tree = rand(Ultrametric(40))
+
+evolve(tree) = map_depthfirst((val, node) -> val + randn(), 0., tree, Float64)
+trait1 = evolve(tree)
+trait2 = evolve(tree)
+tplot=plot(tree,line_z = trait1,linewidth=4,showtips=false,title="Height")
+tplot2 = plot(tree,line_z = trait2,linewidth=4,showtips=false,title="Time of Flowering")
+t1 = trait1[length(trait1)-39:length(trait1)]
+t2 = trait2[length(trait2)-39:length(trait2)]
+t3 =scatter(t1,t2,label="",xlabel="Height",ylabel="Time of Flowering")
+plot(tplot,tplot2,t3,size=(1200,500);layout=@layout [[a;b] c])
+
+
+```
+
+## PIC example {.smaller}
+
+In this case - no actual correlation between traits (or directionality): both simulated under Brownian-Motion.
+
+. . .
+
+One simple way to account for shared history: Phylogenetically independent contrasts.
+
+. . .
+
+Calculate differences between each branch, and compare these.
+
+```{julia}
+scatter(abs.(trait1),abs.(trait2),xlabel="Contrast1",ylabel="Contrast2",leg=false,size=(1200,500))
+```
+
+## How can we identify genetic structure of traits?
+
+Understanding the genetic basis of adaptive traits is not as straightforward as it may seem.
+
+. . .
+We covered this in part already - you can look at regions with differences between closely related species for selection, but not guaranteed to link to your trait.
+
+. . .
+
+If you can interbreed - QTL.
+
+. . .
+
+If still polymorphic - GWAS.
+
+## Genome Wide Association Studies
+
+Genome wide association studies essentially take genotypes of many individuals in a population along with their phenotypes, and return the correlation between each genotype and the phenotype of interest.
+
+. . .
+
+At its heart - simple linear regression!
+
+. . .
+
+More broadly - can take advantage of known inheritance patterns (pedigrees) to account for population structure.
+
+## GWAS example
+
+```{julia}
+using Distributions, GLM
+
+env1 = vcat(rand(Normal(0,0.4),150),rand(Normal(2,0.1),150))
+
+xs = vcat(rand(Normal(1,0.1),100),rand(Normal(2,0.1),100),rand(Normal(3,0.1),100))
+ys1 = rand(Normal(10,0.4),300)
+ys2 = vcat(rand(Normal(11,1.5),100),
+           rand(Normal(10,1.5),100),
+           rand(Normal(9,1.5),100))
+zs = vcat(rand(Normal(1,0.1),150),rand(Normal(2,0.1),150))
+
+p_causal= scatter(xs,ys1.+env1,title="Causal SNP",xticks=([1,2,3],["aa","aA","AA"]),xlabel="Genotype",ylabel="Pod size",leg=false,marker_z = ys1.+env1)
+lm_causal = lm(@formula(z ~ g),DataFrame(z=ys1 .+ env1,g=xs))
+plot!(p_causal,[1,2,3],predict(lm_causal,DataFrame(g=[1,2,3])))
+
+p_random = scatter(xs,ys2.+env1,title="Non-associated",xticks=([1,2,3],["aa","aA","AA"]),xlabel="Genotype",ylabel="Pod size",leg=false,marker_z=ys2.+env1)
+lm_random = lm(@formula(z ~ g),DataFrame(z=ys2 .+ env1,g=xs))
+plot!(p_random,[1,2,3],predict(lm_random,DataFrame(g=[1,2,3])))
+
+plot(p_causal,p_random)
+```
+
+## Accounting for population structure
+
+The problem with just running a linear model is that some correlations exist for other reasons.
+
+. . .
+
+LD with the actual causal locus.
+
+. . .
+
+Correlation with environmental explanatory variable.
+
+## Back to example
+
+```{julia}
+p1 = plot(xs,zs,ys1.+env1,seriestype=:scatter,leg=false,xlabel="Genotype",ylabel="Environment",xticks=([1,2,3],["aa","aA","AA"]),yticks=([1,2],["Hot","Cold"]),marker_z=ys1.+env1,title="Causal";xlabelfontsize=12,ylabelfontsize=12)
+
+p2 = 
+plot(xs,zs,ys2.+env1,seriestype=:scatter,leg=false,xlabel="Genotype",ylabel="Environment",xticks=([1,2,3],["aa","aA","AA"]),yticks=([1,2],["Hot","Cold"]),title="Not Associated",marker_z=ys2.+env1;xlabelfontsize=12,ylabelfontsize=12)
+
+plot(p1,p2)
+```
+
+## More details
+
+Most GWAS approaches are structured as linear mixed models:
+
+$$
+z = x + C + \epsilon
+$$
+
+Where $x$ is the genotype at a site, $C$ is a covariate matrix, and $\epsilon$ is noise.
+
+. . .
+
+For many analyses, the covariate will be the first few PCs of a PCA of the data.
+
+. . .
+
+Ideally, these would be ancestry correlations, but as you've seen, these can be hard to estimate.
+
+## Some things you can't account for
+
+## Multi-trait correlations and selection
+
+We've covered the Breeder's Equation, but an equally important result is Lande's Multivariate Breeder's Equation:
+
+$$
+\Delta \bar{Z} = GP^{-1}S = G \beta
+$$
+
+. . .
+
+Here, $G$ is the genetic variance-covariance matrix, $P$ is the phenotypic covariance matrix and $S$ is the selection gradient. $\beta$ is the vector of directional selection gradients. $\beta$ is a fraction of the phenotypic variance that is selected.
+
+## A quick example
+
+$$
+\Delta \bar{Z} = \begin{bmatrix} 2 & 0.6 \\ 0.6 & 1 \end{bmatrix} \begin{bmatrix} 1 \\ -0.1 \end{bmatrix} \approxeq \begin{bmatrix} 2 \\ 1/2 \end{bmatrix}
+$$
+
+## What does that mean
+
+Traits change in proportion to genetic co-variation.
+
+. . .
+
+A trait can move in the opposite direction of its optimum, if selection on a different trait is stronger and correlations are strong.
+
+. . .
+
+Most famously: Darwin's Finches
+
+## Darwin's Finches {.smaller}
+
+Galapagos struck by a drought in 1976. Peter and Rosemary Grant measured \~700 finches before the drought, and kept track of survivors.
+
+| Trait       | Before drought average | After drought average |
+|-------------|------------------------|-----------------------|
+| Weight      | 16.06                  | 17.13                 |
+| Bill length | 10.63                  | 10.95                 |
+| Bill depth  | 9.21                   | 9.70                  |
+
+. . .
+
+From the first glance - looks like positive selection on all three traits.
+
+. . .
+
+If we account for genetic covariance in traits, we can calculate $\beta$.
+
+## Inferred selection
+
+| Trait       | $\beta$ |
+|-------------|---------|
+| Weight      | 0.477   |
+| Bill length | -0.144  |
+| Bill depth  | 0.528   |
+
+. . . 
+
+Because bill length and depth are highly correlated, stronger selection wins out.
+
+## Across species variation
+
+![Beausoleil et al. 2023](https://oup.silverchair-cdn.com/oup/backfile/Content_public/Journal/evolut/77/12/10.1093_evolut_qpad160/3/m_qpad160_fig1.jpeg?Expires=1763470337&Signature=dgXV2aEUJ6XkJaQK-ORDPSLgFwwZJxsps4O1AMkQH0OifbCI9c9EJB8BBmLKVsCAo0gPcEFYHxEU1sZN48xYmxB0-K~HvhnbB-HubYP-a921j6tSrm-Itulk35yG-47CF7YwcgbLdcsk9YFaB-4gx1Oz~uZLo6TP589t5mF-2RqvQaKL3DfzAl7eUlbtOicaeS~TQ7MRMuzn1JCA~A5L2B6p-s9cHm8VIeBN1qQFNY~oQjwXABzr44R~cEh9nihRqAGGQM21mLedCvyUEbrAE0beI3bG7tM10B8qLg5x1AR54XcZrZpvd6KaZX82neT17cE8gcSUdJ5J0QkHCasg9w__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA)
+
+## Some fun thoughts
+
+When we think about evolvability, we need to consider the mean of the population.
+
+. . . 
+
+Even when multiple alternate strategies have are different fitness peaks with deep valleys between - the population may be able to contain both peaks.
+
+. . . 
+
+Reproductive isolation due to alternate strategies requires the peaks to be far apart, or the valleys very deep.
+
+## More consequences {.smaller}
+
+Whether populations can evolve to different parts of a fitness landscape depends on *how* the traits are correlated.
+
+. . .
+
+![example](https://bio.libretexts.org/@api/deki/files/64592/clipboard_ed8dd74271e352ff1ddfeff98687f6ec8.png?revision=1&size=bestfit&width=637&height=350)
+
+## Visually:
+
+Simulation courtesy of Diogo Melo:
+
+[link](https://curso-genevol.shinyapps.io/superficie-adaptativa/)
+
+## Consequences for interpreting data.
+
+If a trait you are studying is controlled by many alleles, and is potentially linked to other traits under selection, inference of evolutionary patterns becomes increasingly difficult.
+
+. . .
+
+If the trait is highly polygenic, each individual allele might have low signal.
+
+. . .
+
+If the alleles controlling the trait are highly pleiotropic - signal may be dampened depending on how trait is measured.
+
+. . .
+
+If multiple traits genetically covariated and one under very strong selection - the other will have low polymorphism, so low power to detect causal alleles.
+
+## The ultimate complex trait - fitness
+
+We've already mentioned this, but fitness is a highly composite trait.
+
+. . .
+
+Likely affected to some degree by more or less every allele *and* tied to most traits.
+
+. . .
+
+Yet, we can often detect clear signals of adaptation, with alleles showing strong relationships w/fitness.
+
+. . .
+
+So, even when you study complex traits, you *can* identify the causal alleles. But optimal values may be harder to find.
+
+## Back to Speciation
+
+Let's consider for a moment two populations evolving to the _same_ peak.
+
+. . . 
+
+Even though they will both evolve similar trait values, _how_ they control these traits may be different.
+
+. . .
+
+Simplest case: two traits, single optimum.
+
+. . . 
+
+See chalkboard
+
+## Speciation in Fisher's Geometric Model
+
+Fisher's Geometric Model can generate some nice predictions about how fitness between different groups will change as they diverge, _even if they evolve to the same peak_.
+
+. . .
+
+Notably -  fitness in hybrids will decrease because of different combinations of alleles shifting you off of the optimum.
+
+. . .
+
+Cool aspects:
+- Makes relatively simple assumptions about the fitness landscape
+- Generates some known patterns of speciation biology
+- Can be parameterized using known hybrid fitness data
+- Can explain hybrid speciation
+
+Weaknesses:
+- Many more assumptions needed to get other classic results
+- Allows for heterosis, but only if parents are both unfit
+- Strong assumptions about the effect size of mutations, especially for some of the big results
+
+## Alternatives to explain speciation
+
+Bateson-Dobzhansky-Muller Incompatibilities!
+
+. . .
+
+More on this next week, as we chat about all of the processes interplaying with each other for changes in allele frequencies.
+
+. . . 
+
+The week after, we'll talk more about how the interplay of all of the processes results in trait evolution.
+
+. . .
+
+Finally, we'll chat about the geneology of all alleles including all of these processes - the Ancestral Recombination Graph. We'll discuss some approaches to estimating it, and what to do once you have it.
+
+## Student's Choice
+
+The last two weeks we've reserved for student's choice of topics. 
+
+. . . 
+
+I'll send out a survey with several topics I would normally include but haven't had the time for, but I'll leave a blank for whatever your heart desires.
+
+. . .
+
+We'll lock in favorite options next week.
+
+. . . 
+
+Strong caveat - if it's something I've never worked on, might not be as good of a lecture/lab.
+
+## Paper for this week {.smaller}
+
+Chen and Pannell - completely optional, but cool study.
+
+. . .
+
+Examine how the fitness of different plants changes as they produce varying amounts of male/female flowers.
+
+. . . 
+
+The optimum is _not_ to specialize in one or the other - indeed, the dynamics are quite complex.
+
+. . . 
+
+Male flower production correlated with hermaphroditic flower production, so optimum becomes complex.
+
+. . . 
+
+Further - self-fertilization can lead to inbreeding, so different optima depending on whether inbreeding is considered or ignored.

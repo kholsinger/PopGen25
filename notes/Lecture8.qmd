@@ -1,0 +1,29 @@
+---
+title: "Lecture 8"
+execute:
+  freeze: auto  # re-render only when source changes
+format: 
+    revealjs:
+        theme: serif
+        incremental: true
+        preview-links: auto
+        chalkboard: true
+        margin: 0
+        width: 1080
+engine: julia
+julia:
+  exeflags: ["--project=../PopGen25"]
+bibliography: references.bib
+---
+
+## Today's plan
+
+The interplay of each different force on allelic frequencies.
+
+- Mutation-selection balance
+- Selection-drift balance
+- Migration-selection balance
+- Consequences of divergence on migration/selection
+- Detecting migration/introgression
+
+## 
