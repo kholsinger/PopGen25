@@ -4,12 +4,12 @@ execute:
   freeze: auto  # re-render only when source changes
 format: 
     revealjs:
-        theme: serif
+        theme: blood
         incremental: true
         preview-links: auto
         chalkboard: true
         margin: 0
-        width: 1080
+        width: 1000
 engine: julia
 julia:
   exeflags: ["--project=../PopGen25"]
@@ -26,4 +26,115 @@ The interplay of each different force on allelic frequencies.
 - Consequences of divergence on migration/selection
 - Detecting migration/introgression
 
-## 
+## Mutation-selection balance
+
+We discussed earlier in the semester how mutation re-introduces variation even as selection acts against it, but we didn't think about it much more in-depth than that.
+
+. . . 
+
+A consequence of constant mutation rates is that even when traits are strongly selected, mutations will introduce the deleterious allele.
+
+. . . 
+
+The dynamics here _can_ be complicated, but they are easiest to think about when we only consider mutation from the reference allele `a` to a deleterious allele `A`.
+
+## Simplest model all semester?
+
+Let's look for a steady state:
+
+Each generation, there are $\mu (1-p)$ mutations introduced.
+
+. . .
+
+If we recall directional selection, there are $s p (1-p)$ mutations removed by selection.
+
+. . . 
+
+$$
+\begin{array}{rclr}
+\Delta p & = & \mu (1-p) + sp(1-p)  & ,p \ll 1, so (1-p) \approx 1\\
+\Delta p & \approx & \mu + sp & ,\Delta p = 0\\
+\hat{p} & = \frac{\mu}{s} \\
+\end{array}
+$$
+
+. . . 
+
+That's nice and simple! 
+
+## Consequences for genetic diversity (and fitness) {.smaller}
+
+We already talked about how selection is limited compared to drift.
+
+. . .
+
+Turns out, selection is also limited in how it can maintain deleterious alleles in check.
+
+. . .
+
+Each individual allele may contribute very little to polymorphism ($\mu \approx 10^{-8}$, $s <0.01$, so $\hat{p} < 10^{-6}$). But there are _many_ such alleles.
+
+. . .
+
+The result is _mutation load_ - the population fitness is suppressed by constant influx of deleterious mutations.
+
+. . . 
+
+The total extent of mutation load can be approximated using empirical data. In humans - 10-15 recessive deleterious mutations expected per person (cite Henn Botigue Gravel)
+
+. . .
+
+Debated whether there's differences between human populations. Some evidence for increased mutational load in Out of Africa populations. Why?
+
+## Mutational Load (cntd)
+
+One way to estimate the fitness cost of mutational load comes from Haldane:
+
+$$
+L = 1-e^{-2U}
+$$
+
+Where $L$ is the mutational load (equal to $\frac{\bar{W}}{W_{max}}$) and $U$ is the average number of new (deleterious) mutations per genome per generation.
+
+. . .
+
+In most species, $N\mu \approx 1$. If all of the new mutations were deleterious, that implies $L = 0.86$. In practice, we estimate that ~at least 60% of mutations are neutral-positive. So, $L = 0.55$ - still huge!
+
+. . . 
+
+Note, this only considers mutations visible to selection: the fitness reduction is in the number of offspring had/survived. This doesn't account for other traits that are bad for us, but are essentially invisible to selection (e.g. anything post reproductive age).
+
+## Ongoing selection has a cost!
+
+There's a second issue with mutational load - constantly introduced deleterious variation is selected against.
+
+. . . 
+
+This means that in any generation, there are potentially many deaths due to selection on this variation.
+
+. . . 
+
+Two issues: 1) This has a population level cost. 2) This has effects on linked regions.
+
+## Population load, or why are we not dead 100 times over? {.smaller}
+
+If selection happens because of _death_ of individual, high load implies that population sizes are much smaller than they could be. In the extreme, these values are bizarrely high.
+
+. . . 
+
+In a classic paper by A. Kondrashov, he noted that given load estimates at the time, each individual should carry ~100 lethal mutations.
+
+. . .
+
+One solution: selection is _soft_ : competition between individuals rather than death.
+
+. . .
+
+An alternative: selection is stabilizing rather than purifying - this reduces the fitness effect of having many deleterious mutations, since their average effect might bring you close to optimum (Fisher's Geometric Model logic here).
+
+. . . 
+
+In either case, mutational load may play an important role in conservation: as populations shrink, effect of selection decreases, so more deleterious mutations may be found in higher and higher frequencies.
+
+
+
