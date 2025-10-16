@@ -73,7 +73,7 @@ Stabilizing and overdominance: while no alleles are fixed, $V_A$ goes to 0.
 ```{julia}
 using Plots, Measures, LaTeXStrings
 theme(:vibrant)
-default(xlabelfontsize=16,ylabelfontsize=16,margins=4mm,markerstrokewidth=0,linewidth=2,dpi=400)
+default(xlabelfontsize=16,ylabelfontsize=16,margins=5mm,markerstrokewidth=0,linewidth=2,dpi=400)
 
 a = bar(["aa","aA","AA"],[1,1.2,1.4],leg=false,title="Additive",color=1,ylabel="trait Z")
 
@@ -90,7 +90,7 @@ d = plot(range(0,1,length=50),f_add,label="Additive",xlabel=L"p",ylabel=L"\bar{Z
 plot!(d,range(0,1,length=50),f_over,label="Overdominant")
 plot!(d,range(0,1,length=50),f_under,label="Underdominant")
 
-plot(a,b,c,d;layout=@layout[[a;b;c] d{0.7w}],size=(1200,600))
+plot(a,b,c,d;layout=@layout[[a;b;c] d{0.7w}],size=(1200,600),margins=4mm)
 
 ```
 
@@ -119,7 +119,7 @@ using StatsPlots, CSV, DataFrames
 
 corn_data = CSV.read("data/corn_data.txt",DataFrame,missingstring=["."])
 
-corn_plot= plot(corn_data.YR,corn_data.IHO_2,label="High Oil Selection",xlabel="Year",ylabel="Corn Oil %",dpi=400,margins=4mm,size=(1200,600))
+corn_plot= plot(corn_data.YR,corn_data.IHO_2,label="High Oil Selection",xlabel="Year",ylabel="Corn Oil %",dpi=400,margins=5mm,size=(1200,600))
 ```
 
 ## But it *can* have limits
@@ -156,7 +156,7 @@ Not the case in corn data!
 
 ```{julia}
 
-corn_plot2 = plot(corn_data.YR[2:105],[log(corn_data.IHO_2[i])-log(corn_data.IHO_2[i-1]) for i in 2:105],label="High Oil Selection",xlabel="Year",ylabel="Fold change in oil content")
+corn_plot2 = plot(corn_data.YR[2:105],[log(corn_data.IHO_2[i])-log(corn_data.IHO_2[i-1]) for i in 2:105],label="High Oil Selection",xlabel="Year",ylabel="Fold change in oil content",margins=5mm)
 plot!(corn_plot2,corn_data.YR[2:105],[log(corn_data.ILO_2[i])-log(corn_data.ILO_2[i-1]) for i in 2:105],label="Low Oil Selection")
 
 ```
@@ -307,6 +307,7 @@ Especially true if trait is highly polygenic - lots of small random changes can 
 Understanding the genetic basis of adaptive traits is not as straightforward as it may seem.
 
 . . .
+
 We covered this in part already - you can look at regions with differences between closely related species for selection, but not guaranteed to link to your trait.
 
 . . .
@@ -395,7 +396,7 @@ For many analyses, the covariate will be the first few PCs of a PCA of the data.
 
 Ideally, these would be ancestry correlations, but as you've seen, these can be hard to estimate.
 
-## Some things you can't account for
+## Some things you can't account for {.smaller}
 
 Even when GWAS is performed _perfectly_, we can still have a lot of missing information.
 
@@ -541,7 +542,7 @@ Yet, we can often detect clear signals of adaptation, with alleles showing stron
 
 So, even when you study complex traits, you *can* identify the causal alleles. But optimal values may be harder to find.
 
-## How common is this worry of complex genetic underpinnings of traits?
+## How common is this worry of complex genetic underpinnings of traits? {.smaller}
 
 There are certainly some traits with simple genetic control (e.g. 1-2 alleles of strong effect).
 
@@ -551,11 +552,11 @@ The slowly building consensus is that many traits of interest may in fact be "om
 
 . . . 
 
-The rationale is that for most quantitative traits, some small portion of heritability is explained either by alleles at any genomic location, or those alleles are _linked_ to something that influences the effect.
+Most alleles either influence trait, or linked to something that does.
 
 . . . 
 
-In practice, each location is at least somewhat correlated to any continuous trait of interest (if you get enough power to actually study it).
+In practice, each location is at least somewhat correlated to any continuous trait of interest.
 
 . . . 
 
