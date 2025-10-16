@@ -16,7 +16,7 @@ julia:
 bibliography: references.bib
 ---
 
-## Quantitative trait evolution
+## Quantitative trait evolution {.smaller}
 
 Now that we have a better feeling for how all of the different processes impact the evolution in alleles, it's worth thinking about quantitative traits in general.
 
@@ -90,7 +90,7 @@ d = plot(range(0,1,length=50),f_add,label="Additive",xlabel=L"p",ylabel=L"\bar{Z
 plot!(d,range(0,1,length=50),f_over,label="Overdominant")
 plot!(d,range(0,1,length=50),f_under,label="Underdominant")
 
-plot(a,b,c,d;layout=@layout[[a;b;c] d{0.7w}],size=(1000,600))
+plot(a,b,c,d;layout=@layout[[a;b;c] d{0.7w}],size=(1200,600))
 
 ```
 
@@ -119,7 +119,7 @@ using StatsPlots, CSV, DataFrames
 
 corn_data = CSV.read("data/corn_data.txt",DataFrame,missingstring=["."])
 
-corn_plot= plot(corn_data.YR,corn_data.IHO_2,label="High Oil Selection",xlabel="Year",ylabel="Corn Oil %",dpi=400,margins=4mm)
+corn_plot= plot(corn_data.YR,corn_data.IHO_2,label="High Oil Selection",xlabel="Year",ylabel="Corn Oil %",dpi=400,margins=4mm,size=(1200,600))
 ```
 
 ## But it *can* have limits
@@ -165,7 +165,7 @@ plot!(corn_plot2,corn_data.YR[2:105],[log(corn_data.ILO_2[i])-log(corn_data.ILO_
 
 It *is* the case for change in fitness in Lenski's long term *E. coli* evolution.
 
-![](https://www.science.org/cms/10.1126/science.1243357/asset/6f1f047b-9303-4c88-bc7c-ebd32d50508d/assets/graphic/342_1364_f2.jpeg){width="715"}
+![](https://www.science.org/cms/10.1126/science.1243357/asset/6f1f047b-9303-4c88-bc7c-ebd32d50508d/assets/graphic/342_1364_f2.jpeg){width="1200"}
 
 . . .
 
@@ -283,8 +283,24 @@ One simple way to account for shared history: Phylogenetically independent contr
 Calculate differences between each branch, and compare these.
 
 ```{julia}
-scatter(abs.(trait1),abs.(trait2),xlabel="Contrast1",ylabel="Contrast2",leg=false,size=(1200,500))
+scatter(abs.(trait1),abs.(trait2),xlabel="Contrast1",ylabel="Contrast2",leg=false,size=(1200,500),margins=4mm)
 ```
+
+## Brownian motion as a null model
+
+We can also use the expectations from Brownian motion to see if traits are evolving faster/slower than expected.
+
+. . .
+
+Ideally, we can identify rates across the tree, and find _rate shifts_: branches on which evolutionary rates have changed.
+
+. . .
+
+Without the evolutionary context - an extreme trait value could just be a result of drift
+
+. . .
+
+Especially true if trait is highly polygenic - lots of small random changes can lead to big overall differences.
 
 ## How can we identify genetic structure of traits?
 
@@ -353,10 +369,10 @@ Correlation with environmental explanatory variable.
 ## Back to example
 
 ```{julia}
-p1 = plot(xs,zs,ys1.+env1,seriestype=:scatter,leg=false,xlabel="Genotype",ylabel="Environment",xticks=([1,2,3],["aa","aA","AA"]),yticks=([1,2],["Hot","Cold"]),marker_z=ys1.+env1,title="Causal";xlabelfontsize=12,ylabelfontsize=12)
+p1 = plot(xs,zs,ys1.+env1,seriestype=:scatter,leg=false,xlabel="Genotype",ylabel="Environment",xticks=([1,2,3],["aa","aA","AA"]),yticks=([1,2],["Hot","Cold"]),marker_z=ys1.+env1,title="Caused by environment";xlabelfontsize=12,ylabelfontsize=12)
 
 p2 = 
-plot(xs,zs,ys2.+env1,seriestype=:scatter,leg=false,xlabel="Genotype",ylabel="Environment",xticks=([1,2,3],["aa","aA","AA"]),yticks=([1,2],["Hot","Cold"]),title="Not Associated",marker_z=ys2.+env1;xlabelfontsize=12,ylabelfontsize=12)
+plot(xs,zs,ys2.+env1,seriestype=:scatter,leg=false,xlabel="Genotype",ylabel="Environment",xticks=([1,2,3],["aa","aA","AA"]),yticks=([1,2],["Hot","Cold"]),title="Actually causal",marker_z=ys2.+env1;xlabelfontsize=12,ylabelfontsize=12)
 
 plot(p1,p2)
 ```
@@ -373,13 +389,35 @@ Where $x$ is the genotype at a site, $C$ is a covariate matrix, and $\epsilon$ i
 
 . . .
 
-For many analyses, the covariate will be the first few PCs of a PCA of the data.
+For many analyses, the covariate will be the first few PCs of a PCA of the data. Why?
 
 . . .
 
 Ideally, these would be ancestry correlations, but as you've seen, these can be hard to estimate.
 
 ## Some things you can't account for
+
+Even when GWAS is performed _perfectly_, we can still have a lot of missing information.
+
+. . . 
+
+"Missing heritability" in height. Height about 80% heritable in worst case.
+
+. . . 
+
+Tons of studies, 5.4 million sequences, and we have 12k variants explaining about 55% of variation.
+
+. . .
+
+Multiple issues: low power to detect effects of rare variants, correction for structure exclude GxE effects, etc.
+
+. . . 
+
+Height is also a complex trait affected by many other selected traits (nutrition,immunity). 
+
+. . . 
+
+Predictions harder when there is multi-trait selection and alleles are pleiotropic.
 
 ## Multi-trait correlations and selection
 
@@ -503,6 +541,30 @@ Yet, we can often detect clear signals of adaptation, with alleles showing stron
 
 So, even when you study complex traits, you *can* identify the causal alleles. But optimal values may be harder to find.
 
+## How common is this worry of complex genetic underpinnings of traits?
+
+There are certainly some traits with simple genetic control (e.g. 1-2 alleles of strong effect).
+
+. . . 
+
+The slowly building consensus is that many traits of interest may in fact be "omnigenic" - affected to some degree by pretty much any allele in the genome.
+
+. . . 
+
+The rationale is that for most quantitative traits, some small portion of heritability is explained either by alleles at any genomic location, or those alleles are _linked_ to something that influences the effect.
+
+. . . 
+
+In practice, each location is at least somewhat correlated to any continuous trait of interest (if you get enough power to actually study it).
+
+. . . 
+
+Data primarily coming from _D. melanogaster_, _S. cerevisiae_ : large population sizes, rapid generation times, easy for a cell division rate to influence most traits.
+
+. . . 
+
+Might not be the case for other organisms, especially with smaller pop sizes and longer generation times.
+
 ## Back to Speciation
 
 Let's consider for a moment two populations evolving to the _same_ peak.
@@ -519,7 +581,7 @@ Simplest case: two traits, single optimum.
 
 See chalkboard
 
-## Speciation in Fisher's Geometric Model
+## Speciation in Fisher's Geometric Model {.smaller}
 
 Fisher's Geometric Model can generate some nice predictions about how fitness between different groups will change as they diverge, _even if they evolve to the same peak_.
 
