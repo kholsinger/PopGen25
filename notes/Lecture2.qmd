@@ -200,7 +200,7 @@ We can take a look at our simulations:
 ```{julia}
 using Plots, Measures, LaTeXStrings
 theme(:solarized_light)
-default(legendfontsize=18,guidefontsize=18)
+default(guidefontsize=16,titlefontsize=18,legendfontsize=16,dpi=400,margins=4mm,size=(1000,600))
 include("../src/Pop_gen_code.jl")
 sims = [WrightFisher(1000,0.5,1000) for _ in 1:500]
 h = broadcast(x -> 2 .* x .*(1 .- x),sims)

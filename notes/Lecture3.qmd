@@ -59,7 +59,7 @@ Over time - two identical populations become different.
 ```{julia}
 using Plots, Distributions, Measures
 theme(:dracula)
-default(guidefontsize=16,titlefontsize=18,legendfontsize=16)
+default(guidefontsize=16,titlefontsize=18,legendfontsize=16,dpi=400,margins=4mm,size=(1000,600))
 include("../src/Pop_gen_code.jl")
 
 

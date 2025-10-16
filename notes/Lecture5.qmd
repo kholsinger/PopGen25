@@ -191,7 +191,7 @@ We start with some samples in a population in the current day:
 ```{julia}
 using Plots, LaTeXStrings, Measures
 theme(:solarized)
-default(xlabelfontsize=16,ylabelfontsize=16,size=(1000,600),margins=4mm)
+default(xlabelfontsize=16,ylabelfontsize=16,dpi=400,size=(1000,600),margins=4mm)
 
 include("../src/Stats_utilities.jl")
 include("../src/Coalescent.jl")

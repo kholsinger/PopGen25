@@ -109,7 +109,7 @@ One way to estimate heritability ($h^2$) is to examine parent-offspring regressi
 ```{julia}
 using Plots, LaTeXStrings, Measures, Distributions, GLM, DataFrames
 theme(:juno)
-default(xlabelfontsize=16,ylabelfontsize=16,margins=4mm,markerstrokewidth=0,markersize=2)
+default(xlabelfontsize=16,ylabelfontsize=16,margins=4mm,markerstrokewidth=0,markersize=2,dpi=400)
 
 xs = rand(Normal(),1000)
 ys = 0.2*xs+rand(Normal(),1000)

@@ -205,7 +205,7 @@ Because these values depend on allele frequencies, they don't scale nicely linea
 #| echo: false
 using Plots, LaTeXStrings, Measures
 theme(:rose_pine)
-default(xlabelfontsize=16,ylabelfontsize=16,markerstrokewidth=0,markersize=1)
+default(guidefontsize=16,titlefontsize=18,legendfontsize=16,dpi=400,margins=4mm,size=(1000,600),markerstrokewidth=0,markersize=1)
 function max_D(p1,p2)
     min(p1*(1-p2),p2*(1-p1))
 end
