@@ -21,7 +21,7 @@ bibliography: references.bib
 The interplay of each different force on allelic frequencies.
 
 -   Mutation-selection balance
--   Selection-drift balance
+-   Mutational load
 -   Migration-selection balance
 -   Consequences of divergence on migration/selection
 -   Detecting migration/introgression
@@ -51,10 +51,10 @@ If we recall directional selection, there are $s p (1-p)$ mutations removed by s
 . . .
 
 $$
-\begin{array}{rclr}
-\Delta p & = & \mu (1-p) + sp(1-p)  & ,p \ll 1\\
-\Delta p & \approx & \mu + sp & ,\Delta p = 0\\
-\hat{p} & = \frac{\mu}{s} \\
+\begin{array}{rlr}
+\Delta p  = & \mu (1-p) + sp(1-p)  & ,p \ll 1\\
+\Delta p  \approx & \mu + sp & ,\Delta p = 0\\
+\hat{p}  = & \frac{\mu}{s} \\
 \end{array}
 $$
 
@@ -80,13 +80,13 @@ The result is *mutation load* - the population fitness is suppressed by constant
 
 . . .
 
-Load only affected by mutation rate, not strength of selection. Thankfully, mutation rates are low. But, in humans - 10-15 recessive deleterious mutations expected per person (cite Henn Botigue Gravel)
+Load only affected by mutation rate, not strength of selection. Thankfully, mutation rates are low. But, in humans - 10-15 recessive deleterious mutations expected per person[@Henn2015].
 
 . . .
 
 Debated whether there's differences between human populations. Some evidence for increased mutational load in Out of Africa populations. Why?
 
-## Mutational Load (cntd) {.smaller}
+## Mutational Load (cntd.) {.smaller}
 
 One way to estimate the fitness cost of mutational load across the genome comes from Haldane:
 
@@ -118,7 +118,7 @@ If selection happens because of *death* of individual, high load implies that po
 
 . . .
 
-In a classic paper by A. Kondrashov, he noted that given load estimates at the time, each individual should carry \~100 lethal mutations.
+In a classic paper by A. Kondrashov [@Kondrashov1995], he noted that given load estimates at the time, each individual should carry \~100 lethal mutations.
 
 . . .
 
@@ -246,7 +246,7 @@ When the population is distributed continuously in space, and there is simply a 
 
 . . .
 
-Offspring may not live at the same site as parents. We'll say that on average, offspring land in the same spot, but the standard deviation of the dispersal is \$\sigma \$.
+Offspring may not live at the same site as parents. We'll say that on average, offspring land in the same spot, but the standard deviation of the dispersal is $\sigma$ .
 
 . . .
 
@@ -484,6 +484,26 @@ This is the *long* term expectation, and some secondary contact only lasts a lim
 
 Sites under strong selection may not homogenize even in the long run, but reproductive barriers can be much weaker than expected.
 
+## Divergence vs migration
+
+How diverged to populations need to become to stop migration from occurring (and therefore make speciation "final")?
+
+. . .
+
+The simplest answer is practically useless: The effective number of hybrids needs to be smaller than 1.
+
+. . .
+
+What does that mean? $N_2 m$ migrants move into population 1. They need to mate with local residents, which will happen with some frequency based on the degree of non-random mating (often parameterized as $a$). So, $N_2 m N_1 a$ matings occur. That produces $W_{hyb}$ offspring, on average. So, we need to know the long term trajectory of $m$, $a$ and $W_{hyb}$.
+
+. . .
+
+We've discussed several models for hybrid fitness, but there are not many great models for long term trajectories of $a$ or $m$, as the former is highly variable, and the latter is more dependant on ecology than evolution.
+
+. . .
+
+We can look at real data to try and tell!
+
 ## Estimating introgression {.smaller}
 
 One way to think about introgression is sharing more variation than expected by chance.
@@ -554,10 +574,54 @@ In general - each statistic has some minor advantages/disadvantages. Patterson's
 
 DON'T interpret $D$ as the fraction of a gene that has introgressed. It's a bad estimate of this.
 
+## Examples of introgression over genetic distance: Birds
+
+![](images/paste-8.jpeg)
+
+## Solanum
+
+![](images/paste-9.jpeg)
+
+## Eukaryotes
+
+![](images/paste-15.png){width="498"}
+
+## Introgression take-aways
+
+If you are dealing with recently diverged species/populations, migration almost certainly plays a role in:
+
+1\) Generating population structure.
+
+2\) Introducing adaptive/maladaptive variation
+
+3\) Decreasing divergence between populations
+
+. . .
+
+As your populations become increasingly diverged/isolated, you need to worry about migration less and less.
+
+. . .
+
+But this comes with drawbacks for your system: less variation, less adaptability, less likely to persist.
+
 ## Interpreting all of the forces
 
 ![](images/paste-14.png)
 
 ## Reading for this week
 
-A lot of cool work in
+Skua!
+
+. . .
+
+Long paper - think about how they structure the whole study. This paper is a good example of how you go from raw data to making evolutionary stories in a systematic way.
+
+. . .
+
+Lab: We'll run some introgression tests and continue working on your projects.
+
+. . .
+
+If you still don't have your data - let's talk ASAP (if I owe you something - ping me on slack! I *will* forget otherwise).
+
+## References
