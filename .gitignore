@@ -2,3 +2,5 @@
 _site/
 _site/*.html
 .vscode*
+_site_libs/*
+**/*.quarto_ipynb
