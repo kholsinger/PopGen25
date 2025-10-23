@@ -32,3 +32,5 @@ Lab 5 is [here](labs/lab5.qmd)
 Lab 6 can be accessed with Pluto, find it at `labs/lab5.jl` (remember you can open Pluto notebooks via url, so you don't need to download the file!)
 
 Lab 7 is [here](labs/lab7.qmd)
+
+Lab 8 is [here](labs/lab8.qmd)
