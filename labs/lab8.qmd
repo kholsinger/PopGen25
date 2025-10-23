@@ -110,42 +110,23 @@ Your homework is to look at these results and _really_ think about them. Which o
 The other two methods for introgression will be presented _but you don't need to run them_. Frankly, they will take too long.
 
 
-## Method 2: TWISST
+## Method 2: TWISST2
 
-STOP HERE! I JUST REALIZED THERE'S TWISST2, AND IT IS WAAAAY BETTER. BUT, I HAVEN'T FULLY TESTED IT. WILL HOPEFULLY HAVE BY LAB TIME.
-
-[TWISST](https://github.com/simonhmartin/twisst) is not strictly a test for introgression, but it can be a useful tool to gauge whether (and where in the genome) different relationships between groups are supported. Twisst requires not just the vcf, but a series of gene trees across the genome. Constructing these is relatively straightforward once you start with a vcf, however. I've added a script to the `src` directory which will generate the commands to make gene trees in windows. It will need you to specify the chromosomes in your data and their lengths in a separate file (in this case, single line files).
+[TWISST2](https://github.com/simonhmartin/twisst2) is not strictly a test for introgression, but it can be a useful tool to gauge whether (and where in the genome) different relationships between groups are supported. TWISST2 only requires the vcf, but it needs to be first formatted using a different tool: [sticcs](https://github.com/simonhmartin/sticcs). The whole process can take a while in big data sets, but is much faster than the previous approach (Twisst), which required you to build gene trees using your own favorite method.
 
 ```{bash}
-echo "22" > chrs.txt
-echo "51304566" > lengths.txt
-bash genWind.sh subsampled_chr22.vcf.gz 10000 > cmds.txt
+sticcs prep -i subsampled_chr22.vcf.gz -o sticcs_chr22.vcf.gz --outgroup "NA18861" #Ideally we'd have an actual outgroup here, instead I'm grapping a random YRI individual to polarize
+
+twisst2 sticcstack -i sticcs_chr22.vcf.gz -o twisst_22.vcf.gz --ploidy 2 --group_names ASW CLM MXL FIN --groups_file dsuite_samples_table.tsv --max_subtrees 512
 ```
 
-If you look at the head of the `cmds.txt` file, you'll see there's lots of individual blocks of code for each window:
+This wil produce two files - one which identifies intervals that have (more or less) consistent topology weights, and the second which identifies what those weights were. A topology weight is a neat idea from Simon Martin: take one individual at random from each of your groups. The topology weight is the probability that their gene tree will show that gene tree topology. You can calculate it by randomly subsampling individuals from each of your populations. What does this do? Well, it helps identify regions where different relationships between groups are supported. Introgression should drive differences in the topology in parts of the genome, and so TWISST2 can help identify not only what introgression events are likely, but _where_ they are likely. There is no formal test for introgression here, so be aware of its limitations.
 
-```{output}
-##22_0_wnd1000000
-bcftools view -r 22:1-1000001 subsampled_chr12.vcf.gz > 22_0_wnd1000000.vcf
-plink --vcf 22_0_wnd1000000.vcf --snps-only --allow-extra-chrs --export phylip-phased --out 22_0_wnd1000000
-rm 22_0_wnd1000000.vcf
-iqtree3 -redo -pre 22_0_wnd1000000 -nt AUTO -ntmax 4 -bb 1000 -m auto -s 22_0_wnd1000000.phy
-```
+To plot the data, you'll need to do some further work with the output files. The easiest approach here is to use the scripts included with the twisst2 installation (`/plot_twisst/example_plot.R` has the general gist).
 
-There's 5173 windows here, so it will take it a while to actually run through them all in sequence, in principle. In practice - this data is a little funky and there's lots of the genome with, essentially, zero information, so many of the windows will just error out. Rather than make you generate these files yourself, I've added some trees to the lab data folder, just so you can see how TWISST works.
+What you'll end up with is something like this:
 
-Just like `Dsuite`, twisst needs you to enumerate the groups. It has a slightly nicer format, in that you can have a file with group labels, and then seperately specify which groups you'd like to include in your testing. Here, we'll only look for introgression between ACB and ASW.
-
-```{bash}
-twisst.py -t trees.gz -w output_weights.csv -g ACB -g MXL -g ASW -g YRI --method complete --groupsFile dsuite_samples_table.tsv
-```
-
-The output will be a csv file which, for each tree, calculates how frequent different tree topologies are. Each column is a topology, and each row is a single tree. So, we can just plot the relative frequency of each of these as we run along the genome (in this case, a ~1Mb region on chr22). 
-
-```{r}
-twisst_out = read_csv("output_weights.csv")
-# This is where I realized there's a new and better method, which outputs data quite differently.
-```
+CODE STILL RUNNING 
 
 ## Treemix
 
