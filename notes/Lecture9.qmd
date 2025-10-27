@@ -1,0 +1,39 @@
+---
+title: "Lecture 8"
+execute:
+  freeze: auto  # re-render only when source changes
+format: 
+    revealjs:
+        theme: blood
+        incremental: true
+        preview-links: auto
+        chalkboard: true
+        margin: 0
+        width: 1080
+engine: julia
+julia:
+  exeflags: ["--project=../PopGen25"]
+bibliography: references.bib
+---
+
+
+# Studying trait evolution when everything is complicated
+
+## Today's plan
+
+Regretably, most biologists are not population geneticists.
+
+. . . 
+
+That means you might be interested in the actual traits of your population, not a hypothetical Platonic population size that would evolve _as if_ that model developed 100 years ago we all like.
+
+. . .
+
+Inferring history of your populations is crucial to inform their trait evolution, as we have continuously shown, but how do you actually use all of this evolutionary history to say something about traits of interest?
+
+## General course of action
+
+Get a good idea about population structure of your samples.
+
+. . . 
+
