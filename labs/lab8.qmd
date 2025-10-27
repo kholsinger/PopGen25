@@ -1,0 +1,133 @@
+---
+title: Lab 8
+theme: cosmo
+bibliography: references.bib
+execute:
+  freeze: auto  # re-render only when source changes
+  eval: false
+  echo: true
+engine: julia
+---
+
+# Calculating introgression statistics - three ways.
+
+Today's lab is all about looking for introgression. We'll use several approaches - first, Patterson's D statistics from lecture. Second, we'll use a tree based approaches (TWISST and TreeMix) to see if we can get corroborating results. But first, let's look at D-statistics.
+
+## Patterson's D
+
+This one is surprisingly simple to calculate by yourself given pretty much all of the functions you have already written. The below is a code example of how you can take allele frequencies for four populations, and from the calculate Patterson's D. The calculation is equivalent to ABBA-BABA, but using allele frequency differences. Suppose you have subset of the genotype matrix for each population, then: 
+
+```{r}
+#Calculate allele frequencies
+p_1 = apply(pop_1_GT,1,freq_GT)
+p_2 = apply(pop_2_GT,1,freq_GT)
+p_3 = apply(pop_3_GT,1,freq_GT)
+p_4 = apply(pop_4_GT,1,freq_GT)
+
+#Find which alleles should be re-polarized based on outgroup
+idx =  which(p_4 > 0.5)
+#And repolarize
+p1[idx] = 1-p1[idx]
+p2[idx] = 1-p2[idx]
+p3[idx] = 1-p3[idx]
+p4[idx] = 1-p4[idx]
+
+denom_sum = sum((p1-p2)*(p3-p4))
+num_sum = sum((p1+p2-2*p1*p2)*(p3+p4-2*p3*p4))
+D = denom_sum/num_sum
+```
+
+But, this won't return nice features like significance testing, or other bits that you'd want with your test. So, let's use a common software tool: [Dsuite](https://github.com/millanek/Dsuite).
+
+Dsuite is great in its simplicity. It takes a `vcf` (we've got one!), and a table that lists which samples belong to which population. We'd continue working with the MUC19 data, but, problematically, we only have three populations and need four. So, we'll use the entirety of Chromosome 12 from the 1K genomes project, and use the opportunity to learn to manipulate vcf files.
+
+First, you'll want to download the chr12 vcf. In a terminal, you can do this with:
+
+```{bash}
+wget https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/ALL.chr22.phase3_shapeit2_mvncall_integrated_v5b.20130502.genotypes.vcf.gz
+bcftools index ALL.chr22.phase3_shapeit2_mvncall_integrated_v5b.20130502.genotypes.vcf.gz
+```
+
+This will download chr22 data (the smallest chromosome) for ~3606 samples, and will then index it. The index will be useful for us when we manipulate the file further. In the lab data folder, you'll find `samples_for_introgression.txt`, a file which contains the ~800 samples we'll look for introgression in. So, the first thing you'll want to do is to subset the vcf only to those samples.
+
+Most vcf manipulations happen with `bcftools`. This is a suite of tools which allow you to filter/subset/query/analyze vcfs in a variety of ways. You will frequently use several of its capabilities when dealing with genomic data. In this case, we want to limit ourselves only to the samples in the populations we are interested in. We'll first need to make a list of these samples. You could import the table into R and output only the first column, or you can use `awk` to print only the first column as follows:
+
+```{bash}
+awk 'NR > 1{print $1}' samples_for_introgression.txt > samples_to_keep.txt
+```
+
+However you make your list of samples to keep, subsetting the vcf is quite easy:
+
+```{bash}
+bcftools view ALL.chr12.phase3_shapeit2_mvncall_integrated_v5b.20130502.genotypes.vcf.gz -S samples_to_keep.txt -Oz -o subsampled_chr22.vcf.gz
+```
+
+Now, many pieces of software will want you to have an index for the vcf, so index it as well:
+
+```{bash}
+bcftools index subsampled_chr22.vcf.gz
+```
+
+And now we have a file that is ready for Dsuite.
+
+
+Dsuite also needs a file formatted as:
+
+```{format}
+Ind1_name   Pop1
+Ind2_name   Pop2
+...
+Indx_name   Outgroup
+```
+
+In other words, we need to take the table from 1k genomes and do two things - return only columns 1 and 4, and then rename YRI samples to "Outgroup". Again, `awk` is super useful here, but we'll also use `sed`, another great command line tool for editing text. `awk` will output the first and fourth column, while sed will look for any place in the file that says "YRI" and replace it with "Outgroup". This could go wrong if any of the samples have "YRI" in the name, but thankfully that should not be the case.
+
+```{bash}
+awk 'NR > 1{print $1 "\t" $4}' samples_for_introgression.txt > dsuite_samples_table.tsv
+sed -i 's/YRI/Outgroup/' dsuite_samples_table.tsv
+```
+
+Alright, now we are finally ready to run `Dsuite`, assuming you have installed it.
+
+```{bash}
+Dsuite Dtrios subsampled_chr22.vcf.gz dsuite_samples_table.tsv -o chr22_test
+```
+
+This will generate a couple of files, the one you will want is the one that ends in `_Dmin.txt`. This shows the arrangement of population triplets that produced the smallest possible signal of introgression. 
+
+Here's a key for the populations:
+
+ASW - American Southwest
+ACB - AfroCarribean
+CLM - Columbian
+MXL - Mexican
+FIN - Finnish
+
+Remember that ideally, Patterson's D requires P1 and P2 to be sister. Is that true for all of the inferred arrangements? 
+
+Your homework is to look at these results and _really_ think about them. Which of these introgression patterns make sense given human evolutionary history? Which are likely artifacts of data?
+
+The other two methods for introgression will be presented _but you don't need to run them_. Frankly, they will take too long.
+
+
+## Method 2: TWISST2
+
+[TWISST2](https://github.com/simonhmartin/twisst2) is not strictly a test for introgression, but it can be a useful tool to gauge whether (and where in the genome) different relationships between groups are supported. TWISST2 only requires the vcf, but it needs to be first formatted using a different tool: [sticcs](https://github.com/simonhmartin/sticcs). The whole process can take a while in big data sets, but is much faster than the previous approach (Twisst), which required you to build gene trees using your own favorite method.
+
+```{bash}
+sticcs prep -i subsampled_chr22.vcf.gz -o sticcs_chr22.vcf.gz --outgroup "NA18861" #Ideally we'd have an actual outgroup here, instead I'm grapping a random YRI individual to polarize
+
+twisst2 sticcstack -i sticcs_chr22.vcf.gz -o twisst_22.vcf.gz --ploidy 2 --group_names ASW CLM MXL FIN --groups_file dsuite_samples_table.tsv --max_subtrees 512
+```
+
+This wil produce two files - one which identifies intervals that have (more or less) consistent topology weights, and the second which identifies what those weights were. A topology weight is a neat idea from Simon Martin: take one individual at random from each of your groups. The topology weight is the probability that their gene tree will show that gene tree topology. You can calculate it by randomly subsampling individuals from each of your populations. What does this do? Well, it helps identify regions where different relationships between groups are supported. Introgression should drive differences in the topology in parts of the genome, and so TWISST2 can help identify not only what introgression events are likely, but _where_ they are likely. There is no formal test for introgression here, so be aware of its limitations.
+
+To plot the data, you'll need to do some further work with the output files. The easiest approach here is to use the scripts included with the twisst2 installation (`/plot_twisst/example_plot.R` has the general gist).
+
+What you'll end up with is something like this:
+
+CODE STILL RUNNING 
+
+## Treemix
+
+Treemix is another approach to detecting introgression. It has many known issues, but it is quite popular. Rather than reinvent the wheel, I'll point you to the guide I used when I learned to use it, found [here](https://speciationgenomics.github.io/Treemix/). There's also many other useful little guides in that page, but beware many of the methods they suggest are either slightly or very out of date, and the software has updated. So don't be surprised if some elements don't work.
