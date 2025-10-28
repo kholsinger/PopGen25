@@ -213,10 +213,11 @@ When $Q_{ST}$ exceeds genome-wide $F_{ST}$ - trait divergence faster than geneti
 When $Q_{ST} \approx F_{ST}$ - could be traits diverging purely by drift.
 
 ## Example: Snapdragons
-
-![](images/paste-22.png){width="121"}
+::: {#fig-snapdragons layout-ncol=2}
 
 ![](images/paste-21.png)
+:::
+
 
 [@Marin2020]
 
