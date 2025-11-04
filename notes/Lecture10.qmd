@@ -72,6 +72,8 @@ When recombination rates are high ($r \approx 0.5$), the number of lineages to k
 
 ![](images/paste-28.png)
 
+[@Lewanski2024]
+
 ## Another way to portray an ARG
 
 ![](images/paste-29.png)
@@ -312,22 +314,22 @@ As with any model fitting, it's tempting to just fit *everything*. But, to fit e
 
 There are the purely SMC variants, generally meant to estimate demography (population sizes and migration rates):
 
--   `PSMC`
+-   `PSMC` [@Li2011]
 
--   `SMC'`
+-   `SMC'` [@Wilton2015]
 
--   `SMC+`
+-   `SMC++` [@Terhorst2017]
 
--   `MSMC`/`MSCM2`
+-   `MSMC`/`MSCM2` [@Schiffels2020]
 
 . . .
 
 Then there are ARG inference approaches, which do not, by themselves, give you demography, but give a good approximation of the underlying ARG for your data:
 
--   `tsinfer` (also does demography with `tsdate`)
--   `ARGWeaver` (also does)
--   `ARG-needle` (also does GWAS)
--   `Relate` (also does everything)
+-   `tsinfer` (also does demography with `tsdate`) [@Kelleher2019]
+-   `ARGWeaver` (also does recombination) [@Rasmussen2014][@Hubisz2020]
+-   `ARG-needle` (also does GWAS) [@Zhang2023]
+-   `Relate` (also does everything) [@Speidel2019]
 
 ## Which should I use?
 
@@ -378,5 +380,17 @@ SMC approaches are *Markovian* - they rely solely on the previous state. But tha
 Can overestimate tracts!
 
 ![](images/paste-33.png)
+
+## Reading for Thursday
+
+A more efficient approach to estimate demography.
+
+. . .
+
+Will be compared to many of the approaches you see here, and to results we talked about in terms of bottlenecks/structure in ancient African populations.
+
+. . .
+
+Long and technical - read early/read often.
 
 ## References
