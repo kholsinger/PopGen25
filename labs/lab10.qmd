@@ -45,7 +45,7 @@ And you'll have the same pre-requisite files, but now filtered.
 Now that you have the files ready, runnning psmc is a single line:
 
 ```{bash}
-${psmc}/psmc -N25 -t15 -r5 -p "4+25*2+4+6" -o ${sample}.psmc ${sample}.psmcfa
+${psmcdir}/psmc -N25 -t15 -r5 -p "4+25*2+4+6" -o ${sample}.psmc ${sample}.psmcfa
 ```
 
 This might take a minute if you are running on your own computer, but once it's done you should have a file that contains the results. As it runs - what are the parameters? `-N` specifics the maximum number of iterations (here 25). `-t15` identifies the maximum coalescent time (a multiple of $2N_0$). `-r` specifies the initial $\theta/\rho$ ratio which is optimized over the course of the run, and `-p` specifies the bins that demography will be estimated in. The above pattern is the default for the human phylogeny - a bin of size 4, 25 bins of size 2 and then a 4 and a 6. The "size" of these depends on the parameter choices, and ideally each timespan contains at least 10 recombination events. How you determine that is essentially by fidlling with `-t` and `-p` until you either feel confident, or get tired of fiddling with the parameters. Ideally, each time period is meant to contain about \~10 recombination events in your data, but there is no hard rule for how to determine that.
@@ -60,7 +60,7 @@ ${psmcdir}/utils/psmc_plot.pl ${sample} ${sample}.psmc
 
 That should produce the following:
 
-![![](images/paste-7.png)](images/paste-6.png){width="582"}
+![](images/paste-7.png)
 
 This plotting does a few things by default, setting the human generation time (25 years) and mutation rate (although the mutation rate has some estimation that happens during the run). The population size is scaled relative to $N_0$ - the current population size. So, the numbers you see are not necessarily meaningful off the bat for your system - you'll need to do some conversions to figure out what they should be in your case. Pro tip - if you see the x axis look exactly like this in a publication and the system is not humans - it's possible the authors never really fiddled around from default parameters. That could be fine - the default parameters turn out to work well enough for many systems. But also - that means they likely just ran the tool rather than understand what it's meant to do, so take some caution in interpreting those results. 
 
@@ -88,4 +88,19 @@ mkdir analysis
 smc++ estimate -o analysis/ 1.25e-8 chr22.smc.gz
 ```
 
-Here, you do need to specify the per generation mutation rate, but the number of bins is estimated for you. This
+Here, you do need to specify the per generation mutation rate, but the number of bins is estimated for you.
+
+Again, it has its own plotting utility, but take a look at the output files - they are fairly readable.
+
+
+## PHLASH
+
+This one runs better if you have a GPU, but will run even without (albeit slowly).
+
+Install from [here](https://github.com/jthlab/phlash).
+
+Unlike the other appraoches, this one lives primarily inside Python, so follow their markdown notebook guide:
+
+https://github.com/jthlab/phlash/blob/main/notebooks/example.md
+
+This will actually also use chromosome 22 data, but the guide is all in `python`, so beware.
