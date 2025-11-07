@@ -34,3 +34,5 @@ Lab 6 can be accessed with Pluto, find it at `labs/lab5.jl` (remember you can op
 Lab 7 is [here](labs/lab7.qmd)
 
 Lab 8 is [here](labs/lab8.qmd)
+
+Lab 10 is [here](labs/lab10.qmd)

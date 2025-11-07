@@ -222,7 +222,7 @@ Even if we have perfect mutation/recombination rate knowledge, there are many ev
 
 The parameter space to explore is gigantic even for a few samples, since recombination means the number of lineages to keep track of is not $1:n$, but $1:\infty$, even if the tail of the distribution is *very* thin.
 
-## The full ARG - impossible to obtain  {.smaller}
+## The full ARG - impossible to obtain {.smaller}
 
 The full ARG contains the genealogy of the full set of sequence for all of your samples.
 
@@ -238,7 +238,7 @@ The absolute full ARG is practically impossible to estimate, simply because many
 
 Methods to estimate the "full" ARG exist for just a few samples, but are extremely computationally complex (and limited to the amount of sequence that can be used).
 
-## The marginal ARG  {.smaller}
+## The marginal ARG {.smaller}
 
 If we examine some segment of chromosome, parts of the ARG are dropped.
 
